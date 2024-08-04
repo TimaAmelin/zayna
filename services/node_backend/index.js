@@ -2,7 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 
 const token = process.env.TG_TOKEN;
 
-const webAppUrl = 'https://518e-188-32-134-230.ngrok-free.app';
+const webAppUrl = process.env.NGROK_LINK;
 
 const bot = new TelegramBot(token, {polling: true});
 
