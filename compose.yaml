@@ -1,0 +1,24 @@
+name: cotico
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: services/client/Dockerfile
+      target: development
+    env_file:
+      - .env.local
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./services/client:/app/client
+
+  node_backend:
+    build:
+      context: .
+      dockerfile: services/node_backend/Dockerfile
+      target: development
+    env_file:
+      - .env.local
+    volumes:
+      - ./services/node_backend:/app/node_backend
