@@ -1,4 +1,4 @@
-name: cotico
+name: zayna
 
 services:
   client:
@@ -12,6 +12,7 @@ services:
       - "3000:3000"
     volumes:
       - ./services/client:/app/client
+      - /app/client/node_modules
 
   node_backend:
     build:
@@ -22,3 +23,4 @@ services:
       - .env.local
     volumes:
       - ./services/node_backend:/app/node_backend
+      - /app/node_backend/node_modules
