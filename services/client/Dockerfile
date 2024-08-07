@@ -7,25 +7,20 @@ ENV NEXT_TELEMETRY_DISABLED 1
 FROM base AS deps
 WORKDIR /app/client/
 COPY /services/client/ ./
-RUN ls
 RUN npm install
-RUN ls
-RUN cd node_modules && ls
 
 
 FROM base AS development
 ENV NODE_ENV=development
 COPY --from=deps /app/client/ /app/client/
 WORKDIR /app/client/
-RUN ls
-RUN cd node_modules && ls
 EXPOSE ${PORT}
 ENTRYPOINT npm run dev
 
 
 FROM base AS builder
 COPY --from=deps /app/client/ /app/client/
-WORKDIR /app/
+WORKDIR /app/client
 RUN npm run build
 
 
@@ -34,7 +29,6 @@ ENV NODE_ENV=production
 COPY --from=deps /app/client/node_modules/ /app/client/node_modules/
 WORKDIR /app/client/
 COPY --from=builder /app/client/package.json ./
-COPY --from=builder /app/.next/ ./.next/
-COPY --from=builder /app/public/ ./public/
+COPY --from=builder /app/client/.next/ ./.next/
 EXPOSE ${PORT}
 ENTRYPOINT npm run start

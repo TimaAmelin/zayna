@@ -5,11 +5,14 @@ services:
     build:
       context: .
       dockerfile: services/client/Dockerfile
-      target: production
+      target: development
     env_file:
       - .env.local
     ports:
       - "3000:3000"
+    volumes:
+      - ./services/client:/app/client
+      - /app/client/node_modules
 
   node_backend:
     build:
@@ -18,3 +21,6 @@ services:
       target: development
     env_file:
       - .env.local
+    volumes:
+      - ./services/node_backend:/app/node_backend
+      - /app/node_backend/node_modules
