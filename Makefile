@@ -19,8 +19,11 @@ clear:
 
 CTC_FILTERED_ARGS=$(filter-out --no-detach, $(CTC_ARGS))
 
-start-dev:
+start:
 	docker compose --progress plain --env-file .env.local --file compose.yaml up $(CTC_FILTERED_ARGS)
+
+start-dev:
+	docker compose --progress plain --env-file .env.local --file compose.development.yaml up $(CTC_FILTERED_ARGS)
 
 %::
 	@true

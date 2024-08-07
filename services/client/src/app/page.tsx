@@ -1,5 +1,9 @@
+'use client'
+
+import { Dummy } from "@/components/Dummy/Dummy";
+
 export default function Home() {
   return (
-    <div>люблю Алёну</div>
+    <Dummy />
   );
 }
