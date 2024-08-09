@@ -1,9 +1,10 @@
-'use client'
+// import { Dummy } from '@/components/Dummy/Dummy';
+import { DummyWithInvite } from '@/components/DummyWithInvite/DummyWithInvite';
 
-import { Dummy } from "@/components/Dummy/Dummy";
+export default function Home(props: any) {
+  const {username, id, from} = props.searchParams;
 
-export default function Home() {
   return (
-    <Dummy />
+    <DummyWithInvite username={username} id={id} from={from} tgLogin={process.env.TG_LOGIN ?? ''} />
   );
 }

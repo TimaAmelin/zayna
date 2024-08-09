@@ -10,11 +10,11 @@ bot.on('message', async (msg) => {
 	const chatId = msg.chat.id;
 	const text = msg.text;
 
-	if (text === '/start') {
+	if (text.includes('/start')) {
 		await bot.sendMessage(chatId, 'Переходите в наше приложение', {
 			reply_markup: {
 				inline_keyboard: [
-					[{text: 'Открыть', web_app: {url: webAppUrl}}]
+					[{text: 'Открыть', web_app: {url: `${webAppUrl}?username=${msg.from.username}&id=${msg.from.id}${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}`}}]
 				],
 			},
 		})
