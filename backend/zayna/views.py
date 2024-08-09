@@ -1,12 +1,14 @@
+import json
+
 from .models import User
 from django.http import HttpResponse
 
 
 def login_view(request):
-    if request.method == "POST":
-        print(request)
-        id = request.POST.get("id")
-        username = request.POST.get("username")
+    if request.method == "PUT":
+        body = json.loads(request.body)
+        id = body.get("id")
+        username = body.get("username")
         user_qs = User.objects.filter(id=id)
         if user_qs.exists():
             return HttpResponse(status=204)
