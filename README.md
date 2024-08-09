@@ -17,6 +17,7 @@ ngrok tunnel --label edge=edghts_*** http://localhost:3000
 добавь ссылку из ngrok в .env.local
 
 ## Выкатка бэка:
+cd backend  
 ./manage.py migrate  
 ./manage.py runserver  
 ### Подключение к БД:  
