@@ -32,5 +32,9 @@ npm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# python
 .idea/
 *.pyc
+/backend/__pycache__/
+zaynadb.sqlite3
