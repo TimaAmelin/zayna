@@ -2,6 +2,8 @@
 cd services/client && npm install && cd ../../  
 cd services/node_backend && npm install && cd ../../
 
+https://github.com/pyenv/pyenv?tab=readme-ov-file#installation  
+apt install postgresql  
 cd backend  
 pyenv virtualenv 3.10.8 zay  
 pyenv activate zay  
