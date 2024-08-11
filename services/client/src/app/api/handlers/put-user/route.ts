@@ -4,7 +4,7 @@ export async function PUT(req: NextRequest) {
     const { id, username, from } = await req.json()
 
     try {
-        const response = await fetch('http://host.docker.internal:8000/login/', {
+        const response = await fetch('http://127.0.0.1:8000/login/', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
