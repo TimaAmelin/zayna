@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useEffect } from 'react';
 import { ContentCopyIcon, DummyContainer, DummyContentContainer, DummyHeader, DummyInviteButton, DummyInviteButtonContainer, DummyInviteButtonText, DummyInviteText, DummySocial, DummySocialContainer, DummySubHeader, DummyText } from './DummyWithInvite.css';
@@ -13,14 +13,12 @@ import { Box } from '@mui/material';
 
 function copyTextToClipboard(text: string): void {
     if (navigator.clipboard) {
-        // Современный способ через Clipboard API
         navigator.clipboard.writeText(text).then(() => {
             console.log('Текст скопирован в буфер обмена');
         }).catch(err => {
             console.error('Ошибка при копировании текста: ', err);
         });
     } else {
-        // Обратная совместимость для старых браузеров
         const textArea = document.createElement('textarea');
         textArea.value = text;
         document.body.appendChild(textArea);
@@ -35,21 +33,23 @@ function copyTextToClipboard(text: string): void {
     }
 }
 
-export const DummyWithInvite = ({ id, username, from, tgLogin }: {
+export const DummyWithInvite = ({ id, username, from, tgLogin, firstTime }: {
     id: number,
-    username: string,
-    from: number,
+    username?: string,
+    from?: number,
     tgLogin: string,
+    firstTime?: string,
 }) => {
     useEffect(() => {
         const addUser = async () => {
             const res = await putUser(id, username, from);
-
             return res
         }
 
-        addUser();
-    }, [from, id, username]);
+        if (firstTime) {
+            addUser();
+        }
+    }, [from, id, username, firstTime]);
     return (
         <DummyContainer>
             <DummyContentContainer sx={{ position: 'absolute', top: '-50px', height: '180px', zIndex: 0, width: '80%' }}>
@@ -72,7 +72,7 @@ export const DummyWithInvite = ({ id, username, from, tgLogin }: {
                         Invite friends
                     </DummyInviteButtonText>
                     <DummyInviteButton>
-                        <ContentCopyIcon onClick={() => copyTextToClipboard(`https://t.me/${tgLogin}?start=${from}`)} />
+                        <ContentCopyIcon onClick={() => copyTextToClipboard(`https://t.me/${tgLogin}?start=${id}`)} />
                     </DummyInviteButton>
                 </DummyInviteButtonContainer>
                 <DummySocialContainer>
