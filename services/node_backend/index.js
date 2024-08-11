@@ -14,7 +14,14 @@ bot.on('message', async (msg) => {
 		await bot.sendMessage(chatId, 'Переходите в наше приложение', {
 			reply_markup: {
 				inline_keyboard: [
-					[{text: 'Открыть', web_app: {url: `${webAppUrl}?username=${msg.from.username}&id=${msg.from.id}${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}`}}]
+					[
+						{	
+							text: 'Открыть',
+							web_app: {
+								url: `${webAppUrl}?username=${msg.from.username}&id=${msg.from.id}${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}&first_time=1`
+							},
+						},
+					],
 				],
 			},
 		})

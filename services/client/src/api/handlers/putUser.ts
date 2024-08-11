@@ -1,7 +1,7 @@
 export const putUser = async (
     id: number,
-    username: string,
-    from: number,
+    username?: string,
+    from?: number,
 ) => {
     const response = await fetch('/api/handlers/put-user', {
         method: 'PUT',
