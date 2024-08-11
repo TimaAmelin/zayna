@@ -14,6 +14,9 @@ COPY . /app
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
+# Create the directory to store the logs and the log file
+RUN touch logfile.log
+
 # Make port 8000 available for the app
 EXPOSE 8000
 
