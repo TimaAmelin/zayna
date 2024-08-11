@@ -5,7 +5,7 @@ FROM python:3.7-alpine
 WORKDIR /app
 
 # Adding buffering
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 
 # Copy the current directory contents into the container
 COPY . /app

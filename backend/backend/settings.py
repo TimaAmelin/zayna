@@ -109,7 +109,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/root/zayna/backend/logfile.log',
+            'filename': '~/zayna/backend/logfile.log',
         },
     },
     'root': {
