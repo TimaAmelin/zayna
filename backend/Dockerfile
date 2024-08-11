@@ -11,7 +11,6 @@ ENV PYTHONUNBUFFERED 1
 COPY . /app
 
 # Install any needed packages specified in requirements.txt
-RUN pyenv activate zay
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
