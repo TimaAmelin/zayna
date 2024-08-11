@@ -2,12 +2,6 @@
 cd services/client && npm install && cd ../../  
 cd services/node_backend && npm install && cd ../../
 
-https://github.com/pyenv/pyenv?tab=readme-ov-file#installation  
-cd backend  
-pyenv virtualenv 3.10.8 zay  
-pyenv activate zay  
-pip3 install --upgrade pip  
-pip3 install -r requirements.txt
 ## Выкатка фронта:
 make start-dev -- (параметры докера)
 
@@ -20,7 +14,8 @@ ngrok tunnel --label edge=edghts_*** http://localhost:3000
 
 ## Выкатка бэка:
 cd backend  
-./manage.py migrate  
-./manage.py runserver  
+docker build -t zayna-backend .  
+docker run --name backend -p 8000:8000 zayna-backend  
+
 ### Подключение к БД:  
 sqlite3 zaynadb.sqlite3 
