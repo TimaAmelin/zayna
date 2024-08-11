@@ -1,25 +1,24 @@
-# Use an official Python runtime as a parent image
-FROM python:3.7-alpine
+# syntax=docker/dockerfile:1.4
 
-# Set the working directory
-WORKDIR /app
-
-# Adding buffering
-ENV PYTHONUNBUFFERED=1
-
-# Copy the current directory contents into the container
-COPY . /app
-
-# Install any needed packages specified in requirements.txt
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-
-# Create the directory to store the logs and the log file
-RUN touch logfile.log
-
-# Make port 8000 available for the app
+FROM --platform=$BUILDPLATFORM python:3.7-alpine AS builder
 EXPOSE 8000
+WORKDIR /app
+COPY requirements.txt /app
+RUN pip3 install -r requirements.txt --no-cache-dir
+COPY . /app
+ENTRYPOINT ["python3"]
+CMD ["manage.py", "runserver", "0.0.0.0:8000"]
 
-# Run the command to start uWSGI
-CMD ["python", "manage.py", "migrate"]
-CMD ["python", "manage.py", "runserver", "127.0.0.1:8000"]
+FROM builder as dev-envs
+RUN <<EOF
+apk update
+apk add git
+EOF
+
+RUN <<EOF
+addgroup -S docker
+adduser -S --shell /bin/bash --ingroup docker vscode
+EOF
+# install Docker tools (cli, buildx, compose)
+COPY --from=gloursdocker/docker / /
+CMD ["manage.py", "runserver", "0.0.0.0:8000"]

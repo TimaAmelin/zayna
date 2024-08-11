@@ -18,3 +18,10 @@ services:
       target: development
     env_file:
       - .env.local
+
+  web:
+    build:
+      context: backend
+      target: builder
+    ports:
+      - '8000:8000'
