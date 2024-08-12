@@ -13,6 +13,8 @@ services:
     volumes:
       - ./services/client:/app/client
       - /app/client/node_modules
+    networks:
+      - my-network
 
   node_backend:
     build:
@@ -24,3 +26,16 @@ services:
     volumes:
       - ./services/node_backend:/app/node_backend
       - /app/node_backend/node_modules
+
+  web:
+    build:
+      context: backend
+      target: builder
+    ports:
+      - '8000:8000'
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
