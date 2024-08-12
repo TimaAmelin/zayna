@@ -10,6 +10,8 @@ services:
       - .env.local
     ports:
       - "3000:3000"
+    networks:
+      - my-network
 
   node_backend:
     build:
@@ -25,3 +27,9 @@ services:
       target: builder
     ports:
       - '8000:8000'
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
