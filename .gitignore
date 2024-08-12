@@ -37,4 +37,5 @@ next-env.d.ts
 .idea/
 *.pyc
 /backend/__pycache__/
-zaynadb.sqlite3
+/backend/zaynadb.sqlite3
+/backend/logfile.log
