@@ -19,3 +19,6 @@ docker run --name backend -p 8000:8000 zayna-backend
 
 ### Подключение к БД:  
 sqlite3 zaynadb.sqlite3 
+
+### Запуск приложение в режиме разработки
+/start_dev_2416256
