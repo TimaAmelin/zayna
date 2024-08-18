@@ -1,4 +1,4 @@
-import { Box, styled } from '@mui/material';
+import { BottomNavigation, Box, styled } from '@mui/material';
 
 export const NavbarProviderContainer = styled(Box)(() => ({
     height: '100%',
@@ -6,6 +6,7 @@ export const NavbarProviderContainer = styled(Box)(() => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-end',
+    backgroundColor: '#1F1F2E',
 }));
 
 export const NavbarProviderChildrenContainer = styled(Box)(() => ({
@@ -13,4 +14,18 @@ export const NavbarProviderChildrenContainer = styled(Box)(() => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
 }));
+
+export const NavbarContainer = styled(Box)(() => ({
+    margin: 15,
+    marginBottom: 25,
+    zIndex: 10,
+    height: 65,
+}));
+
+export const Navbar = styled(BottomNavigation)(() => ({
+    backgroundColor: '#2E3342',
+    borderRadius: 5,
+    height: 65,
+}))

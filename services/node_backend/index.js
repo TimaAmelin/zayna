@@ -10,7 +10,22 @@ bot.on('message', async (msg) => {
 	const chatId = msg.chat.id;
 	const text = msg.text;
 
-	if (text.includes('/start')) {
+	if (text === '/start_dev_2416256') {
+		await bot.sendMessage(chatId, 'Check out our app in dev mode', {
+			reply_markup: {
+				inline_keyboard: [
+					[
+						{	
+							text: 'Open',
+							web_app: {
+								url: `${webAppUrl}/tapper?username=${msg.from.username}&id=${msg.from.id}${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}&first_time=1`
+							},
+						},
+					],
+				],
+			},
+		})
+	} else if (text.includes('/start')) {
 		await bot.sendMessage(chatId, 'Check out our app', {
 			reply_markup: {
 				inline_keyboard: [

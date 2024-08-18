@@ -18,3 +18,6 @@ docker compose up -d
 curl -X PUT -H "Content-Type: application/json" -d '{"id":123, "username":"hello"}' -v http://127.0.0.1:8000/login/
 ### Подключение к БД:  
 sqlite3 zaynadb.sqlite3 
+
+### Запуск приложение в режиме разработки
+/start_dev_2416256

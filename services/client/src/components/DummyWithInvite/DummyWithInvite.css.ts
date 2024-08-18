@@ -71,7 +71,7 @@ export const DummyInviteButtonText = styled(Button)(() => ({
     justifyContent: 'center',
     marginRight: 11,
     '&:hover': {
-        backgroundColor: '#7ADA46',
+        backgroundColor: '#fff',
     },
     textTransform: 'none',
 }));
@@ -85,7 +85,7 @@ export const DummyInviteButton = styled(Button)(() => ({
     alignItems: 'center',
     justifyContent: 'center',
     '&:hover': {
-        backgroundColor: '#7ADA46',
+        backgroundColor: '#fff',
     }
 }));
 
