@@ -1,7 +1,7 @@
 from .models import *
 import logging
 from django.db.models import Sum
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 
 def add_user(id, username, referrer):
@@ -37,6 +37,6 @@ def get_tokens_count(user_id):
         logging.info(f"User {user_id} does not exist")
         return HttpResponse(status=400)
     current_tokens = int(user_qs.values_list("tokens_count", flat=True)[0])
-    last_hour_sum = user_qs.first().batches.aggregate(Sum("tokens_count"))
-    return HttpResponse(status=200, content={"sum": current_tokens, "per_hour": last_hour_sum})
+    last_hour_sum = user_qs.first().batches.aggregate(per_hour=Sum("tokens_count"))
+    return JsonResponse({"sum": current_tokens, **last_hour_sum}, status=200)
 

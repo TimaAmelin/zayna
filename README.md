@@ -14,8 +14,10 @@ ngrok tunnel --label edge=edghts_*** http://localhost:3000
 
 ## Выкатка бэкенда:  
 docker compose up -d  
-Пример запроса:  
+Примеры запросов:  
 curl -X PUT -H "Content-Type: application/json" -d '{"id":123, "username":"hello"}' -v http://127.0.0.1:8000/login/
+curl -X PUT -H "Content-Type: application/json" -d '{"id":123, "tokens_count":10}' -v http://127.0.0.1:8000/tokens_batch/
+curl -X GET -H "Content-Type: application/json" -d '{"id":123, "tokens_count":10}' -v http://127.0.0.1:8000/tokens_count/
 ### Подключение к БД:  
 sqlite3 zaynadb.sqlite3 
 
