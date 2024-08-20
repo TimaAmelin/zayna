@@ -2,7 +2,9 @@ from .models import *
 import logging
 from django.db.models import Sum
 from django.http import HttpResponse, JsonResponse
-
+import datetime
+from django.utils import timezone
+from .tasks import *
 
 def add_user(id, username, referrer):
     user_qs = User.objects.filter(id=id)
@@ -32,11 +34,14 @@ def add_tokens_batch(user_id, tokens_count):
 
 
 def get_tokens_count(user_id):
+    process_old_batches()  # TODO: remove it
     user_qs = User.objects.filter(id=user_id)
     if not user_qs.exists():
         logging.info(f"User {user_id} does not exist")
         return HttpResponse(status=400)
     current_tokens = int(user_qs.values_list("tokens_count", flat=True)[0])
-    last_hour_sum = user_qs.first().batches.aggregate(per_hour=Sum("tokens_count"))
+    last_hour_sum = user_qs.first().batches.filter(
+        created_at__gt=timezone.now() - datetime.timedelta(hours=1),
+    ).aggregate(per_hour=Sum("tokens_count"))
     return JsonResponse({"sum": current_tokens, **last_hour_sum}, status=200)
 

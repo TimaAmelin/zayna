@@ -1,3 +1,5 @@
+from datetime import timezone
+
 from django.db import models
 
 
@@ -11,3 +13,4 @@ class User(models.Model):
 class TokensBatch(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="batches")
     tokens_count = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now=True)

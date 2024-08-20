@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_celery_beat",
     "zayna",
 ]
 
@@ -161,3 +162,14 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Celery settings
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Use the appropriate broker URL
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # Use the appropriate backend URL
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+# Importing the Celery application
+from .celery import app as celery_app
+all = ('celery_app',)
