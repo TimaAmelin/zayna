@@ -10,4 +10,4 @@ class User(models.Model):
 
 class TokensBatch(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
-    tokens = models.IntegerField(default=0)
+    tokens_count = models.IntegerField(default=0)
