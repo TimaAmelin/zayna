@@ -36,7 +36,7 @@ def get_tokens_count(user_id):
     if not user_qs.exists():
         logging.info(f"User {user_id} does not exist")
         return HttpResponse(status=400)
-    current_tokens = int(user_qs.values_list("tokens", flat=True)[0])
+    current_tokens = int(user_qs.values_list("tokens_count", flat=True)[0])
     last_hour_sum = user_qs.first().batches.aggregate(Sum("tokens_count"))
     return HttpResponse(status=200, content={"sum": current_tokens, "per_hour": last_hour_sum})
 
