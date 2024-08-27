@@ -30,9 +30,8 @@ def tokens_batch_view(request):
 
 def tokens_count_view(request):
     if request.method == "GET":
-        logging.info(f"[Zayna] get tokens count {request} {request.body}")
-        body = json.loads(request.body)
-        id = body.get("id")
+        logging.info(f"[Zayna] get tokens count {request}")
+        id = request.GET.get("id")
         return get_tokens_count(id)
 
     return HttpResponse(status=404)
