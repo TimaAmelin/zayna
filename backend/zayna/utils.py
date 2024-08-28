@@ -43,5 +43,7 @@ def get_tokens_count(user_id):
     last_hour_sum = user_qs.first().batches.filter(
         created_at__gt=timezone.now() - datetime.timedelta(hours=1),
     ).aggregate(per_hour=Sum("tokens_count"))
+    if last_hour_sum["per_hour"]:
+        current_tokens += last_hour_sum["per_hour"]
     return JsonResponse({"sum": current_tokens, **last_hour_sum}, status=200)
 
