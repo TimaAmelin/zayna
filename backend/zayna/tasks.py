@@ -1,4 +1,3 @@
-from celery import shared_task
 from .models import *
 import datetime
 import logging
@@ -6,7 +5,6 @@ from django.db.models import Sum
 from django.utils import timezone
 
 
-@shared_task
 def process_old_batches():
     logging.info("Aggregating olg batches...")
     to_update = []
