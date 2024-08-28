@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TapperContainer, TapperStatisticsContainer, TapperMainContainer, TapperStatistics, TapperStatisticsCoinContainer, TapperStatisticsProfitContainer, TapperStatisticsProfitTitleContainer, TapperStatisticsProfitAmountContainer, TapperStatisticsLeft, TapperStatisticsRight, TapperStatisticsAvatar, TapperStatisticsSettingsContainer, TapperStatisticsSettingsLine, TapperStatisticsName, TapperMainContainerCardContainer, TapperMainContainerCard, TapperMainContainerCardTop, TapperMainContainerCardTopTime, TapperMainContainerMoney, TapperMainContainerTapper, TapperMainContainerTapperContainer } from './Tapper.css';
 
 import CoinMin from '../../assets/icons/coin_min.svg';
@@ -10,8 +10,32 @@ import SettingsIcon from '../../assets/icons/settings.svg';
 import CalendarIcon from '../../assets/icons/calendar.png';
 import Image from 'next/image';
 
+import { getTokens } from '@/api/handlers/getTokens';
+import { putTokenBatch } from '@/api/handlers/putTokenBatch';
+
 export const Tapper = ({ id }: { id: string }) => {
-    const [money, setMoney] = useState(7000000);
+    const [money, setMoney] = useState(0);
+    const [moneyLast, setMoneyLast] = useState(0);
+    const [moneyPerHour, setMoneyPerHour] = useState(0);
+
+    useEffect(() => {
+        const getUserTokens = async () => {
+            const res = await getTokens(Number(id));
+            return res
+        }
+
+        getUserTokens().then(data => {
+            setMoney(data.response.sum)
+            setMoneyLast(data.response.sum)
+            setMoneyPerHour(data.response.per_hour ?? 0)
+        })
+    }, [id]);
+
+    useEffect(() => {
+        putTokenBatch(Number(id), money - moneyLast)
+        setMoneyLast(money)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [money, id]);
 
     return (
         <TapperContainer>
@@ -26,7 +50,7 @@ export const Tapper = ({ id }: { id: string }) => {
                                 Profit per hour
                             </TapperStatisticsProfitTitleContainer>
                             <TapperStatisticsProfitAmountContainer>
-                                +2,42M <IIcon />
+                                +{moneyPerHour} <IIcon />
                             </TapperStatisticsProfitAmountContainer>
                         </TapperStatisticsProfitContainer>
                     </TapperStatisticsLeft>
@@ -48,7 +72,7 @@ export const Tapper = ({ id }: { id: string }) => {
                         <TapperMainContainerCardTop>
                             <Image alt="" src={CalendarIcon} height={27} width={27} />
                             <TapperMainContainerCardTopTime>
-                                05:22
+                                {moneyLast}
                             </TapperMainContainerCardTopTime>
                         </TapperMainContainerCardTop>
                         Daily Reward
@@ -57,7 +81,7 @@ export const Tapper = ({ id }: { id: string }) => {
                         <TapperMainContainerCardTop>
                             <Image alt="" src={CalendarIcon} height={27} width={27} />
                             <TapperMainContainerCardTopTime>
-                                05:22
+                                {money - moneyLast}
                             </TapperMainContainerCardTopTime>
                         </TapperMainContainerCardTop>
                         Forests
@@ -76,7 +100,9 @@ export const Tapper = ({ id }: { id: string }) => {
                     <CoinMax style={{marginRight: 10}} /> {money.toLocaleString('ru-RU')}
                 </TapperMainContainerMoney>
                 <TapperMainContainerTapperContainer>
-                    <TapperMainContainerTapper onClick={() => setMoney(money + 1)} />
+                    <TapperMainContainerTapper onClick={() => {
+                        setMoney(money + 1)
+                    }} />
                 </TapperMainContainerTapperContainer>
             </TapperMainContainer>
         </TapperContainer>
