@@ -12,14 +12,20 @@ import Image from 'next/image';
 
 import { getTokens } from '@/api/handlers/getTokens';
 import { putTokenBatch } from '@/api/handlers/putTokenBatch';
+import { putUser } from '@/api/handlers/putUser';
 
-export const Tapper = ({ id }: { id: string }) => {
+export const Tapper = ({ id, username, from }: {
+    id: number,
+    username?: string,
+    from?: number,
+}) => {
     const [money, setMoney] = useState(0);
     const [moneyLast, setMoneyLast] = useState(0);
     const [moneyPerHour, setMoneyPerHour] = useState(0);
 
     useEffect(() => {
         const getUserTokens = async () => {
+            await putUser(id, username, from);
             const res = await getTokens(Number(id));
             return res
         }
@@ -29,7 +35,7 @@ export const Tapper = ({ id }: { id: string }) => {
             setMoneyLast(data.response.sum)
             setMoneyPerHour(data.response.per_hour ?? 0)
         })
-    }, [id]);
+    }, [id, username, from]);
 
     useEffect(() => {
         putTokenBatch(Number(id), money - moneyLast)

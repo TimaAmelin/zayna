@@ -1,9 +1,9 @@
 import { Tapper } from '@/components/Tapper/Tapper';
 
 export default function Home(props: any) {
-  const { id } = props.searchParams;
+  const { username, id, from, first_time } = props.searchParams;
 
   return (
-    <Tapper id={id} />
+    <Tapper id={id} username={username} from={from} />
   );
 }
