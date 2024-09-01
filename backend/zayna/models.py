@@ -14,9 +14,3 @@ class TokensBatch(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="batches")
     tokens_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now=True)
-
-
-class GameResult(str, Enum):
-    PLAYER_WIN = "player_win"
-    BOT_WIN = "bot_win"
-    DRAW = "draw"
