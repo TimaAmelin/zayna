@@ -16,7 +16,7 @@ class TokensBatch(models.Model):
     created_at = models.DateTimeField(auto_now=True)
 
 
-class GameResult(Enum):
+class GameResult(str, Enum):
     PLAYER_WIN = "player_win"
     BOT_WIN = "bot_win"
     DRAW = "draw"

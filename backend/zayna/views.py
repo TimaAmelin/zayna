@@ -40,6 +40,7 @@ def tokens_count_view(request):
 
 def tic_tac_toe_view(request):
     if request.method == "POST":
+        logging.info(f"[Zayna] tic tac toe step {request}")
         body = json.loads(request.body)
         field = body.get("field")
         try:
@@ -47,5 +48,5 @@ def tic_tac_toe_view(request):
         except Exception as e:
             logging.warning(e)
             return HttpResponse(status=400)
-
+    logging.info("Im here")
     return HttpResponse(status=404)

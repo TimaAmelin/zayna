@@ -1,11 +1,8 @@
 import random
 
-from .models import *
-import logging
-from django.db.models import Sum
+from .models import GameResult
+
 from django.http import HttpResponse, JsonResponse
-import datetime
-from django.utils import timezone
 from .tasks import *
 
 def add_user(id, username, referrer):
@@ -50,8 +47,8 @@ def get_tokens_count(user_id):
     return JsonResponse({"sum": current_tokens, **last_hour_sum}, status=200)
 
 
-PLAYER_RESPONSE = JsonResponse({"result": GameResult.PLAYER_WIN}, 205)
-BOT_RESPONSE = JsonResponse({"result": GameResult.BOT_WIN}, 205)
+PLAYER_RESPONSE = JsonResponse({"result": GameResult.PLAYER_WIN}, status=205)
+BOT_RESPONSE = JsonResponse({"result": GameResult.BOT_WIN}, status=205)
 
 
 def next_step(field):
@@ -84,4 +81,4 @@ def next_step(field):
 
     bot_step = random.choice(free_cells)
     field[bot_step[0]][bot_step[1]] = -1
-    return JsonResponse({"field": field}, 202)
+    return JsonResponse({"field": field}, status=202)

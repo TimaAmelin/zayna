@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from zayna.views import login_view, tokens_batch_view, tokens_count_view
+from zayna.views import login_view, tokens_batch_view, tokens_count_view, tic_tac_toe_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
