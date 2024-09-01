@@ -1,4 +1,5 @@
 import json
+import logging
 
 from django.http import HttpResponse
 
@@ -33,5 +34,18 @@ def tokens_count_view(request):
         logging.info(f"[Zayna] get tokens count {request}")
         id = request.GET.get("id")
         return get_tokens_count(id)
+
+    return HttpResponse(status=404)
+
+
+def tic_tac_toe_view(request):
+    if request.method == "POST":
+        body = json.loads(request.body)
+        field = body.get("field")
+        try:
+            return next_step(field)
+        except Exception as e:
+            logging.warning(e)
+            return HttpResponse(status=400)
 
     return HttpResponse(status=404)

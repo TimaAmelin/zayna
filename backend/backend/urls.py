@@ -24,4 +24,5 @@ urlpatterns = [
     path("login/", login_view, name="login"),
     path("tokens_batch/", tokens_batch_view, name="tokens_batch"),
     path("tokens_count/", tokens_count_view, name="tokens_count"),
+    path("tic_tac_toe/", tic_tac_toe_view, name="tic_tac_toe"),
 ]

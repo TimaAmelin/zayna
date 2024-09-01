@@ -1,3 +1,5 @@
+import random
+
 from .models import *
 import logging
 from django.db.models import Sum
@@ -47,3 +49,39 @@ def get_tokens_count(user_id):
         current_tokens += last_hour_sum["per_hour"]
     return JsonResponse({"sum": current_tokens, **last_hour_sum}, status=200)
 
+
+PLAYER_RESPONSE = JsonResponse({"result": GameResult.PLAYER_WIN}, 205)
+BOT_RESPONSE = JsonResponse({"result": GameResult.BOT_WIN}, 205)
+
+
+def next_step(field):
+    free_cells = []
+    for i in range(3):
+        if field[i][0] == field[i][1] == field[i][2] == 1:
+            return PLAYER_RESPONSE
+        elif field[i][0] == field[i][1] == field[i][2] == -1:
+            return BOT_RESPONSE
+        elif field[0][i] == field[1][i] == field[2][i] == 1:
+            return PLAYER_RESPONSE
+        elif field[0][i] == field[1][i] == field[2][i] == -1:
+            return BOT_RESPONSE
+        for j in range(3):
+            if field[i][j] == 0:
+                free_cells.append((i, j))
+    if not free_cells:
+        return JsonResponse({"result": GameResult.DRAW}, 205)
+
+    if field[0][0] == field[1][1] == field[2][2]:
+        if field[0][0] == 1:
+            return PLAYER_RESPONSE
+        elif field[0][0] == -1:
+            return BOT_RESPONSE
+    elif field[0][2] == field[1][1] == field[2][0]:
+        if field[1][1] == 1:
+            return PLAYER_RESPONSE
+        elif field[1][1] == -1:
+            return BOT_RESPONSE
+
+    bot_step = random.choice(free_cells)
+    field[bot_step[0]][bot_step[1]] = -1
+    return JsonResponse({"field": field}, 202)
