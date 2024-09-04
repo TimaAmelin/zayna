@@ -39,12 +39,14 @@ def get_tokens_count(user_id):
         logging.info(f"User {user_id} does not exist")
         return HttpResponse(status=400)
     current_tokens = int(user_qs.values_list("tokens_count", flat=True)[0])
-    last_hour_sum = user_qs.first().batches.filter(
+    user = user_qs.first()
+    last_hour_sum = user.batches.filter(
         created_at__gt=timezone.now() - datetime.timedelta(hours=1),
     ).aggregate(per_hour=Sum("tokens_count"))
     if last_hour_sum["per_hour"]:
         current_tokens += last_hour_sum["per_hour"]
-    return JsonResponse({"sum": current_tokens, **last_hour_sum}, status=200)
+    presents = list(user.presents.values_list("sender", "tokens_count"))
+    return JsonResponse({"sum": current_tokens, "presents": presents, **last_hour_sum}, status=200)
 
 
 class GameResult(str, Enum):
