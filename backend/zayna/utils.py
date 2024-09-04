@@ -72,7 +72,7 @@ def check_win(field, value):
             if field[i][j] == 0:
                 free_cells.append((i, j))
     if not free_cells:
-        return JsonResponse({"result": GameResult.DRAW}, 205)
+        return JsonResponse({"result": GameResult.DRAW, "field": field}, status=205)
 
     if field[0][0] == field[1][1] == field[2][2]:
         if field[0][0] == value:
