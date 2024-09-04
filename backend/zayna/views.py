@@ -49,3 +49,14 @@ def tic_tac_toe_view(request):
             logging.warning(e)
             return HttpResponse(status=400)
     return HttpResponse(status=404)
+
+
+def present_view(request):
+    if request.method == "PUT":
+        logging.info(f"[Zayna] present {request} {request.body}")
+        body = json.loads(request.body)
+        sender_id = body.get("sender")
+        receiver_id = body.get("receiver")
+        tokens_count = body.get("tokens_count")
+        return add_present(sender_id, receiver_id, tokens_count)
+    return HttpResponse(status=404)
