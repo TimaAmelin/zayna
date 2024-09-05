@@ -22,6 +22,7 @@ curl -X PUT -H "Content-Type: application/json" -d '{"id":123, "tokens_count":10
 curl -X GET -H "Content-Type: application/json" -v http://127.0.0.1:8000/tokens_count?id=123
 curl -X POST -H "Content-Type: application/json" -d '{"field":[[1,-1,-1],[-1,1,0],[0,0,1]]}' -v http://127.0.0.1:8000/tic_tac_toe/
 curl -X PUT -H "Content-Type: application/json" -d '{"sender": 123, "receiver": 1234, "tokens_count": 1}' -v http://127.0.0.1:8000/present/
+curl -X GET -H "Content-Type: application/json" -v http://127.0.0.1:8000/projects/
 ### Подключение к БД:  
 sqlite3 zaynadb.sqlite3 
 
