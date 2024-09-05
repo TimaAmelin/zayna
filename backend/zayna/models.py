@@ -21,3 +21,9 @@ class Present(models.Model):
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="presents")
     tokens_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now=True)
+
+
+class Project(models.Model):
+    name = models.CharField(default="", null=False, blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    tokens_count = models.IntegerField(default=0)

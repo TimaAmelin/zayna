@@ -60,3 +60,11 @@ def present_view(request):
         tokens_count = body.get("tokens_count")
         return add_present(sender_id, receiver_id, tokens_count)
     return HttpResponse(status=404)
+
+
+def projects_view(request):
+    if request.method == "GET":
+        logging.info(f"[Zayna] get projects {request}")
+        return get_projects()
+
+    return HttpResponse(status=404)
