@@ -3,7 +3,7 @@ from .models import Project
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'tokens_count')  # Columns to display in the list view
+    list_display = ('name', 'price', 'income')  # Columns to display in the list view
     search_fields = ('name',)  # Fields to search by
     list_filter = ('price',)  # Fields to filter by
 

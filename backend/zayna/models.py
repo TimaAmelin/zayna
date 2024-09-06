@@ -31,5 +31,5 @@ class Present(models.Model):
 
 class Project(models.Model):
     name = models.CharField(default="", null=False, blank=True, max_length=255)
-    price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    tokens_count = models.IntegerField(default=0)
+    price = models.IntegerField(default=0)
+    income = models.IntegerField(default=0)
