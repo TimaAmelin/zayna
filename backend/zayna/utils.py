@@ -48,7 +48,10 @@ def get_tokens_count(user_id):
     if last_hour_sum["per_hour"]:
         current_tokens += last_hour_sum["per_hour"]
     presents = list(user.presents.values_list("sender", "tokens_count"))
-    return JsonResponse({"sum": current_tokens, "presents": presents, **last_hour_sum}, status=200)
+    return JsonResponse(
+        {"sum": current_tokens, "presents": presents, "name": user.name, **last_hour_sum},
+        status=200,
+    )
 
 
 class GameResult(str, Enum):
