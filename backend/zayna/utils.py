@@ -1,9 +1,7 @@
 import random
 from enum import Enum
 
-from celery.bin.control import status
 from django.http import HttpResponse, JsonResponse
-from sqlalchemy.testing.plugin.plugin_base import logging
 
 from .tasks import *
 
