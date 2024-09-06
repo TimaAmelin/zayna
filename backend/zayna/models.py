@@ -1,6 +1,6 @@
 from django.db import models
 
-from backend.backend.settings import MAX_NANE_LENGTH
+from .config import MAX_NANE_LENGTH
 
 
 class User(models.Model):
