@@ -135,7 +135,7 @@ def add_present(sender_id, receiver_id, tokens_count):
 
 
 def get_projects():
-    projects = list(Project.objects.values_list("name", "price", "income"))
+    projects = list(Project.objects.values("name", "price", "income"))
     return JsonResponse({"projects": projects}, status=200)
 
 
