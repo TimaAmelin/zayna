@@ -147,7 +147,7 @@ def participate(user_id, project_id):
         return HttpResponse(status=400)
     project_qs = Project.objects.filter(id=project_id)
     if not project_qs.exists():
-        logging.info(f"Project {user_id} does not exist")
+        logging.info(f"Project {project_id} does not exist")
         return HttpResponse(status=400)
     user = user_qs.first()
     project = project_qs.first()
@@ -158,7 +158,6 @@ def participate(user_id, project_id):
     user.income += project.income
     user.save(update_fields=["tokens_count", "income"])
     project.users.add(user)
-    project.save(update_fields=["users"])
     return HttpResponse(status=201)
 
 

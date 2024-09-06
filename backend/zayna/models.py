@@ -48,4 +48,4 @@ class Project(models.Model):
     name = models.CharField(default="", null=False, blank=True, max_length=255)
     price = models.IntegerField(default=0)
     income = models.IntegerField(default=0)
-    users = models.ManyToManyField(User, default=None, related_name="projects")
+    users = models.ManyToManyField(User, default=None, blank=True, related_name="projects")
