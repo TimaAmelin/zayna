@@ -27,7 +27,7 @@ def add_user(id, username, referrer_id):
         logging.info(
             f"Create user {id} with username {username}" + (f" by referrer {referrer_id}" if referrer_id else "")
         )
-        user, _ = User.objects.create(username=username, id=id, referrer=referrer_qs.first())
+        user = User.objects.create(username=username, id=id, referrer=referrer_qs.first())
         if referrer_id:
             user.friends.add(referrer_qs.first())
         return HttpResponse(status=201)
@@ -198,5 +198,5 @@ def get_friends(id):
     if not user_qs.exists():
         logging.info(f"User {id} does not exist")
         return HttpResponse(status=400)
-    friends = list(user_qs.first().friends.values_list("username", flat=True))
+    friends = list(user_qs.first().friends.values("id", "username"))
     return JsonResponse({"friends": friends}, status=200)
