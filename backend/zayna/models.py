@@ -1,5 +1,3 @@
-from datetime import timezone
-from enum import Enum
 from django.db import models
 
 
@@ -8,6 +6,12 @@ class User(models.Model):
     username = models.CharField(max_length=32, null=True, blank=True)
     referrer = models.ForeignKey("User", null=True, on_delete=models.SET_NULL)
     tokens_count = models.TextField(default="0")
+    name = models.CharField(max_length=255, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.name is None:  # Only set name if it's not already provided
+            self.name = self.username
+        super(User, self).save(*args, **kwargs)
 
 
 class TokensBatch(models.Model):

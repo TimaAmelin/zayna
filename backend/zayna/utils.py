@@ -1,9 +1,11 @@
 import random
+from enum import Enum
 
 from django.http import HttpResponse, JsonResponse
 from sqlalchemy.testing.plugin.plugin_base import logging
 
 from .tasks import *
+
 
 def add_user(id, username, referrer):
     user_qs = User.objects.filter(id=id)
