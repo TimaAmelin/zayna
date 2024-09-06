@@ -6,20 +6,30 @@ from django.http import HttpResponse, JsonResponse
 from .tasks import *
 
 
-def add_user(id, username, referrer):
+def add_user(id, username, referrer_id):
+    if id == referrer_id:
+        logging.warning(f"User {id} tries to refer himself")
+        return JsonResponse({"status": "ERROR", "message": "User can not refer himself"}, status=400)
     user_qs = User.objects.filter(id=id)
-    referrer_qs = User.objects.filter(id=referrer)
+    referrer_qs = User.objects.filter(id=referrer_id)
     if user_qs.exists():
         logging.info(f"User {id} already exists")
+        if not referrer_qs.exists():
+            logging.info(f"Referrer {referrer_id} does not exist")
+            return HttpResponse(status=204)
+        if referrer_id:
+            user_qs.first().friends.add(referrer_qs.first())
         return HttpResponse(status=204)
     else:
         if not referrer_qs.exists():
-            logging.info(f"Referrer {referrer} does not exist")
-            referrer = None
+            logging.info(f"Referrer {referrer_id} does not exist")
+            referrer_id = None
         logging.info(
-            f"Create user {id} with username {username}" + (f" by referrer {referrer}" if referrer else "")
+            f"Create user {id} with username {username}" + (f" by referrer {referrer_id}" if referrer_id else "")
         )
-        User.objects.create(username=username, id=id, referrer=referrer_qs.first())
+        user, _ = User.objects.create(username=username, id=id, referrer=referrer_qs.first())
+        if referrer_id:
+            user.friends.add(referrer_qs.first())
         return HttpResponse(status=201)
 
 
