@@ -68,3 +68,18 @@ def projects_view(request):
         return get_projects()
 
     return HttpResponse(status=404)
+
+
+def change_name_view(request):
+    if request.method == "POST":
+        logging.info(f"[Zayna] change name {request}")
+        body = json.loads(request.body)
+        id = body.get("id")
+        name = body.get("name")
+        try:
+            return change_name(id, name)
+        except Exception as e:
+            logging.warning(e)
+            return HttpResponse(status=400)
+
+    return HttpResponse(status=404)

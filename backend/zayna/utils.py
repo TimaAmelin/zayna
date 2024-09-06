@@ -134,3 +134,17 @@ def add_present(sender_id, receiver_id, tokens_count):
 def get_projects():
     projects = list(Project.objects.values_list("name", "price", "tokens_count"))
     return JsonResponse({"projects": projects}, status=200)
+
+
+def change_name(id, name):
+    user_qs = User.objects.filter(id=id)
+    if not user_qs.exists():
+        logging.info(f"User {id} does not exist")
+        return HttpResponse(status=400)
+    if len(name) > MAX_NANE_LENGTH:
+        logging.info(f"Name {name} is too long")
+        return HttpResponse(status=400)
+    user = user_qs.first()
+    user.name = name
+    user.save(update_fields=["name"])
+    return HttpResponse(status=201)
