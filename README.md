@@ -23,6 +23,7 @@ curl -X GET -H "Content-Type: application/json" -v http://127.0.0.1:8000/tokens_
 curl -X POST -H "Content-Type: application/json" -d '{"field":[[1,-1,-1],[-1,1,0],[0,0,1]]}' -v http://127.0.0.1:8000/tic_tac_toe/
 curl -X PUT -H "Content-Type: application/json" -d '{"sender": 123, "receiver": 1234, "tokens_count": 1}' -v http://127.0.0.1:8000/present/
 curl -X GET -H "Content-Type: application/json" -v http://127.0.0.1:8000/projects/
+curl -X POST -H "Content-Type: application/json" -d '{"user_id": 123, "project_id": 0}' -v http://127.0.0.1:8000/participate/
 curl -X POST -H "Content-Type: application/json" -d '{"id": 123, "name": "meme"}' -v http://127.0.0.1:8000/change_name/
 curl -X DELETE -H "Content-Type: application/json" -v http://127.0.0.1:8000/delete_user/123/
 ### Подключение к БД:  

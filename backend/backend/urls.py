@@ -28,6 +28,7 @@ urlpatterns = [
     path("tic_tac_toe/", tic_tac_toe_view, name="tic_tac_toe"),
     path("present/", present_view, name="present"),
     path("projects/", projects_view, name="projects"),
+    path("participate/", participate_view, name="participate"),
     path("change_name/", change_name_view, name="change_name"),
     path("delete_user/<int:id>/", delete_user_view, name="delete_user"),
 ]

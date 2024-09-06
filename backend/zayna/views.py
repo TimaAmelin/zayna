@@ -67,6 +67,16 @@ def projects_view(request):
     return HttpResponse(status=404)
 
 
+def participate_view(request):
+    if request.method == "POST":
+        logging.info(f"[Zayna] participate {request}")
+        body = json.loads(request.body)
+        user_id = body.get("user_id")
+        project_id = body.get("project_id")
+        return participate(user_id, project_id)
+    return HttpResponse(status=404)
+
+
 def change_name_view(request):
     if request.method == "POST":
         logging.info(f"[Zayna] change name {request}")

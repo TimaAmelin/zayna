@@ -1,6 +1,7 @@
 import random
 from enum import Enum
 
+from celery.bin.control import status
 from django.http import HttpResponse, JsonResponse
 from sqlalchemy.testing.plugin.plugin_base import logging
 
@@ -135,8 +136,30 @@ def add_present(sender_id, receiver_id, tokens_count):
 
 
 def get_projects():
-    projects = list(Project.objects.values("name", "price", "income"))
+    projects = list(Project.objects.values("id", "name", "price", "income"))
     return JsonResponse({"projects": projects}, status=200)
+
+
+def participate(user_id, project_id):
+    user_qs = User.objects.filter(id=user_id)
+    if not user_qs.exists():
+        logging.info(f"User {user_id} does not exist")
+        return HttpResponse(status=400)
+    project_qs = Project.objects.filter(id=project_id)
+    if not project_qs.exists():
+        logging.info(f"Project {user_id} does not exist")
+        return HttpResponse(status=400)
+    user = user_qs.first()
+    project = project_qs.first()
+    if user.tokens_sum < project.price:
+        logging.info(f"Not enough tokens: {user.tokens_sum} < {project.price}")
+        return JsonResponse({"result": "ERROR", "message": "Not enough tokens"}, status=400)
+    user.tokens_count = str(int(user.tokens_count) - project.price)
+    user.income += project.income
+    user.save(update_fields=["tokens_count", "income"])
+    project.users.add(user)
+    project.save(update_fields=["users"])
+    return HttpResponse(status=201)
 
 
 def change_name(id, name):
