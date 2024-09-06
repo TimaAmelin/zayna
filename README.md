@@ -26,6 +26,7 @@ curl -X GET -H "Content-Type: application/json" -v http://127.0.0.1:8000/project
 curl -X POST -H "Content-Type: application/json" -d '{"user_id": 123, "project_id": 1}' -v http://127.0.0.1:8000/participate/
 curl -X POST -H "Content-Type: application/json" -d '{"id": 123, "name": "meme"}' -v http://127.0.0.1:8000/change_name/
 curl -X DELETE -H "Content-Type: application/json" -v http://127.0.0.1:8000/delete_user/123/
+curl -X GET -H "Content-Type: application/json" -v http://127.0.0.1:8000/friends?id=123
 ### Подключение к БД:  
 sqlite3 zaynadb.sqlite3 
 

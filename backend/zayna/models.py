@@ -14,6 +14,7 @@ class User(models.Model):
     tokens_count = models.TextField(default="0")
     income = models.IntegerField(default=0)
     name = models.CharField(max_length=MAX_NANE_LENGTH, null=True, blank=True)
+    friends = models.ManyToManyField('self', blank=True)
 
     def save(self, *args, **kwargs):
         if self.name is None:  # Only set name if it's not already provided

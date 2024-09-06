@@ -181,3 +181,12 @@ def delete_user(id):
     user_qs.delete()
     logging.info(f"User {id} deleted!")
     return HttpResponse(status=201)
+
+
+def get_friends(id):
+    user_qs = User.objects.filter(id=id)
+    if not user_qs.exists():
+        logging.info(f"User {id} does not exist")
+        return HttpResponse(status=400)
+    friends = list(user_qs.first().friends.values_list("username", flat=True))
+    return JsonResponse({"friends": friends}, status=200)
