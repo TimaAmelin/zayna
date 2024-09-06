@@ -80,3 +80,11 @@ def change_name_view(request):
             return HttpResponse(status=400)
 
     return HttpResponse(status=404)
+
+
+def delete_user_view(request, id):
+    if request.method == "DELETE":
+        logging.info(f"[Zayna] deleting user {id}")
+        return delete_user(id)
+
+    return HttpResponse(status=404)

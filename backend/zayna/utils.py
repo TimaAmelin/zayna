@@ -151,3 +151,13 @@ def change_name(id, name):
     user.name = name
     user.save(update_fields=["name"])
     return HttpResponse(status=201)
+
+
+def delete_user(id):
+    user_qs = User.objects.filter(id=id)
+    if not user_qs.exists():
+        logging.info(f"User {id} does not exist")
+        return HttpResponse(status=400)
+    user_qs.delete()
+    logging.info(f"User {id} deleted!")
+    return HttpResponse(status=201)

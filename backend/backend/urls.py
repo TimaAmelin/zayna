@@ -29,4 +29,5 @@ urlpatterns = [
     path("present/", present_view, name="present"),
     path("projects/", projects_view, name="projects"),
     path("change_name/", change_name_view, name="change_name"),
+    path("delete_user/<int:id>/", delete_user_view, name="delete_user"),
 ]
