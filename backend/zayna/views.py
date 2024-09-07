@@ -44,6 +44,15 @@ def friends_view(request):
     return HttpResponse(status=404)
 
 
+def daily_view(request):
+    if request.method == "GET":
+        logging.info(f"[Zayna] get daily reward {request}")
+        id = request.GET.get("id")
+        return get_daily_reward(id)
+
+    return HttpResponse(status=404)
+
+
 def tic_tac_toe_view(request):
     if request.method == "POST":
         logging.info(f"[Zayna] tic tac toe step {request}")

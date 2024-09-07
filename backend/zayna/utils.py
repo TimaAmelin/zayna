@@ -3,6 +3,7 @@ from enum import Enum
 
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
+from yt.common import update
 
 from .tasks import *
 
@@ -232,3 +233,22 @@ def get_friends(id):
         return HttpResponse(status=400)
     friends = list(user_qs.first().friends.values("id", "username"))
     return JsonResponse({"friends": friends}, status=200)
+
+
+def get_daily_reward(id):
+    user_qs = User.objects.filter(id=id)
+    if not user_qs.exists():
+        logging.info(f"User {id} does not exist")
+        return HttpResponse(status=400)
+    user = user_qs.first()
+    if timezone.now() - user.daily_reward_at < datetime.timedelta(days=1):
+        return JsonResponse({"reward": False, "combo": user.daily_combo}, status=200)
+    if datetime.timedelta(days=1) < timezone.now() - user.daily_reward_at < datetime.timedelta(hours=30):
+        user.daily_combo += 1
+        user.daily_reward_at = timezone.now()
+        user.save(update_fields=["daily_combo", "daily_reward_at"])
+        return JsonResponse({"reward": True, "combo": user.daily_combo + 1}, status=201)
+    user.daily_combo = 0
+    user.daily_reward_at = timezone.now()
+    user.save(update_fields=["daily_combo", "daily_reward_at"])
+    return JsonResponse({"reward": False, "combo": 0}, status=200)
