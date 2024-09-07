@@ -3,7 +3,7 @@ from .models import Project
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'income')  # Columns to display in the list view
+    ist_display = [field.name for field in Project._meta.get_fields()]  # Columns to display in the list view
     search_fields = ('name',)  # Fields to search by
     list_filter = ('price',)  # Fields to filter by
 
