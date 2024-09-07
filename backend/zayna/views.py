@@ -61,10 +61,9 @@ def present_view(request):
     if request.method == "PUT":
         logging.info(f"[Zayna] present {request} {request.body}")
         body = json.loads(request.body)
-        sender_id = body.get("sender")
-        receiver_id = body.get("receiver")
-        tokens_count = body.get("tokens_count")
-        return add_present(sender_id, receiver_id, tokens_count)
+        sender_id = body.get("sender_id")
+        project_id = body.get("project_id")
+        return add_present(sender_id, project_id)
     return HttpResponse(status=404)
 
 

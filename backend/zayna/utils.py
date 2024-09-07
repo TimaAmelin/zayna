@@ -2,6 +2,7 @@ import random
 from enum import Enum
 
 from django.http import HttpResponse, JsonResponse
+from sqlalchemy.testing.suite.test_reflection import users
 
 from .tasks import *
 
@@ -116,31 +117,28 @@ def next_step(field):
     return JsonResponse({"field": field}, status=202)
 
 
-def add_present(sender_id, receiver_id, tokens_count):
-    if sender_id == receiver_id:
-        logging.info(f"Users {sender_id} and {receiver_id} are the same.")
-        return HttpResponse(status=400)
+def add_present(sender_id, project_id):
     sender_qs = User.objects.filter(id=sender_id)
     if not sender_qs.exists():
         logging.info(f"User {sender_id} does not exist")
         return HttpResponse(status=400)
     sender = sender_qs.first()
-    receiver_qs = User.objects.filter(id=receiver_id)
-    if not receiver_qs.exists():
-        logging.info(f"User {receiver_id} does not exist")
+
+    project_qs = Project.objects.filter(id=project_id)
+    if not project_qs.exists():
+        logging.info(f"Project {project_id} does not exist")
         return HttpResponse(status=400)
-    receiver = receiver_qs.first()
-    batches_sum = sender.batches.aggregate(per_hour=Sum("tokens_count"))
-    current_tokens = int(sender.tokens_count) + (batches_sum["per_hour"] or 0)
-    if tokens_count < 0 or current_tokens < tokens_count:
-        logging.warning(f"Required {tokens_count}, current tokens: {current_tokens}")
+    project = project_qs.first()
+
+    if sender.tokens_sum < project.price:
+        logging.warning(f"Required {project.price}, current tokens: {sender.tokens_sum}")
         return HttpResponse("Not enough tokens", status=400)
-    Present.objects.create(sender=sender, receiver=receiver, tokens_count=tokens_count)
-    sender.tokens_count = str(current_tokens - tokens_count)
+
+    present = Present.objects.create(sender=sender, project=project)
+
+    sender.tokens_count = str(int(sender.tokens_count) - project.price)
     sender.save(update_fields=["tokens_count"])
-    receiver.tokens_count = str(int(receiver.tokens_count) + tokens_count)
-    receiver.save(update_fields=["tokens_count"])
-    return HttpResponse(status=200)
+    return JsonResponse({"present": present.pk, "link": present.link}, status=201)
 
 
 def get_projects():

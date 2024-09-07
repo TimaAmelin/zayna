@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models import Sum
 from django.utils import timezone
 
-from .config import MAX_NANE_LENGTH
+from .config import MAX_NANE_LENGTH, BOT_LINK
 
 
 class User(models.Model):
@@ -38,15 +38,18 @@ class TokensBatch(models.Model):
     created_at = models.DateTimeField(auto_now=True)
 
 
-class Present(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="presents")
-    tokens_count = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now=True)
-
-
 class Project(models.Model):
     name = models.CharField(default="", null=False, blank=True, max_length=255)
     price = models.IntegerField(default=0)
     income = models.IntegerField(default=0)
     users = models.ManyToManyField(User, default=None, blank=True, related_name="projects")
+
+
+class Present(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    received = models.BooleanField(default=False)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False, related_name="presents")
+
+    @property
+    def link(self):
+        return f"{BOT_LINK}?start={self.sender.id}present{self.pk}"
