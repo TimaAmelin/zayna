@@ -1,9 +1,8 @@
 import random
 from enum import Enum
 
-from django.http import HttpResponse, JsonResponse
 from django.conf import settings
-from yt.common import update
+from django.http import HttpResponse, JsonResponse
 
 from .tasks import *
 
