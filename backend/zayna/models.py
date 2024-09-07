@@ -52,4 +52,4 @@ class Present(models.Model):
 
     @property
     def link(self):
-        return f"{BOT_LINK}?start={self.sender.id}present{self.pk}"
+        return f"{BOT_LINK}?start=present{self.pk}"

@@ -141,6 +141,30 @@ def add_present(sender_id, project_id):
     return JsonResponse({"present": present.pk, "link": present.link}, status=201)
 
 
+def get_present(user_id, present_id):
+    user_qs = User.objects.filter(id=user_id)
+    if not user_qs.exists():
+        logging.info(f"User {user_id} does not exist")
+        return HttpResponse(status=400)
+    user = user_qs.first()
+
+    present_qs = Present.objects.filter(id=present_id)
+    if not present_qs.exists():
+        logging.info(f"Present {present_id} does not exist")
+        return HttpResponse(status=400)
+    present = present_qs.first()
+
+    if present.received:
+        logging.info(f"Present {present_id} has been already received")
+        return HttpResponse(status=400)
+
+    present.received = True
+    present.save(update_fields=["received"])
+    user.income += present.project.income
+    user.save(update_fields=["income"])
+    return HttpResponse(status=200)
+
+
 def get_projects():
     projects = list(Project.objects.values("id", "name", "price", "income"))
     return JsonResponse({"projects": projects}, status=200)
