@@ -2,6 +2,7 @@ import random
 from enum import Enum
 
 from django.http import HttpResponse, JsonResponse
+from django.conf import settings
 
 from .tasks import *
 
@@ -168,7 +169,8 @@ def get_projects(request):
     projects = list(Project.objects.values("id", "name", "price", "income", "level", "mode", "description", "logo"))
     for project in projects:
         if project["logo"]:  # Check if the logo field is not empty
-            project['logo'] = request.build_absolute_uri(project['logo'])
+            project['logo'] = request.build_absolute_uri(settings.MEDIA_URL + project['logo'])
+
     return JsonResponse({"projects": projects}, status=200)
 
 
