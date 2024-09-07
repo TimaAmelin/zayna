@@ -72,7 +72,8 @@ def present_view(request):
         body = json.loads(request.body)
         sender_id = body.get("sender_id")
         project_id = body.get("project_id")
-        return add_present(sender_id, project_id)
+        receiver_id = body.get("receiver_id")
+        return add_present(sender_id, project_id, receiver_id)
     elif request.method == "GET":
         logging.info(f"[Zayna] get present {request} {request.body}")
         body = json.loads(request.body)

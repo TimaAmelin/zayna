@@ -64,9 +64,13 @@ def get_tokens_count(user_id):
         current_tokens += last_hour_sum["per_hour"]
     last_hour_sum["per_hour"] = (last_hour_sum["per_hour"] or 0) + user.income
 
-    projects = list(user.projects.values_list("name", flat=True))
+    presents = list(user.presents.filter(shown=False).values("project__name", "sender__username"))
+    for present in user.presents.filter(shown=False):
+        user.income += present.project.income
+    user.save(update_fields=["income"])
+    user.presents.filter(shown=False).update(shown=True)
     return JsonResponse(
-        {"sum": current_tokens, "projects": projects, "name": user.name, **last_hour_sum},
+        {"sum": current_tokens, "presents": presents, "name": user.name, "income": user.income, **last_hour_sum},
         status=200,
     )
 
@@ -124,7 +128,7 @@ def next_step(field):
     return JsonResponse({"field": field}, status=202)
 
 
-def add_present(sender_id, project_id):
+def add_present(sender_id, project_id, receiver_id=None):
     sender_qs = User.objects.filter(id=sender_id)
     if not sender_qs.exists():
         logging.info(f"User {sender_id} does not exist")
@@ -137,11 +141,19 @@ def add_present(sender_id, project_id):
         return HttpResponse(status=400)
     project = project_qs.first()
 
+    receiver = None
+    if receiver_id:
+        receiver_qs = User.objects.filter(id=receiver_id)
+        if not receiver_qs.exists():
+            logging.info(f"Receiver {receiver_id} does not exist")
+            return HttpResponse(status=400)
+        receiver = receiver_qs.first()
+
     if sender.tokens_sum < project.price:
         logging.warning(f"Required {project.price}, current tokens: {sender.tokens_sum}")
         return HttpResponse("Not enough tokens", status=400)
 
-    present = Present.objects.create(sender=sender, project=project)
+    present = Present.objects.create(sender=sender, project=project, receiver=receiver)
 
     sender.tokens_count = str(int(sender.tokens_count) - project.price)
     sender.save(update_fields=["tokens_count"])

@@ -35,10 +35,10 @@ class User(models.Model):
         return current_tokens
 
     def add_income(self):
-        if self.updated_at >= timezone.now() - datetime.timedelta(hours=1):
+        if self.income_updated_at >= timezone.now() - datetime.timedelta(hours=1):
             return
-        hours_without_update = (timezone.now() - self.updated_at) // datetime.timedelta(hours=1)
-        self.tokens_count = str(int(self.tokens_count + self.income * hours_without_update))
+        hours_without_update = (timezone.now() - self.income_updated_at) // datetime.timedelta(hours=1)
+        self.tokens_count = str(int(self.tokens_count) + self.income * hours_without_update)
         self.income_updated_at = timezone.now()
         self.save(update_fields=["tokens_count", "income_updated_at"])
 
@@ -70,7 +70,9 @@ class Project(models.Model):
 
 class Present(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="presents")
     received = models.BooleanField(default=False)
+    shown = models.BooleanField(default=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False, related_name="presents")
 
     @property
