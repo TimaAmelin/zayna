@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 from django.db.models import Sum
 from django.utils import timezone
+from sympy.physics.units import hours
 
 from .config import MAX_NANE_LENGTH, BOT_LINK
 
@@ -15,6 +16,7 @@ class User(models.Model):
     income = models.IntegerField(default=0)
     name = models.CharField(max_length=MAX_NANE_LENGTH, null=True, blank=True)
     friends = models.ManyToManyField('self', blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         if self.name is None:  # Only set name if it's not already provided
@@ -30,6 +32,13 @@ class User(models.Model):
         if last_hour_sum["per_hour"]:
             current_tokens += last_hour_sum["per_hour"]
         return current_tokens
+
+    def add_income(self):
+        if self.updated_at >= timezone.now() - datetime.timedelta(hours=1):
+            return
+        hours_without_update = (timezone.now() - self.updated_at) // datetime.timedelta(hours=1)
+        self.tokens_count = str(int(self.tokens_count + self.income * hours_without_update))
+        self.save(update_fields=["tokens_count", "updated_at"])
 
 
 class TokensBatch(models.Model):

@@ -50,16 +50,22 @@ def get_tokens_count(user_id):
     if not user_qs.exists():
         logging.info(f"User {user_id} does not exist")
         return HttpResponse(status=400)
-    current_tokens = int(user_qs.values_list("tokens_count", flat=True)[0])
+
     user = user_qs.first()
+    user.add_income()
+
+    current_tokens = int(user.tokens_count)
     last_hour_sum = user.batches.filter(
         created_at__gt=timezone.now() - datetime.timedelta(hours=1),
     ).aggregate(per_hour=Sum("tokens_count"))
+
     if last_hour_sum["per_hour"]:
         current_tokens += last_hour_sum["per_hour"]
-    presents = list(user.presents.values_list("sender", "tokens_count"))
+    last_hour_sum["per_hour"] = (last_hour_sum["per_hour"] or 0) + user.income
+
+    projects = list(user.projects.values_list("name", flat=True))
     return JsonResponse(
-        {"sum": current_tokens, "presents": presents, "name": user.name, **last_hour_sum},
+        {"sum": current_tokens, "projects": projects, "name": user.name, **last_hour_sum},
         status=200,
     )
 
