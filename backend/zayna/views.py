@@ -76,7 +76,7 @@ def present_view(request):
 def projects_view(request):
     if request.method == "GET":
         logging.info(f"[Zayna] get projects {request}")
-        return get_projects()
+        return get_projects(request)
 
     return HttpResponse(status=404)
 

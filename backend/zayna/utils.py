@@ -2,7 +2,6 @@ import random
 from enum import Enum
 
 from django.http import HttpResponse, JsonResponse
-from sqlalchemy.testing.suite.test_reflection import users
 
 from .tasks import *
 
@@ -165,8 +164,11 @@ def get_present(user_id, present_id):
     return HttpResponse(status=200)
 
 
-def get_projects():
-    projects = list(Project.objects.values("id", "name", "price", "income"))
+def get_projects(request):
+    projects = list(Project.objects.values("id", "name", "price", "income", "level", "mode", "description", "logo"))
+    for project in projects:
+        if project["logo"]:  # Check if the logo field is not empty
+            project['logo'] = request.build_absolute_uri(project['logo'])
     return JsonResponse({"projects": projects}, status=200)
 
 

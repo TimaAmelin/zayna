@@ -54,7 +54,7 @@ class Project(models.Model):
     level = models.IntegerField(default=0)
     mode = models.CharField(max_length=10, choices=MODE_CHOICES.choices, default=Modes.FOREST)
     description = models.TextField(null=True, blank=True)
-    logo = models.ImageField(upload_to='logos', blank=True, null=True)
+    logo = models.ImageField(blank=True, null=True)
 
 
 class Present(models.Model):

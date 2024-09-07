@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+from django.conf import settings
+from django.conf.urls.static import static
+from django.urls import path
 from zayna.views import *
 
 urlpatterns = [
@@ -34,3 +36,5 @@ urlpatterns = [
     path("change_name/", change_name_view, name="change_name"),
     path("delete_user/<int:id>/", delete_user_view, name="delete_user"),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
