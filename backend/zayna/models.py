@@ -19,6 +19,7 @@ class User(models.Model):
     daily_reward_at = models.DateTimeField(default=timezone.now)
     daily_combo = models.IntegerField(default=0)
     last_game_at = models.DateTimeField(default=None, null=True)
+    last_game_won = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if self.name is None:  # Only set name if it's not already provided

@@ -308,7 +308,8 @@ def check_tic_tac_toe(id):
         logging.info(f"User {id} does not exist")
         return False
     user = user_qs.first()
-    if user.last_game_at and user.last_game_at > timezone.now() - datetime.timedelta(days=1):
+    delta = datetime.timedelta(days=1) if user.last_game_won else datetime.timedelta(hours=1)
+    if user.last_game_at and user.last_game_at > timezone.now() - delta:
         logging.info(f"User {id} have already played the game")
         return False
     return True
