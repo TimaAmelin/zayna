@@ -64,7 +64,18 @@ def get_tokens_count(user_id):
         current_tokens += last_hour_sum["per_hour"]
     last_hour_sum["per_hour"] = (last_hour_sum["per_hour"] or 0) + user.income
 
-    presents = list(user.presents.filter(shown=False).values("project__name", "sender__username"))
+    presents = list(user.presents.filter(shown=False).values(
+        "project__id",
+        "project__name",
+        "project__price",
+        "project__income",
+        "project__level",
+        "project__mode",
+        "project__description",
+        "project__logo",
+        "project__name",
+        "sender__username",
+    ))
     for present in user.presents.filter(shown=False):
         user.income += present.project.income
     user.save(update_fields=["income"])
