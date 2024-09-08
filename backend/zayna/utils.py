@@ -274,6 +274,7 @@ def get_daily_reward(id):
         logging.info(f"User {id} does not exist")
         return HttpResponse(status=400)
     user = user_qs.first()
-    user.tokens_count = str(int(user.tokens_count) + DAILY_TOKENS * user.daily_combo)
+    new_tokens = DAILY_TOKENS * user.daily_combo
+    user.tokens_count = str(int(user.tokens_count) + new_tokens)
     user.save(update_fields=["tokens_count"])
-    return HttpResponse(status=201)
+    return JsonResponse({"tokens": new_tokens, "combo": user.daily_combo}, status=201)
