@@ -137,7 +137,7 @@ def next_step(user_id, field):
         user.last_game_at = timezone.now()
         user.save(update_fields=["last_game_at"])
         return status
-    return JsonResponse({"field": field}, status=202)
+    return JsonResponse({"field": field, "result": None}, status=202)
 
 
 def add_present(sender_id, project_id, receiver_id=None):
