@@ -1,9 +1,12 @@
 import random
+from distutils.command.config import config
 from enum import Enum
 
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
+from yt.common import update
 
+from .config import DAILY_TOKENS
 from .tasks import *
 
 
@@ -246,7 +249,7 @@ def get_friends(id):
     return JsonResponse({"friends": friends}, status=200)
 
 
-def get_daily_reward(id):
+def check_daily_reward(id):
     user_qs = User.objects.filter(id=id)
     if not user_qs.exists():
         logging.info(f"User {id} does not exist")
@@ -263,3 +266,14 @@ def get_daily_reward(id):
     user.daily_reward_at = timezone.now()
     user.save(update_fields=["daily_combo", "daily_reward_at"])
     return JsonResponse({"reward": False, "combo": 0}, status=200)
+
+
+def get_daily_reward(id):
+    user_qs = User.objects.filter(id=id)
+    if not user_qs.exists():
+        logging.info(f"User {id} does not exist")
+        return HttpResponse(status=400)
+    user = user_qs.first()
+    user.tokens_count = str(int(user.tokens_count) + DAILY_TOKENS * user.daily_combo)
+    user.save(update_fields=["tokens_count"])
+    return HttpResponse(status=201)

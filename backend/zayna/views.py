@@ -46,6 +46,15 @@ def friends_view(request):
 
 def daily_view(request):
     if request.method == "GET":
+        logging.info(f"[Zayna] check daily reward {request}")
+        id = request.GET.get("id")
+        return check_daily_reward(id)
+
+    return HttpResponse(status=404)
+
+
+def get_daily_view(request):
+    if request.method == "GET":
         logging.info(f"[Zayna] get daily reward {request}")
         id = request.GET.get("id")
         return get_daily_reward(id)
