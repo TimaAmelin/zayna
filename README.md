@@ -21,7 +21,7 @@ curl -X PUT -H "Content-Type: application/json" -d '{"id":123, "username":"hello
 curl -X PUT -H "Content-Type: application/json" -d '{"id":123, "username":"hello", "from": 1234}' -v http://127.0.0.1:8000/login/
 curl -X PUT -H "Content-Type: application/json" -d '{"id":123, "tokens_count":10}' -v http://127.0.0.1:8000/tokens_batch/
 curl -X GET -H "Content-Type: application/json" -v http://127.0.0.1:8000/tokens_count?id=123
-curl -X POST -H "Content-Type: application/json" -d '{"field":[[1,-1,-1],[-1,1,0],[0,0,1]]}' -v http://127.0.0.1:8000/tic_tac_toe/
+curl -X POST -H "Content-Type: application/json" -d '{"field":[[0,0,0],[0,1,0],[0,0,0]], "id": 123}' -v http://127.0.0.1:8000/tic_tac_toe/
 curl -X PUT -H "Content-Type: application/json" -d '{"sender_id": 123, "project_id": 1}' -v http://127.0.0.1:8000/present/
 curl -X PUT -H "Content-Type: application/json" -d '{"sender_id": 123, "receiver_id": 1234, "project_id": 1}' -v http://127.0.0.1:8000/present/
 curl -X GET -H "Content-Type: application/json" -d '{"user_id": 123, "present_id": 1}' -v http://127.0.0.1:8000/present/

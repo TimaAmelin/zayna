@@ -4,7 +4,7 @@ from enum import Enum
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 
-from .config import DAILY_TOKENS
+from .config import DAILY_TOKENS, GAME_PRICE
 from .tasks import *
 
 
@@ -113,9 +113,19 @@ def check_win(field, value):
     return free_cells
 
 
-def next_step(field):
+def next_step(user_id, field):
+    user_qs = User.objects.filter(id=user_id)
+    if not user_qs.exists():
+        logging.info(f"User {user_id} does not exist")
+        return HttpResponse(status=400)
+    user = user_qs.first()
+
     status = check_win(field, PlayerValue.PLAYER)
     if isinstance(status, JsonResponse):
+        user.last_game_at = timezone.now()
+        if status.get("result") == GameResult.PLAYER_WIN:
+            user.tokens_count = str(int(user.tokens_count) + GAME_PRICE)
+        user.save(update_fields=["tokens_count", "last_game_at"])
         return status
 
     free_cells = status
@@ -124,6 +134,8 @@ def next_step(field):
 
     status = check_win(field, PlayerValue.BOT)
     if isinstance(status, JsonResponse):
+        user.last_game_at = timezone.now()
+        user.save(update_fields=["last_game_at"])
         return status
     return JsonResponse({"field": field}, status=202)
 
@@ -276,3 +288,15 @@ def get_daily_reward(id):
     user.tokens_count = str(int(user.tokens_count) + new_tokens)
     user.save(update_fields=["tokens_count"])
     return JsonResponse({"tokens": new_tokens, "combo": user.daily_combo}, status=201)
+
+
+def check_tic_tac_toe(id):
+    user_qs = User.objects.filter(id=id)
+    if not user_qs.exists():
+        logging.info(f"User {id} does not exist")
+        return False
+    user = user_qs.first()
+    if user.last_game_at and user.last_game_at > timezone.now() - datetime.timedelta(days=1):
+        logging.info(f"User {id} have already played the game")
+        return False
+    return True

@@ -67,11 +67,11 @@ def tic_tac_toe_view(request):
         logging.info(f"[Zayna] tic tac toe step {request}")
         body = json.loads(request.body)
         field = body.get("field")
-        try:
-            return next_step(field)
-        except Exception as e:
-            logging.warning(e)
-            return HttpResponse(status=400)
+        id = body.get("id")
+        if not check_tic_tac_toe(id):
+            logging.info(f"User {id} has already played tic tac toe")
+            return HttpResponse(status=408)
+        return next_step(id, field)
     return HttpResponse(status=404)
 
 

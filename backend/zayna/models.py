@@ -18,6 +18,7 @@ class User(models.Model):
     income_updated_at = models.DateTimeField(default=timezone.now)
     daily_reward_at = models.DateTimeField(default=timezone.now)
     daily_combo = models.IntegerField(default=0)
+    last_game_at = models.DateTimeField(default=None, null=True)
 
     def save(self, *args, **kwargs):
         if self.name is None:  # Only set name if it's not already provided
