@@ -278,16 +278,16 @@ def check_daily_reward(id):
         return HttpResponse(status=400)
     user = user_qs.first()
     if timezone.now() - user.daily_reward_at < datetime.timedelta(days=1):
-        return JsonResponse({"reward": False, "combo": user.daily_combo}, status=200)
+        return JsonResponse({"reward": False, "combo": user.daily_combo, "last": user.daily_reward_at}, status=200)
     if datetime.timedelta(days=1) < timezone.now() - user.daily_reward_at < datetime.timedelta(hours=30):
         user.daily_combo += 1
         user.daily_reward_at = timezone.now()
         user.save(update_fields=["daily_combo", "daily_reward_at"])
-        return JsonResponse({"reward": True, "combo": user.daily_combo + 1}, status=201)
+        return JsonResponse({"reward": True, "combo": user.daily_combo + 1, "last": user.daily_reward_at}, status=201)
     user.daily_combo = 0
     user.daily_reward_at = timezone.now()
     user.save(update_fields=["daily_combo", "daily_reward_at"])
-    return JsonResponse({"reward": False, "combo": 0}, status=200)
+    return JsonResponse({"reward": False, "combo": 0, "last": user.daily_reward_at}, status=200)
 
 
 def get_daily_reward(id):
