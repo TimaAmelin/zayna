@@ -68,9 +68,9 @@ def tic_tac_toe_view(request):
         body = json.loads(request.body)
         field = body.get("field")
         id = body.get("id")
-        if not check_tic_tac_toe(id):
-            logging.info(f"User {id} has already played tic tac toe")
-            return HttpResponse(status=408)
+        check = check_tic_tac_toe(id)
+        if isinstance(check, JsonResponse):
+            return check
         return next_step(id, field)
     return HttpResponse(status=404)
 

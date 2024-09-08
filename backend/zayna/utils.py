@@ -137,7 +137,8 @@ def next_step(user_id, field):
         user.last_game_at = timezone.now()
         if status.get("result") == GameResult.PLAYER_WIN:
             user.tokens_count = str(int(user.tokens_count) + GAME_PRICE)
-        user.save(update_fields=["tokens_count", "last_game_at"])
+            user.last_game_won = True
+        user.save(update_fields=["tokens_count", "last_game_at", "last_game_won"])
         return status
 
     free_cells = status
@@ -147,8 +148,10 @@ def next_step(user_id, field):
     status = check_win(field, PlayerValue.BOT)
     if isinstance(status, JsonResponse):
         user.last_game_at = timezone.now()
-        user.save(update_fields=["last_game_at"])
+        user.last_game_won = False
+        user.save(update_fields=["last_game_at", "last_game_won"])
         return status
+
     return JsonResponse({"field": field, "result": GameResult.IN_PROGRESS}, status=202)
 
 
@@ -306,10 +309,13 @@ def check_tic_tac_toe(id):
     user_qs = User.objects.filter(id=id)
     if not user_qs.exists():
         logging.info(f"User {id} does not exist")
-        return False
+        return JsonResponse({"status": "ERROR", "message": "User does not exist"}, status=400)
     user = user_qs.first()
     delta = datetime.timedelta(days=1) if user.last_game_won else datetime.timedelta(hours=1)
     if user.last_game_at and user.last_game_at > timezone.now() - delta:
-        logging.info(f"User {id} have already played the game")
-        return False
-    return True
+        logging.info(f"User {id} has already played the game")
+        return JsonResponse(
+            {"status": "ERROR", "message": "User has already played the game", "next": user.last_game_at + delta},
+            status=408,
+        )
+    return None
