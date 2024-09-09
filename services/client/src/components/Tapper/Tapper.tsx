@@ -235,7 +235,7 @@ export const Tapper = ({ id, username, from, openReward, present }: {
                 </TapperMainContainerMoney>
                 <TapperMainContainerTapperContainer>
                     <TapperMainContainerTapper onClick={() => {
-                        setMoney(money + 100000)
+                        setMoney(money + money.toString().length)
                     }} />
                 </TapperMainContainerTapperContainer>
             </TapperMainContainer>

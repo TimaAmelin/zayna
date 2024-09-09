@@ -85,7 +85,7 @@ export const Tasks = ({ id, username }: {
                     </Box>
                     <TasksCardTextsContainer>
                         <TasksCardMainText>
-                            Task list
+                            Join our Telegram
                         </TasksCardMainText>
                         <TasksCardSecondaryText>
                             <CoinIcon style={{marginRight: 5}} /> +5,000
