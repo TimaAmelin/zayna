@@ -3,8 +3,6 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function PUT(req: NextRequest) {
     const { id, tokensPerHalfSecond } = await req.json()
 
-    console.log(tokensPerHalfSecond)
-
     try {
         const response = await fetch('http://web:8000/tokens_batch/', {
             method: 'PUT',
@@ -15,7 +13,7 @@ export async function PUT(req: NextRequest) {
                 id,
                 tokens_count: tokensPerHalfSecond,
             })
-        })
+        });
 
         return NextResponse.json({ success: true })
     } catch (error) {

@@ -12,7 +12,7 @@ export async function PUT(req: NextRequest) {
             body: JSON.stringify({
                 id, username, from
             })
-        })
+        });
 
         return NextResponse.json({ success: true })
     } catch (error) {

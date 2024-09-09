@@ -1,4 +1,3 @@
-// import { Dummy } from '@/components/Dummy/Dummy';
 import { DummyWithInvite } from '@/components/DummyWithInvite/DummyWithInvite';
 
 export default function Home(props: any) {

@@ -1,6 +1,6 @@
 export function getComponentFileText(componentName) {
 	return (
-		'import React from \'react\';\n' +
+		`'use client';\n` +
         `import { ${componentName}Container } from './${componentName}.css';\n\n` +
         `export const ${componentName} = () => {\n` +
         '    return (\n' +

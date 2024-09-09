@@ -7,33 +7,140 @@ import CoinMin from '../../assets/icons/coin_min.svg';
 import CoinMax from '../../assets/icons/coin_max.svg';
 import IIcon from '../../assets/icons/i.svg';
 import SettingsIcon from '../../assets/icons/settings.svg';
-import CalendarIcon from '../../assets/icons/calendar.png';
-import Image from 'next/image';
+import GameIcon from '../../assets/icons/game.png';
+import CalendarNewIcon from '../../assets/icons/calendar_new.png';
+import ForestIcon from '../../assets/icons/forest.png';
 
 import { getTokens } from '@/api/handlers/getTokens';
 import { putTokenBatch } from '@/api/handlers/putTokenBatch';
 import { putUser } from '@/api/handlers/putUser';
+import { useRouter } from 'next/navigation';
+import { GiftModal } from '../GiftModal/GiftModal';
 
-export const Tapper = ({ id, username, from }: {
+import Image from 'next/image';
+import { RewardModal } from '../RewardModal/RewardModal';
+import { getDaily } from '@/api/handlers/getDaily';
+import { ticTacToe } from '@/api/handlers/ticTacToe';
+import { recieveGift } from '@/api/handlers/recieveGift';
+
+function dateDiff(date1: Date, date2: Date) {
+    const diff: number = date2.getTime() - date1.getTime();
+    
+    const hours: number = Math.floor(diff / (1000 * 60 * 60));
+    const minutes: number = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    
+    return { hours, minutes }
+}
+
+function timeUntilTomorrow() {
+    const tomorrow: Date = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    
+    return timeUntilDate(tomorrow)
+}
+
+function timeUntilDate(date: Date) {
+    const now: Date = new Date();
+    
+    return dateDiff(now, date)
+}
+
+export const Tapper = ({ id, username, from, openReward, present }: {
     id: number,
     username?: string,
     from?: number,
+    openReward?: boolean,
+    present?: string
 }) => {
     const [money, setMoney] = useState(0);
     const [moneyLast, setMoneyLast] = useState(0);
     const [moneyPerHour, setMoneyPerHour] = useState(0);
+    const [giftModalOpen, setGiftModalOpen] = useState(false);
+    const [dailyModalOpen, setDailyModalOpen] = useState(openReward ?? false);
+    const [gifts, setGifts] = useState<{
+        project__id: number;
+        project__name: string;
+        project__price: number;
+        project__income: number;
+        project__level: number;
+        project__mode: string;
+        project__description: string;
+        project__logo: string;
+        sender__username: string;
+    }[]>([]);
+
+    const [giftN, setGiftN] = useState(0);
+
+    const [available, setAvailable] = useState(false);
+    const [combo, setCombo] = useState(0);
+    const [nextMini, setNextMini] = useState<Date>();
+    const [timeToNextMini, setTimeToNextMini] = useState({hours: 0, minutes: 0});
+
+    const [timeToDaily, setTimeToDaily] = useState(timeUntilTomorrow());
+
+    const router = useRouter();
+    
+    const toggleDrawer = async (b: boolean) => {
+        if (!b) {
+            if (giftN + 1 === gifts.length) {
+                setGiftModalOpen(false);
+                return
+            }
+            setGiftModalOpen(false);
+            setGiftN(giftN + 1);
+            await new Promise(r => setTimeout(r, 500));
+            setGiftModalOpen(true);
+            return
+        }
+        setGiftModalOpen(false);
+        return
+    }
 
     useEffect(() => {
         const getUserTokens = async () => {
             await putUser(id, username, from);
+            if (present) {
+                await recieveGift(id, Number(present));
+            }
             const res = await getTokens(Number(id));
             return res
         }
 
         getUserTokens().then(data => {
-            setMoney(data.response.sum)
-            setMoneyLast(data.response.sum)
-            setMoneyPerHour(data.response.per_hour ?? 0)
+            setMoney(data.response.sum);
+            setMoneyLast(data.response.sum);
+            setMoneyPerHour(data.response.per_hour ?? 0);
+            setGifts(data.response.presents);
+            if (data.response.presents.length) {
+                setGiftModalOpen(true);
+            }
+        })
+    }, [id, username, from]);
+
+    useEffect(() => {
+        const getUserDaily = async () => {
+            const res = await getDaily(Number(id));
+            return res
+        }
+
+        getUserDaily().then(data => {
+            setAvailable(data.response.reward);
+            setCombo(data.response.combo);
+        })
+    }, [id, username, from]);
+
+    useEffect(() => {
+        const getUserMini = async () => {
+            const res = await ticTacToe([[0, 0, 0], [0, 0, 0], [0, 0, 0]], id);
+            return res
+        }
+
+        getUserMini().then(data => {
+            if (data.response.message === 'User has already played the game') {
+                setNextMini(new Date(data.response.next));
+                setTimeToNextMini(timeUntilDate(new Date(data.response.next)));
+            }
         })
     }, [id, username, from]);
 
@@ -42,6 +149,17 @@ export const Tapper = ({ id, username, from }: {
         setMoneyLast(money)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [money, id]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTimeToDaily(timeUntilTomorrow);
+            if (nextMini) {
+                setTimeToNextMini(timeUntilDate(new Date(nextMini)));
+            }
+        }, 1000);
+ 
+        return () => clearInterval(interval);
+    }, [timeToDaily]);
 
     return (
         <TapperContainer>
@@ -63,10 +181,11 @@ export const Tapper = ({ id, username, from }: {
                     <TapperStatisticsRight>
                         <TapperStatisticsAvatar />
                         <TapperStatisticsName>
-                            Ivan Ivanov
+                            {username}
                         </TapperStatisticsName>
                         <TapperStatisticsSettingsLine />
-                        <TapperStatisticsSettingsContainer>
+                        <TapperStatisticsSettingsContainer
+                            onClick={() => router.push(`/settings?id=${id}&username=${username}`)}>
                             <SettingsIcon />
                         </TapperStatisticsSettingsContainer>
                     </TapperStatisticsRight>
@@ -75,28 +194,37 @@ export const Tapper = ({ id, username, from }: {
             <TapperMainContainer>
                 <TapperMainContainerCardContainer>
                     <TapperMainContainerCard>
-                        <TapperMainContainerCardTop>
-                            <Image alt="" src={CalendarIcon} height={27} width={27} />
-                            <TapperMainContainerCardTopTime>
-                                {moneyLast}
-                            </TapperMainContainerCardTopTime>
+                        <TapperMainContainerCardTop onClick={() => setDailyModalOpen(true)}>
+                            <div style={{height: 35}}>
+                                <Image src={CalendarNewIcon} height={27} alt="" />
+                            </div>
+                            {timeToDaily && (
+                                <TapperMainContainerCardTopTime>
+                                    {timeToDaily.hours}h{timeToDaily.minutes}m
+                                </TapperMainContainerCardTopTime>
+                            )}
                         </TapperMainContainerCardTop>
                         Daily Reward
                     </TapperMainContainerCard>
-                    <TapperMainContainerCard>
+                    <TapperMainContainerCard onClick={() => router.push(`/projects?id=${id}&username=${username}`)}>
                         <TapperMainContainerCardTop>
-                            <Image alt="" src={CalendarIcon} height={27} width={27} />
-                            <TapperMainContainerCardTopTime>
-                                {money - moneyLast}
-                            </TapperMainContainerCardTopTime>
+                            <div style={{height: 35}}>
+                                <Image src={ForestIcon} height={35} alt="" />
+                            </div>
                         </TapperMainContainerCardTop>
                         Forests
                     </TapperMainContainerCard>
-                    <TapperMainContainerCard>
+                    <TapperMainContainerCard onClick={() => router.push(`/tic-tac-toe?id=${id}&username=${username}`)}>
                         <TapperMainContainerCardTop>
-                            <Image alt="" src={CalendarIcon} height={27} width={27} />
+                            <div style={{height: 35}}>
+                                <Image src={GameIcon} height={27} alt="" />
+                            </div>
                             <TapperMainContainerCardTopTime>
-                                05:22
+                                {(timeToNextMini.hours || timeToNextMini.minutes) && (
+                                    <TapperMainContainerCardTopTime>
+                                        {timeToNextMini.hours}h{timeToNextMini.minutes}m
+                                    </TapperMainContainerCardTopTime>
+                                )}
                             </TapperMainContainerCardTopTime>
                         </TapperMainContainerCardTop>
                         Mini-app
@@ -107,10 +235,19 @@ export const Tapper = ({ id, username, from }: {
                 </TapperMainContainerMoney>
                 <TapperMainContainerTapperContainer>
                     <TapperMainContainerTapper onClick={() => {
-                        setMoney(money + 1)
+                        setMoney(money + 100000)
                     }} />
                 </TapperMainContainerTapperContainer>
             </TapperMainContainer>
+            <GiftModal toggleDrawer={toggleDrawer} open={giftModalOpen} id={id} gift={gifts[giftN]} />
+            <RewardModal
+                toggleDrawer={setDailyModalOpen}
+                open={dailyModalOpen}
+                id={id} combo={combo}
+                available={available}
+                setMoney={setMoney}
+                setAvailable={setAvailable}
+                money={money} />
         </TapperContainer>
     )
 }

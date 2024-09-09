@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { NavbarProvider } from "@/components/NavbarProvider/NavbarProvider";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
         <script src="https://telegram.org/js/telegram-web-app.js" async></script>
       </head>
       <body className={inter.className}>
-        <NavbarProvider>{children}</NavbarProvider>
+        <Suspense>
+          <NavbarProvider>{children}</NavbarProvider>
+        </Suspense>
       </body>
     </html>
   );

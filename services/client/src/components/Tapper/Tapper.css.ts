@@ -91,8 +91,7 @@ export const TapperMainContainer = styled(Box)(() => ({
     backgroundColor: '#1F1F2E',
     height: '85%',
     borderRadius: '10px 10px 0 0',
-    boxShadow: '0px 0px 48.9px 0px #7ADA4699',
-    outline: '2px solid #7ADA46'
+    boxShadow: '0px 0px 48.9px 0px #7ADA4699, 0 0 0 2px #7ADA46',
 }));
 
 export const TapperMainContainerCardContainer = styled(Box)(() => ({
@@ -112,6 +111,7 @@ export const TapperMainContainerCard = styled(Box)(() => ({
     fontSize: 10,
     fontWeight: 700,
     color: '#fff',
+    cursor: 'pointer',
 }));
 
 export const TapperMainContainerCardTop = styled(Box)(() => ({

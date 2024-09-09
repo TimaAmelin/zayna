@@ -4,7 +4,7 @@ import React from 'react';
 import { NavbarProviderContainer, NavbarProviderChildrenContainer, NavbarContainer, Navbar } from './NavbarProvider.css';
 import { BottomNavigationAction } from '@mui/material';
 
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 import ExchangeIcon from '../../assets/icons/exchange_icon.svg';
 import FriendsIcon from '../../assets/icons/friends_icon.svg';
@@ -18,8 +18,8 @@ const links = [
         icon: <ExchangeIcon />,
     },
     {
-        path: '/project',
-        label: 'Project',
+        path: '/projects',
+        label: 'Projects',
         icon: <FriendsIcon />,
     },
     {
@@ -34,6 +34,15 @@ const links = [
     },
 ];
 
+const pagesWithoutNavbar = [
+    '/',
+    '/tic-tac-toe',
+    '/tic-tac-toe-game',
+    '/settings',
+    '/settings/name',
+    '/projects-friends',
+]
+
 export const NavbarProvider = ({
     children,
   }: Readonly<{
@@ -41,20 +50,20 @@ export const NavbarProvider = ({
   }>) => {
     const router = useRouter();
     const pathname = usePathname();
+    const searchParams = useSearchParams();
 
     return (
         <NavbarProviderContainer>
             <NavbarProviderChildrenContainer>
                 {children}
             </NavbarProviderChildrenContainer>
-            {pathname !== '/' && (
+            {!pagesWithoutNavbar.includes(pathname) && (
                 <NavbarContainer>
                     <Navbar
                         showLabels
-                            onChange={(_, newValue) => {
-                                router.push(links[newValue].path);
-                            }}
-                        >
+                        onChange={(_, newValue) => {
+                            router.push(links[newValue].path + `?id=${searchParams.get('id')}&username=${searchParams.get('username')}`);
+                        }}>
                         {links.map((link, index) => (
                             <BottomNavigationAction
                                 sx={{
@@ -63,7 +72,8 @@ export const NavbarProvider = ({
                                     borderRadius: index === 0 ? '5px 0 0 5px' : index === links.length - 1 ? '0 5px 5px 0' : 0,
                                     height: 65,
                                 }}
-                                key={index} label={link.label}
+                                key={index}
+                                label={link.label}
                                 icon={React.cloneElement(link.icon, {
                                     style: {filter: pathname === link.path ? 'sepia(0.5) hue-rotate(50deg) saturate(4) brightness(1) contrast(2)' : 'none'}
                                 })} />
