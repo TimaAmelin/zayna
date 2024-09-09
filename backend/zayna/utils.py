@@ -139,7 +139,7 @@ def next_step(user_id, field):
             user.tokens_count = str(int(user.tokens_count) + GAME_PRICE)
             user.last_game_won = True
         user.save(update_fields=["tokens_count", "last_game_at", "last_game_won"])
-        return status
+        return JsonResponse({"field": field, "result": GameResult.PLAYER_WIN}, status=202)
 
     free_cells = status
     bot_step = random.choice(free_cells)
@@ -150,7 +150,7 @@ def next_step(user_id, field):
         user.last_game_at = timezone.now()
         user.last_game_won = False
         user.save(update_fields=["last_game_at", "last_game_won"])
-        return status
+        return JsonResponse({"field": field, "result": GameResult.BOT_WIN}, status=202)
 
     return JsonResponse({"field": field, "result": GameResult.IN_PROGRESS}, status=202)
 
@@ -208,7 +208,7 @@ def get_present(user_id, present_id):
     present.save(update_fields=["received"])
     user.income += present.project.income
     user.save(update_fields=["income"])
-    return HttpResponse(status=200)
+    return JsonResponse({"present": present}, status=200)
 
 
 def get_projects(request):
