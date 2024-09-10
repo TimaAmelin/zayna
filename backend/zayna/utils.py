@@ -3,7 +3,7 @@ from enum import Enum
 
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
-
+import json
 from .config import DAILY_TOKENS, GAME_PRICE
 from .tasks import *
 
@@ -135,9 +135,12 @@ def next_step(user_id, field):
     status = check_win(field, PlayerValue.PLAYER)
     if isinstance(status, JsonResponse):
         user.last_game_at = timezone.now()
-        if status.get("result") == GameResult.PLAYER_WIN:
+        if json.loads(status.content)["result"] == GameResult.PLAYER_WIN:
             user.tokens_count = str(int(user.tokens_count) + GAME_PRICE)
             user.last_game_won = True
+            logging.info(f"User {user_id} won. Add {GAME_PRICE} tokens.")
+        else:
+            user.last_game_won = False
         user.save(update_fields=["tokens_count", "last_game_at", "last_game_won"])
         return JsonResponse({"field": field, "result": GameResult.PLAYER_WIN}, status=202)
 
