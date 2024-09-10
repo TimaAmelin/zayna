@@ -5,6 +5,7 @@ import { TapperContainer, TapperStatisticsContainer, TapperMainContainer, Tapper
 
 import CoinMin from '../../assets/icons/coin_min.svg';
 import CoinMax from '../../assets/icons/coin_max.svg';
+import CoinIcon from '../../assets/icons/coin_big.png';
 import IIcon from '../../assets/icons/i.svg';
 import SettingsIcon from '../../assets/icons/settings.svg';
 import GameIcon from '../../assets/icons/game.png';
@@ -22,6 +23,40 @@ import { RewardModal } from '../RewardModal/RewardModal';
 import { getDaily } from '@/api/handlers/getDaily';
 import { ticTacToe } from '@/api/handlers/ticTacToe';
 import { recieveGift } from '@/api/handlers/recieveGift';
+import { keyframes, styled } from '@mui/material';
+
+import { v4 as uuidv4 } from 'uuid';
+
+const coinAnimation = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-100px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-150px) scale(0.5);
+  }
+`;
+
+// Стилизованный компонент монетки
+const Coin = styled(Image)(() => ({
+  position: 'absolute',
+  width: '40px',
+  height: '40px',
+  backgroundColor: 'gold',
+  borderRadius: '50%',
+  animation: `${coinAnimation} 1s ease-out forwards`,
+  display: 'inline-block',
+  zIndex: 1000,
+}));
 
 function dateDiff(date1: Date, date2: Date) {
     const diff: number = date2.getTime() - date1.getTime();
@@ -78,6 +113,24 @@ export const Tapper = ({ id, username, from, openReward, present }: {
     const [timeToNextMini, setTimeToNextMini] = useState({hours: 0, minutes: 0});
 
     const [timeToDaily, setTimeToDaily] = useState(timeUntilTomorrow());
+    const [coins, setCoins] = useState<{ id: string; x: number; y: number }[]>([]);
+
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        setMoney(money + (Math.max(money.toString().length, 1)));
+        const buttonRect = e.currentTarget.getBoundingClientRect();
+    
+        // Позиция кнопки, откуда должна появляться монетка
+        const x = e.clientX + Math.random() * 200 - 100;
+        const y = e.clientY + Math.random() * 200 - 100;
+    
+        // Добавляем новую монетку
+        setCoins((prevCoins) => [...prevCoins, { id: uuidv4(), x, y }]);
+    
+        // Удаляем монетку после завершения анимации
+        setTimeout(() => {
+          setCoins((prevCoins) => prevCoins.filter((coin) => coin.id !== prevCoins[0].id));
+        }, 1000); // длительность анимации совпадает с временем анимации
+      };
 
     const router = useRouter();
     
@@ -145,6 +198,7 @@ export const Tapper = ({ id, username, from, openReward, present }: {
     }, [id, username, from]);
 
     useEffect(() => {
+        window.Telegram.WebApp.expand();
         putTokenBatch(Number(id), money - moneyLast)
         setMoneyLast(money)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -234,9 +288,20 @@ export const Tapper = ({ id, username, from, openReward, present }: {
                     <CoinMax style={{marginRight: 10}} /> {money.toLocaleString('ru-RU')}
                 </TapperMainContainerMoney>
                 <TapperMainContainerTapperContainer>
-                    <TapperMainContainerTapper onClick={() => {
-                        setMoney(money + money.toString().length)
+                    <TapperMainContainerTapper onClick={e => {
+                        handleClick(e);
                     }} />
+                    {coins.map((coin) => (
+                        <Coin
+                            alt=""
+                            height={32}
+                            src={CoinIcon}
+                            key={coin.id}
+                            style={{
+                                top: coin.y,
+                                left: coin.x,
+                            }} />
+                        ))}
                 </TapperMainContainerTapperContainer>
             </TapperMainContainer>
             <GiftModal toggleDrawer={toggleDrawer} open={giftModalOpen} id={id} gift={gifts[giftN]} />
