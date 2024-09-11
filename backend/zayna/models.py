@@ -3,7 +3,6 @@ import datetime
 from django.db import models
 from django.db.models import Sum
 from django.utils import timezone
-from pygments.lexer import default
 
 from .config import MAX_NANE_LENGTH, BOT_LINK
 
