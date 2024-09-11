@@ -85,7 +85,13 @@ def get_tokens_count(user_id):
     user.save(update_fields=["income"])
     user.presents.filter(shown=False).update(shown=True)
     return JsonResponse(
-        {"sum": current_tokens, "presents": presents, "name": user.name, "income": user.income, **last_hour_sum},
+        {
+            "sum": current_tokens,
+            "presents": presents,
+            "name": user.name,
+            "income": user.income,
+            "photo": user.photo,
+            **last_hour_sum},
         status=200,
     )
 
