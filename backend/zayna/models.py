@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 from django.db.models import Sum
 from django.utils import timezone
+from pygments.lexer import default
 
 from .config import MAX_NANE_LENGTH, BOT_LINK
 
@@ -14,12 +15,13 @@ class User(models.Model):
     tokens_count = models.TextField(default="0")
     income = models.IntegerField(default=0)
     name = models.CharField(max_length=MAX_NANE_LENGTH, null=True, blank=True)
-    friends = models.ManyToManyField('self', blank=True)
+    friends = models.ManyToManyField("self", blank=True)
     income_updated_at = models.DateTimeField(default=timezone.now)
     daily_reward_at = models.DateTimeField(default=timezone.now)
     daily_combo = models.IntegerField(default=0)
     last_game_at = models.DateTimeField(default=None, null=True)
     last_game_won = models.BooleanField(default=False)
+    photo = models.TextField(default="", blank=True, null=False)
 
     def save(self, *args, **kwargs):
         if self.name is None:  # Only set name if it's not already provided

@@ -8,19 +8,23 @@ from .config import DAILY_TOKENS, GAME_PRICE
 from .tasks import *
 
 
-def add_user(id, username, referrer_id):
+def add_user(id, username, referrer_id, photo):
     if id == referrer_id:
         logging.warning(f"User {id} tries to refer himself")
         return JsonResponse({"status": "ERROR", "message": "User can not refer himself"}, status=400)
     user_qs = User.objects.filter(id=id)
     referrer_qs = User.objects.filter(id=referrer_id)
     if user_qs.exists():
+        user = user_qs.first()
         logging.info(f"User {id} already exists")
         if not referrer_qs.exists():
             logging.info(f"Referrer {referrer_id} does not exist")
             return HttpResponse(status=204)
         if referrer_id:
-            user_qs.first().friends.add(referrer_qs.first())
+            user.friends.add(referrer_qs.first())
+        if not user.photo or user.photo != photo:
+            user.photo = photo
+            user.save(update_fields=["photo"])
         return HttpResponse(status=204)
     else:
         if not referrer_qs.exists():
@@ -29,7 +33,7 @@ def add_user(id, username, referrer_id):
         logging.info(
             f"Create user {id} with username {username}" + (f" by referrer {referrer_id}" if referrer_id else "")
         )
-        user = User.objects.create(username=username, id=id, referrer=referrer_qs.first())
+        user = User.objects.create(username=username, id=id, referrer=referrer_qs.first(), photo=photo)
         if referrer_id:
             user.friends.add(referrer_qs.first())
         return HttpResponse(status=201)

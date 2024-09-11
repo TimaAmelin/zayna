@@ -10,7 +10,8 @@ def login_view(request):
         id = body.get("id")
         username = body.get("username")
         referrer = body.get("from")
-        return add_user(id, username, referrer)
+        photo = body.get("photo")
+        return add_user(id, username, referrer, photo)
 
     return HttpResponse(status=404)
 
