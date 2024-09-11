@@ -283,7 +283,7 @@ def get_friends(id):
     if not user_qs.exists():
         logging.info(f"User {id} does not exist")
         return HttpResponse(status=400)
-    friends = list(user_qs.first().friends.values("id", "username"))
+    friends = list(user_qs.first().friends.values("id", "username", "photo"))
     return JsonResponse({"friends": friends}, status=200)
 
 
