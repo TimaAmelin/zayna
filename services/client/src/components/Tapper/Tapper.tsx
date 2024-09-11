@@ -115,7 +115,7 @@ export const Tapper = ({ id, username, from, openReward, present }: {
     const [timeToDaily, setTimeToDaily] = useState(timeUntilTomorrow());
     const [coins, setCoins] = useState<{ id: string; x: number; y: number }[]>([]);
 
-    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleClick = (e: React.Touch) => {
         setMoney(money + (Math.max(money.toString().length, 1)));
         if (navigator.vibrate) {
             navigator.vibrate(200);
@@ -216,6 +216,16 @@ export const Tapper = ({ id, username, from, openReward, present }: {
         return () => clearInterval(interval);
     }, [timeToDaily]);
 
+    const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+        const touches = e.touches;
+        
+        // Перебираем все касания и обрабатываем каждое
+        for (let i = 0; i < touches.length; i++) {
+            handleClick(touches[i]);
+            // Здесь вы можете добавить свою логику обработки касаний
+        }
+    };
+
     return (
         <TapperContainer>
             <TapperStatisticsContainer>
@@ -299,9 +309,8 @@ export const Tapper = ({ id, username, from, openReward, present }: {
                 <TapperMainContainerMoney>
                     <CoinMax style={{marginRight: 10}} /> {money.toLocaleString('ru-RU')}
                 </TapperMainContainerMoney>
-                <TapperMainContainerTapperContainer onClick={e => {
-                        handleClick(e);
-                    }}>
+                <TapperMainContainerTapperContainer
+                    onTouchStart={e => handleTouchStart(e)}>
                     <TapperMainContainerTapper />
                     {coins.map((coin) => (
                         <Coin

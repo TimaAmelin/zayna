@@ -109,9 +109,6 @@ export const FriendsInviteButtonText = styled(Button)(() => ({
     justifyContent: 'center',
     marginRight: 11,
     marginTop: 20,
-    '&:hover': {
-        backgroundColor: '#fff',
-    },
     textTransform: 'none',
 }));
 
@@ -124,9 +121,6 @@ export const FriendsInviteButton = styled(Button)(() => ({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
-    '&:hover': {
-        backgroundColor: '#fff',
-    }
 }));
 
 export const ContentCopyIcon = styled(ContentCopy)(() => ({

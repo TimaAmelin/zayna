@@ -1,5 +1,5 @@
 'use client'
-import { Box } from '@mui/material';
+import { Box, Fade, Popper } from '@mui/material';
 import { ContentCopyIcon, FriendsCard, FriendsCardText, FriendsCardTextContainer, FriendsContainer, FriendsFriendCard, FriendsInviteButton, FriendsInviteButtonContainer, FriendsInviteButtonText, FriendsSecondaryTextContainer, FriendsSubTitleContainer, FriendsTitleContainer } from './Friends.css';
 
 import CoinMin from '../../assets/icons/coin_min.svg';
@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getFriends } from '@/api/handlers/getFriends';
-import { AccountCircle } from '@mui/icons-material';
+import { AccountCircle, Check } from '@mui/icons-material';
 
 function copyTextToClipboard(text: string): void {
     if (navigator.clipboard) {
@@ -51,6 +51,18 @@ export const Friends = ({ id, username, tgLogin }: {
             setFriends(data.response.friends);
         })
     }, []);
+
+
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    const [friendsInviteButtonTextColor, setFriendsInviteButtonTextColor] = useState('#7ADA46');
+
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget);
+    };
+
+    const open = Boolean(anchorEl);
+    const popperId = open ? 'simple-popper' : undefined;
 
     const router = useRouter();
     return (
@@ -95,13 +107,56 @@ export const Friends = ({ id, username, tgLogin }: {
                     <AccountCircle sx={{marginRight: 2}} />{friend.username}
                 </FriendsFriendCard>
             ))}
-            <FriendsInviteButtonContainer>
-                <FriendsInviteButtonText>
+            <FriendsInviteButtonContainer onClick={(e) => {
+                    handleClick(e);
+                    setFriendsInviteButtonTextColor('#fff');
+                    copyTextToClipboard(`https://t.me/${tgLogin}?start=${id}`);
+                    setTimeout(() => {
+                        setAnchorEl(null);
+                    }, 1000);
+                    setTimeout(() => {
+                        setFriendsInviteButtonTextColor('#7ADA46');
+                    }, 200);
+                }}>
+                <FriendsInviteButtonText sx={{
+                    backgroundColor: friendsInviteButtonTextColor,
+                    '&:hover': {
+                        backgroundColor: friendsInviteButtonTextColor,
+                    }
+                }}>
                     Invite friends
                 </FriendsInviteButtonText>
-                <FriendsInviteButton>
-                    <ContentCopyIcon onClick={() => copyTextToClipboard(`https://t.me/${tgLogin}?start=${id}`)} />
+                <FriendsInviteButton sx={{
+                    backgroundColor: friendsInviteButtonTextColor,
+                    '&:hover': {
+                        backgroundColor: friendsInviteButtonTextColor,
+                    }
+                }}>
+                    <ContentCopyIcon />
                 </FriendsInviteButton>
+                <Popper id={popperId} open={open} anchorEl={anchorEl} transition placement="top">
+                    {({ TransitionProps }) => (
+                        <Fade {...TransitionProps}>
+                            <Box sx={{
+                                border: 1,
+                                height: 32,
+                                width: 114,
+                                borderRadius: '3px', 
+                                margin: '0 auto', 
+                                backgroundColor: '#EDF7ED',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                fontSize: 12,
+                                fontWeight: 400,
+                                color: '#1D4620',
+                            }}>
+                                <Check sx={{marginRight: 1.5, color: '#1D4620'}} />
+                                Link copied!
+                            </Box>
+                        </Fade>
+                    )}
+                </Popper>
             </FriendsInviteButtonContainer>
         </FriendsContainer>
     )
