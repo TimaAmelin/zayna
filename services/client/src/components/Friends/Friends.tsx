@@ -39,7 +39,7 @@ export const Friends = ({ id, username, tgLogin }: {
     username?: string,
     tgLogin: string,
 }) => {
-    const [friends, setFriends] = useState<{username: string, id: number}[]>([]);
+    const [friends, setFriends] = useState<{username: string, id: number, photo: string}[]>([]);
 
     useEffect(() => {
         const getUserFriends = async () => {
@@ -104,7 +104,13 @@ export const Friends = ({ id, username, tgLogin }: {
             )}
             {friends.map(friend => (
                 <FriendsFriendCard key={1}>
-                    <AccountCircle sx={{marginRight: 2}} />{friend.username}
+                    {friend.photo ? (
+                        <Box sx={{marginRight: 2, height: 20, width: 20, borderRadius: '50%', overflow: 'hidden'}}>
+                            <Image src={friend.photo} alt="" height={20} width={20} />
+                        </Box>
+                    ) : (
+                        <AccountCircle sx={{marginRight: 2}} />
+                    )}{friend.username}
                 </FriendsFriendCard>
             ))}
             <FriendsInviteButtonContainer onClick={(e) => {

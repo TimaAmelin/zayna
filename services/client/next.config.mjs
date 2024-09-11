@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['web'], // Add the "web" domain to the allowed list
+        domains: ['web', 'api.telegram.org'], // Add the "web" domain to the allowed list
     },
     webpack(config) {
         config.module.rules.push({

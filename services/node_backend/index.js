@@ -34,7 +34,7 @@ bot.on('message', async (msg) => {
 						{	
 							text: 'Open',
 							web_app: {
-								url: `${webAppUrl}/tapper?username=${msg.from.username}&id=${msg.from.id}${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}${text.match(/\/start present[0-9]*/) ? '&present=' + text.replace('/start present', '') : ''}&first_time=1`,
+								url: `${webAppUrl}/tapper?avatar=${encodeURIComponent(fileUrl)}&username=${msg.from.username}&id=${msg.from.id}${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}${text.match(/\/start present[0-9]*/) ? '&present=' + text.replace('/start present', '') : ''}&first_time=1`,
 							},
 						},
 					],
@@ -53,7 +53,7 @@ bot.on('message', async (msg) => {
 							{
 								text: 'Play',
 								web_app: {
-									url: `${webAppUrl}/tapper?username=${msg.from.username}&id=${msg.from.id}${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}${text.match(/\/start present[0-9]*/) ? '&present=' + text.replace('/start present', '') : ''}&first_time=1`,
+									url: `${webAppUrl}/tapper?avatar=${encodeURIComponent(fileUrl)}&username=${msg.from.username}&id=${msg.from.id}${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}${text.match(/\/start present[0-9]*/) ? '&present=' + text.replace('/start present', '') : ''}&first_time=1`,
 									request_full_screen: true,
 								}
 							}

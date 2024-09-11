@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function PUT(req: NextRequest) {
-    const { id, username, from } = await req.json()
+    const { id, username, from, avatar } = await req.json()
 
     try {
         const response = await fetch('http://web:8000/login/', {
@@ -10,7 +10,7 @@ export async function PUT(req: NextRequest) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                id, username, from
+                id, username, from, photo: avatar
             })
         });
 

@@ -81,18 +81,20 @@ function timeUntilDate(date: Date) {
     return dateDiff(now, date)
 }
 
-export const Tapper = ({ id, username, from, openReward, present }: {
-    id: number,
-    username?: string,
-    from?: number,
-    openReward?: boolean,
-    present?: string
+export const Tapper = ({ id, username, from, openReward, present, avatar }: {
+    id: number;
+    username?: string;
+    from?: number;
+    openReward?: boolean;
+    present?: string;
+    avatar?: string;
 }) => {
     const [money, setMoney] = useState(0);
     const [moneyLast, setMoneyLast] = useState(0);
     const [moneyPerHour, setMoneyPerHour] = useState(0);
     const [giftModalOpen, setGiftModalOpen] = useState(false);
     const [dailyModalOpen, setDailyModalOpen] = useState(openReward ?? false);
+    const [ava, setAva] = useState(avatar);
     const [gifts, setGifts] = useState<{
         project__id: number;
         project__name: string;
@@ -153,7 +155,7 @@ export const Tapper = ({ id, username, from, openReward, present }: {
 
     useEffect(() => {
         const getUserTokens = async () => {
-            await putUser(id, username, from);
+            await putUser(id, username, from, avatar);
             if (present) {
                 await recieveGift(id, Number(present));
             }
@@ -166,6 +168,9 @@ export const Tapper = ({ id, username, from, openReward, present }: {
             setMoneyLast(data.response.sum);
             setMoneyPerHour(data.response.per_hour ?? 0);
             setGifts(data.response.presents);
+            if (data.response.photo) {
+                setAva(data.response.photo);
+            }
             if (data.response.presents.length) {
                 setGiftModalOpen(true);
             }
@@ -244,7 +249,13 @@ export const Tapper = ({ id, username, from, openReward, present }: {
                         </TapperStatisticsProfitContainer>
                     </TapperStatisticsLeft>
                     <TapperStatisticsRight>
-                        <TapperStatisticsAvatar />
+                        <TapperStatisticsAvatar>
+                            {
+                                ava && (
+                                    <Image src={ava} alt="" height={20} width={20} />
+                                )
+                            }
+                        </TapperStatisticsAvatar>
                         <TapperStatisticsName>
                             {username}
                         </TapperStatisticsName>

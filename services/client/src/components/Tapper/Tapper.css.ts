@@ -65,6 +65,7 @@ export const TapperStatisticsAvatar = styled(Box)(() => ({
     width: 20,
     backgroundColor: '#D9D9D9',
     borderRadius: '50%',
+    overflow: 'hidden',
 }));
 
 export const TapperStatisticsName = styled(Box)(() => ({
