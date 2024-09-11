@@ -115,21 +115,22 @@ export const Tapper = ({ id, username, from, openReward, present }: {
     const [timeToDaily, setTimeToDaily] = useState(timeUntilTomorrow());
     const [coins, setCoins] = useState<{ id: string; x: number; y: number }[]>([]);
 
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
         setMoney(money + (Math.max(money.toString().length, 1)));
-        const buttonRect = e.currentTarget.getBoundingClientRect();
+        if (navigator.vibrate) {
+            navigator.vibrate(200);
+        } else {
+            console.log("Вибрация не поддерживается на этом устройстве.");
+        }
     
-        // Позиция кнопки, откуда должна появляться монетка
         const x = e.clientX + Math.random() * 200 - 100;
         const y = e.clientY + Math.random() * 200 - 100;
     
-        // Добавляем новую монетку
         setCoins((prevCoins) => [...prevCoins, { id: uuidv4(), x, y }]);
     
-        // Удаляем монетку после завершения анимации
         setTimeout(() => {
           setCoins((prevCoins) => prevCoins.filter((coin) => coin.id !== prevCoins[0].id));
-        }, 1000); // длительность анимации совпадает с временем анимации
+        }, 1000);
       };
 
     const router = useRouter();
@@ -252,9 +253,12 @@ export const Tapper = ({ id, username, from, openReward, present }: {
                             <div style={{height: 35}}>
                                 <Image src={CalendarNewIcon} height={27} alt="" />
                             </div>
-                            {timeToDaily && (
+                            {timeToDaily ? (
                                 <TapperMainContainerCardTopTime>
                                     {timeToDaily.hours}h{timeToDaily.minutes}m
+                                </TapperMainContainerCardTopTime>
+                            ) : (
+                                <TapperMainContainerCardTopTime>
                                 </TapperMainContainerCardTopTime>
                             )}
                         </TapperMainContainerCardTop>
@@ -268,15 +272,23 @@ export const Tapper = ({ id, username, from, openReward, present }: {
                         </TapperMainContainerCardTop>
                         Forests
                     </TapperMainContainerCard>
-                    <TapperMainContainerCard onClick={() => router.push(`/tic-tac-toe?id=${id}&username=${username}`)}>
+                    <TapperMainContainerCard onClick={() => {
+                        if (timeToNextMini.hours || timeToNextMini.minutes) {
+                            return
+                        }
+                        router.push(`/tic-tac-toe?id=${id}&username=${username}`);
+                    }}>
                         <TapperMainContainerCardTop>
                             <div style={{height: 35}}>
                                 <Image src={GameIcon} height={27} alt="" />
                             </div>
                             <TapperMainContainerCardTopTime>
-                                {(timeToNextMini.hours || timeToNextMini.minutes) && (
+                                {(timeToNextMini.hours || timeToNextMini.minutes) ? (
                                     <TapperMainContainerCardTopTime>
                                         {timeToNextMini.hours}h{timeToNextMini.minutes}m
+                                    </TapperMainContainerCardTopTime>
+                                ) : (
+                                    <TapperMainContainerCardTopTime>
                                     </TapperMainContainerCardTopTime>
                                 )}
                             </TapperMainContainerCardTopTime>
@@ -287,10 +299,10 @@ export const Tapper = ({ id, username, from, openReward, present }: {
                 <TapperMainContainerMoney>
                     <CoinMax style={{marginRight: 10}} /> {money.toLocaleString('ru-RU')}
                 </TapperMainContainerMoney>
-                <TapperMainContainerTapperContainer>
-                    <TapperMainContainerTapper onClick={e => {
+                <TapperMainContainerTapperContainer onClick={e => {
                         handleClick(e);
-                    }} />
+                    }}>
+                    <TapperMainContainerTapper />
                     {coins.map((coin) => (
                         <Coin
                             alt=""

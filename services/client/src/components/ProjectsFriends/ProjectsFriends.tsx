@@ -156,7 +156,7 @@ export const ProjectsFriends = ({ id, username }: {
                 <ProjectsFriendsButton onClick={async () => {
                     if (chosenFriend === 'link') {
                         const data = await sendGift(id, chosenProjects[0]);
-                        window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(data.response.link)}&text=1234`);
+                        window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(data.response.link)}&text=Play with me, invest in real projects and earn money.\n💵+5k coins as the first gift`);
                     } else if (chosenFriend !== '') {
                         await sendGift(id, chosenProjects[0], Number(chosenFriend));
                         router.push(`/friends?id=${id}&username=${username}`)

@@ -65,7 +65,7 @@ export const Friends = ({ id, username, tgLogin }: {
                 <Box sx={{margin: '10px', width: 66, height: 59, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <Image src={InviteIcon} alt="" height={66} />
                 </Box>
-                <FriendsCardTextContainer onClick={() => window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent('Messaged from Zayna bot')}&text=1234`)}>
+                <FriendsCardTextContainer onClick={() => window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent('https://t.me/zayna_eco_bot')}&text=Play with me, invest in real projects and earn money.\n💵+5k coins as the first gift`)}>
                     <FriendsCardText sx={{fontSize: 14, fontWeight: 600}}>Invite a friend</FriendsCardText>
                     <FriendsCardText sx={{fontSize: 12, fontWeight: 400}}><CoinMin style={{marginRight: 5}} />+5,000 for you and your friend</FriendsCardText>
                 </FriendsCardTextContainer>

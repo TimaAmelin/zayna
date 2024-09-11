@@ -11,6 +11,17 @@ bot.on('message', async (msg) => {
 	const chatId = msg.chat.id;
 	const text = msg.text;
 
+	const photos = await bot.getUserProfilePhotos(msg.from.id);
+
+	const photo = photos.photos[0][0];
+
+            // Получаем файл
+	const file = await bot.getFile(photo.file_id);
+
+	// Получаем URL файла для загрузки
+	const fileUrl = `https://api.telegram.org/file/bot${bot.token}/${file.file_path}`;
+	console.log(fileUrl)
+
 	if (text.includes('/start')) {
 		console.log(text);
 

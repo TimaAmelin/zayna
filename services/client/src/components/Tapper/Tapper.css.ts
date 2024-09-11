@@ -122,7 +122,7 @@ export const TapperMainContainerCardTop = styled(Box)(() => ({
 }));
 
 export const TapperMainContainerCardTopTime = styled(Box)(() => ({
-    fontSize: 7,
+    fontSize: 10,
     color: '#ACACAC',
     fontWeight: 400,
 }));

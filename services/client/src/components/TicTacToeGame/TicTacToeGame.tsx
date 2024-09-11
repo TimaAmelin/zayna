@@ -49,6 +49,7 @@ export const TicTacToeGame = ({ id, username }: {
                                 const newGameState = gameState.map((r, iY) => iY === indexY ? row.map((c, iX) => iX === indexX ? 1 : c) : r);
                                 setGameState(newGameState);
                                 const {response} = await ticTacToe(newGameState, id);
+                                await new Promise(r => setTimeout(r, 500));
 
                                 const {field, result: newResult} = response;
 

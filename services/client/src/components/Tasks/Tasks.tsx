@@ -21,7 +21,7 @@ export const Tasks = ({ id, username }: {
             <TasksSecondaryTextContainer>
                 Zayna Social (New)
             </TasksSecondaryTextContainer>
-            <TasksCard onClick={() => router.push(`/tapper?id=${id}&username=${username}`)}>
+            <TasksCard onClick={() => window.open('https://www.youtube.com/@Zaynaclimate', '_blank')}>
                 <TasksMainCardContainer>
                     <Box sx={{height: 32, width: 40, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                         <Image src={YTIcon} alt="" height={32} />
@@ -78,7 +78,7 @@ export const Tasks = ({ id, username }: {
             <TasksSecondaryTextContainer>
                 Task list
             </TasksSecondaryTextContainer>
-            <TasksCard onClick={() => router.push(`/tapper?id=${id}&username=${username}`)}>
+            <TasksCard onClick={() => window.open('https://t.me/zayna_world', '_blank')}>
                 <TasksMainCardContainer>
                     <Box sx={{height: 32, width: 40, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                         <Image src={TGIcon} alt="" height={32} />
