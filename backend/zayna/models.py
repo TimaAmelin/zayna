@@ -21,7 +21,7 @@ class User(models.Model):
     daily_combo = models.IntegerField(default=0)
     last_game_at = models.DateTimeField(default=None, null=True)
     last_game_won = models.BooleanField(default=False)
-    photo = models.TextField(default="", blank=True, null=False)
+    photo = models.TextField(default=None, blank=False, null=True)
 
     def save(self, *args, **kwargs):
         if self.name is None:  # Only set name if it's not already provided
