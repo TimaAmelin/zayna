@@ -81,6 +81,7 @@ def get_tokens_count(user_id):
     last_hour_sum["per_hour"] = (last_hour_sum["per_hour"] or 0) + user.income
 
     presents = list(user.presents.filter(shown=False).values(
+        "id",
         "project__id",
         "project__name",
         "project__price",
@@ -92,9 +93,6 @@ def get_tokens_count(user_id):
         "project__name",
         "sender__username",
     ))
-    for present in user.presents.filter(shown=False):
-        user.income += present.project.income
-    user.save(update_fields=["income"])
     user.presents.filter(shown=False).update(shown=True)
     return JsonResponse(
         {
@@ -231,9 +229,11 @@ def get_present(user_id, present_id):
 
     present.received = True
     present.save(update_fields=["received"])
+    logging.info("payment", present.project.payment)
+    user.tokens_count = str(int(user.tokens_count) + present.project.payment)
     user.income += present.project.income
-    user.save(update_fields=["income"])
-    return JsonResponse({"present": present}, status=200)
+    user.save(update_fields=["income", "tokens_count"])
+    return HttpResponse(status=200)
 
 
 def get_projects(request):
