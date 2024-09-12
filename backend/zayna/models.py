@@ -64,9 +64,10 @@ class Project(models.Model):
     name = models.CharField(default="", null=False, blank=True, max_length=255)
     price = models.IntegerField(default=0)
     income = models.IntegerField(default=0)
+    payment = models.IntegerField(default=0)
     users = models.ManyToManyField(User, default=None, blank=True, related_name="projects")
     level = models.IntegerField(default=0)
-    mode = models.CharField(max_length=10, choices=MODE_CHOICES.choices, default=Modes.FOREST)
+    mode = models.CharField(max_length=10, choices=MODE_CHOICES.choices, default=Modes.FOREST, null=True)
     description = models.TextField(null=True, blank=True)
     logo = models.ImageField(blank=True, null=True)
 

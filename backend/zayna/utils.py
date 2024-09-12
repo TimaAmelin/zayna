@@ -4,8 +4,18 @@ from enum import Enum
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 import json
+
+from sqlalchemy.testing.plugin.plugin_base import logging
+
 from .config import DAILY_TOKENS, GAME_PRICE
 from .tasks import *
+
+
+def welcome_gift(user):
+    zayna = User.objects.get_or_create(username="zayna")[0]
+    gift_project = Project.objects.get_or_create(name="Welcome gift", mode=None, payment=100000)[0]
+    Present.objects.create(sender=zayna, receiver=user, project=gift_project)
+    logging.info(f"Welcome gift for user {user.id} created!")
 
 
 def add_user(id, username, referrer_id, photo):
@@ -25,6 +35,7 @@ def add_user(id, username, referrer_id, photo):
         if not user.photo or user.photo != photo:
             user.photo = photo
             user.save(update_fields=["photo"])
+        welcome_gift(user)
         return HttpResponse(status=204)
     else:
         if not referrer_qs.exists():
@@ -36,6 +47,7 @@ def add_user(id, username, referrer_id, photo):
         user = User.objects.create(username=username, id=id, referrer=referrer_qs.first(), photo=photo)
         if referrer_id:
             user.friends.add(referrer_qs.first())
+        welcome_gift(user)
         return HttpResponse(status=201)
 
 
