@@ -100,6 +100,13 @@ def projects_view(request):
 
     return HttpResponse(status=404)
 
+def user_projects_view(request, id):
+    if request.method == "GET":
+        logging.info(f"[Zayna] get user {id} projects {request}")
+        return get_user_projects(request, id)
+
+    return HttpResponse(status=404)
+
 
 def participate_view(request):
     if request.method == "POST":

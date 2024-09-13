@@ -1,4 +1,5 @@
 import datetime
+from email.policy import default
 
 from django.db import models
 from django.db.models import Sum
@@ -65,11 +66,21 @@ class Project(models.Model):
     price = models.IntegerField(default=0)
     income = models.IntegerField(default=0)
     payment = models.IntegerField(default=0)
-    users = models.ManyToManyField(User, default=None, blank=True, related_name="projects")
-    level = models.IntegerField(default=0)
     mode = models.CharField(max_length=10, choices=MODE_CHOICES.choices, default=Modes.FOREST, null=True)
     description = models.TextField(null=True, blank=True)
     logo = models.ImageField(blank=True, null=True)
+
+    def cost(self, level):
+        return self.price * 3.2 ** (level - 1)
+
+    def profit(self, level):
+        return self.income * 1.3 ** (level - 1)
+
+
+class UserProject(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="participates")
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
+    level = models.IntegerField(default=1)
 
 
 class Present(models.Model):

@@ -237,10 +237,33 @@ def get_present(user_id, present_id):
 
 
 def get_projects(request):
-    projects = list(Project.objects.values("id", "name", "price", "income", "level", "mode", "description", "logo"))
+    projects = list(Project.objects.values("id", "name", "price", "income", "mode", "description", "logo"))
     for project in projects:
         if project["logo"]:  # Check if the logo field is not empty
             project['logo'] = request.build_absolute_uri(settings.MEDIA_URL + project['logo'])
+
+    return JsonResponse({"projects": projects}, status=200)
+
+
+def get_user_projects(request, user_id):
+    user_qs = User.objects.filter(id=user_id)
+    if not user_qs.exists():
+        logging.info(f"User {user_id} does not exist")
+        return HttpResponse(status=400)
+    user = user_qs.first()
+    projects = list(user.participate.objects.values(
+        "level",
+        "project__id",
+        "project__name",
+        "project__price",
+        "project__income",
+        "project__mode",
+        "project__description",
+        "project__logo",
+    ))
+    for project in projects:
+        if project["project__logo"]:  # Check if the logo field is not empty
+            project["project__logo"] = request.build_absolute_uri(settings.MEDIA_URL + project['project__logo'])
 
     return JsonResponse({"projects": projects}, status=200)
 
@@ -250,19 +273,29 @@ def participate(user_id, project_id):
     if not user_qs.exists():
         logging.info(f"User {user_id} does not exist")
         return HttpResponse(status=400)
+    user = user_qs.first()
+
     project_qs = Project.objects.filter(id=project_id)
     if not project_qs.exists():
         logging.info(f"Project {project_id} does not exist")
         return HttpResponse(status=400)
-    user = user_qs.first()
     project = project_qs.first()
-    if user.tokens_sum < project.price:
-        logging.info(f"Not enough tokens: {user.tokens_sum} < {project.price}")
+
+    user_project_qs = UserProject.objects.filter(user=user, project=project)
+    new_level = 1
+    if user_project_qs.exists():
+        new_level = user_project_qs.first().level + 1
+
+    if user.tokens_sum < project.cost(new_level):
+        logging.info(f"Not enough tokens: {user.tokens_sum} < {project.cost(new_level)}")
         return JsonResponse({"result": "ERROR", "message": "Not enough tokens"}, status=400)
-    user.tokens_count = str(int(user.tokens_count) - project.price)
-    user.income += project.income
+
+    user.tokens_count = str(int(user.tokens_count) - project.cost(new_level))
+    user.income += project.profit(new_level)
     user.save(update_fields=["tokens_count", "income"])
-    project.users.add(user)
+    up = UserProject.objects.get_or_create(user=user, project=project)[0]
+    up.level = new_level
+    up.save(update_fields=["level"])
     return HttpResponse(status=201)
 
 
