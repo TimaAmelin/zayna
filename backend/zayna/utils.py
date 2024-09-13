@@ -234,8 +234,8 @@ def get_present(user_id, present_id):
     present.save(update_fields=["received"])
     logging.info("payment", present.project.payment)
     user.tokens_count = str(int(user.tokens_count) + present.project.payment)
-    user.income += present.project.income
-    user.save(update_fields=["income", "tokens_count"])
+    user.save(update_fields=["tokens_count"])
+    participate(user_id, present.project.id)
     return HttpResponse(status=200)
 
 
