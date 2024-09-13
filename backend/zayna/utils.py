@@ -13,7 +13,12 @@ from .tasks import *
 
 def welcome_gift(user):
     zayna = User.objects.get_or_create(username="zayna")[0]
-    gift_project = Project.objects.get_or_create(name="Welcome gift", mode=None, payment=100000)[0]
+    gift_project = Project.objects.get_or_create(
+        name="Welcome gift",
+        mode=None,
+        payment=100000,
+        description="We thank you for caring about our planet and give you 100,000 coins for development",
+    )[0]
     Present.objects.create(sender=zayna, receiver=user, project=gift_project)
     logging.info(f"Welcome gift for user {user.id} created!")
 
