@@ -26,6 +26,7 @@ import { recieveGift } from '@/api/handlers/recieveGift';
 import { keyframes, styled } from '@mui/material';
 
 import { v4 as uuidv4 } from 'uuid';
+import { DummyContainer } from '../Dummy/Dummy.css';
 
 const coinAnimation = keyframes`
   0% {
@@ -89,6 +90,7 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
     present?: string;
     avatar?: string;
 }) => {
+    const [loading, setLoading] = useState(true);
     const [money, setMoney] = useState(0);
     const [moneyLast, setMoneyLast] = useState(0);
     const [moneyPerHour, setMoneyPerHour] = useState(0);
@@ -174,6 +176,7 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
             if (data.response.presents.length) {
                 setGiftModalOpen(true);
             }
+            setLoading(false);
         })
     }, [id, username, from]);
 
@@ -238,7 +241,13 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
             alert("Мини-приложение недоступно на десктопе");
             window.Telegram.WebApp.close();
         }
-    }, [])
+    }, []);
+
+    if (loading) {
+        return (
+            <DummyContainer></DummyContainer>
+        )
+    }
 
     return (
         <TapperContainer>
