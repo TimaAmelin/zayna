@@ -71,10 +71,10 @@ class Project(models.Model):
     logo = models.ImageField(blank=True, null=True)
 
     def cost(self, level):
-        return self.price * 3.2 ** (level - 1)
+        return round(self.price * 3.2 ** (level - 1))
 
     def profit(self, level):
-        return self.income * 1.3 ** (level - 1)
+        return round(self.income * 1.3 ** (level - 1))
 
 
 class UserProject(models.Model):

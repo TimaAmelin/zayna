@@ -35,7 +35,6 @@ def add_user(id, username, referrer_id, photo):
         if not user.photo or user.photo != photo:
             user.photo = photo
             user.save(update_fields=["photo"])
-        welcome_gift(user)
         return HttpResponse(status=204)
     else:
         if not referrer_qs.exists():
@@ -86,7 +85,6 @@ def get_tokens_count(user_id):
         "project__name",
         "project__price",
         "project__income",
-        "project__level",
         "project__mode",
         "project__description",
         "project__logo",
@@ -251,7 +249,7 @@ def get_user_projects(request, user_id):
         logging.info(f"User {user_id} does not exist")
         return HttpResponse(status=400)
     user = user_qs.first()
-    projects = list(user.participate.objects.values(
+    projects = list(user.participates.values(
         "level",
         "project__id",
         "project__name",
