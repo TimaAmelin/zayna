@@ -5,8 +5,6 @@ from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 import json
 
-from sqlalchemy.testing.plugin.plugin_base import logging
-
 from .config import DAILY_TOKENS, GAME_PRICE
 from .tasks import *
 
