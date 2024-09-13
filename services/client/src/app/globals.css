@@ -1,5 +1,15 @@
 /* styles/global.css */
 
+html, body {
+	touch-action: manipulation;
+}
+  
+input, textarea, select, button {
+	touch-action: manipulation;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
 /* Ultralight */
 @font-face {
 	font-family: 'SF Pro Display';

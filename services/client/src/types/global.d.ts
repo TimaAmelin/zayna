@@ -13,6 +13,7 @@ declare global {
         close: () => void;
         openTelegramLink: (x: string) => void;
         expand: () => void;
+        platform: string;
       };
     };
   }

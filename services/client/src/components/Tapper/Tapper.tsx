@@ -231,6 +231,15 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
         }
     };
 
+    useEffect(() => {
+        const platform = window.Telegram.WebApp.platform;
+
+        if (!['ios', 'android'].includes(platform)) {
+            alert("Мини-приложение недоступно на десктопе");
+            window.Telegram.WebApp.close();
+        }
+    }, [])
+
     return (
         <TapperContainer>
             <TapperStatisticsContainer>

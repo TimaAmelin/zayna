@@ -22,14 +22,14 @@ export const Projects = ({ id, username }: {
     username?: string,
 }) => {
     const [projects, setProjects] = useState<{
-        id: number,
-        name: string;
-        price: number;
-        income: number;
-        description: string;
-        mode: string;
+        project__id: number,
+        project__name: string;
+        project__price: number;
+        project__income: number;
+        project__description: string;
+        project__mode: string;
         level: number;
-        logo: string;
+        project__logo: string;
     }[]>([]);
 
     const [money, setMoney] = useState(0);
@@ -44,7 +44,7 @@ export const Projects = ({ id, username }: {
     
     useEffect(() => {
         const getUserProjects = async () => {
-            const res = await getProjects();
+            const res = await getProjects(id);
             return res
         }
 
@@ -122,22 +122,22 @@ export const Projects = ({ id, username }: {
                     </ProjectsMainContainerTypeButton>
                 </ProjectsMainContainerTypeRow>
                 <ProjectsMainContainerCardRow>
-                    {projects.filter(project => project.mode === type).map((project, index) => (
+                    {projects.filter(project => project.project__mode === type).map((project, index) => (
                         <ProjectsMainContainerCard key={index} onClick={() => {
                             setProject(project);
                             setOpen(true);
                         }}>
-                            <Image src={project.logo} alt="" height={38} width={38} />
+                            <Image src={project.project__logo} alt="" height={38} width={38} />
                             <ProjectsMainContainerCardTitle>
-                                {project.name}
+                                {project.project__name}
                             </ProjectsMainContainerCardTitle>
                             <ProjectsMainContainerCardDescription>
-                                {project.description}
+                                {project.project__description}
                             </ProjectsMainContainerCardDescription>
                             <ProjectsMainContainerCardProfit>
                                 Profit per hour<br />
                                 <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                    <Image src={CoinIcon} alt="" height={12} style={{marginRight: 3}} /> + {project.income}
+                                    <Image src={CoinIcon} alt="" height={12} style={{marginRight: 3}} /> + {project.project__income}
                                 </Box>
                             </ProjectsMainContainerCardProfit>
                             <ProjectsMainContainerCardBottom>
@@ -146,7 +146,7 @@ export const Projects = ({ id, username }: {
                                 </ProjectsMainContainerCardBottomLvl>
                                 <ProjectsMainContainerCardBottomCost>
                                     <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                        <Image src={CoinIcon} alt="" height={15} style={{marginRight: 3}} /> {project.price}
+                                        <Image src={CoinIcon} alt="" height={15} style={{marginRight: 3}} /> {project.project__price}
                                     </Box>
                                 </ProjectsMainContainerCardBottomCost>
                             </ProjectsMainContainerCardBottom>

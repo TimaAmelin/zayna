@@ -21,14 +21,14 @@ export const ProjectModal = (
     }: {
         id: number;
         project?: {
-            id: number,
-            name: string;
-            price: number;
-            income: number;
-            description: string;
-            mode: string;
+            project__id: number,
+            project__name: string;
+            project__price: number;
+            project__income: number;
+            project__description: string;
+            project__mode: string;
             level: number;
-            logo: string;
+            project__logo: string;
         };
         toggleDrawer: any;
         open: boolean;
@@ -49,21 +49,25 @@ export const ProjectModal = (
             }}>
             <ProjectModalContainer>
                 <ProjectModalMainText>
-                    {project?.name}
+                    {project?.project__name}
                 </ProjectModalMainText>
                 <ProjectModalSecondaryText>
-                    {project?.description}
+                    {project?.project__description}
                 </ProjectModalSecondaryText>
                 <ProjectModalProfitText>
                     Profit per hour<br />
-                    <Image src={CoinIcon} alt="" height={12} style={{marginRight: 3}} /> + {project?.income}
+                    <Image src={CoinIcon} alt="" height={12} style={{marginRight: 3}} /> + {project?.project__income}
                 </ProjectModalProfitText>
                 <ProjectsModalMainContainerMoney>
                     <CoinMax style={{marginRight: 10}} /> {currentMoney.toLocaleString('ru-RU')}
                 </ProjectsModalMainContainerMoney>
                 <ProjectModalButton onClick={async () => {
-                    await buyProject(id, project?.id ?? 0);
-                    setCurrentMoney(currentMoney - (project?.price ?? 0));
+                    if (currentMoney - (project?.project__price ?? 0) < 0) {
+                        alert(`You don't have enough money`);
+                        return
+                    }
+                    await buyProject(id, project?.project__id ?? 0);
+                    setCurrentMoney(currentMoney - (project?.project__price ?? 0));
                     toggleDrawer(false);
                 }}>
                     Buy

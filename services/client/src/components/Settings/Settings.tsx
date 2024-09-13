@@ -29,7 +29,7 @@ export const Settings = ({ id, username }: {
                     <Image src={SettingsIcon} alt="" height={32} />
                     Settings
                 </SettingsTitleContainer>
-                <SettingsCard>
+                <SettingsCard onClick={() => router.push(`/stocks?id=${id}&username=${username}`)}>
                     <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                         <Exchange style={{margin: 10}} /> Exchange section
                     </Box>

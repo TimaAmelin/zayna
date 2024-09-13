@@ -48,6 +48,7 @@ export const TapperStatisticsProfitContainer = styled(Box)(() => ({
 
 export const TapperStatisticsProfitTitleContainer = styled(Box)(() => ({
     fontSize: 7,
+    textWrap: 'wrap'
 }));
 
 export const TapperStatisticsProfitAmountContainer = styled(Box)(() => ({
