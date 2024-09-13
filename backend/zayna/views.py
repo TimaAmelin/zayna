@@ -100,6 +100,15 @@ def projects_view(request):
 
     return HttpResponse(status=404)
 
+
+def presents_view(request):
+    if request.method == "GET":
+        logging.info(f"[Zayna] get presents {request}")
+        return get_presents(request)
+
+    return HttpResponse(status=404)
+
+
 def user_projects_view(request, id):
     if request.method == "GET":
         logging.info(f"[Zayna] get user {id} projects {request}")

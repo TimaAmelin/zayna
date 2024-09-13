@@ -69,6 +69,7 @@ class Project(models.Model):
     mode = models.CharField(max_length=10, choices=MODE_CHOICES.choices, default=Modes.FOREST, null=True)
     description = models.TextField(null=True, blank=True)
     logo = models.ImageField(blank=True, null=True)
+    is_present = models.BooleanField(default=False, null=False)
 
     def cost(self, level):
         return round(self.price * 3.2 ** (level - 1))

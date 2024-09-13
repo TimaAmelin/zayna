@@ -34,6 +34,7 @@ urlpatterns = [
     path("get_daily", get_daily_view, name="daily"),
     path("tic_tac_toe/", tic_tac_toe_view, name="tic_tac_toe"),
     path("present/", present_view, name="present"),
+    path("presents/", presents_view, name="present"),
     path("projects/<int:id>", user_projects_view, name="user_projects"),
     path("projects/<int:id>/", user_projects_view, name="user_projects"),
     path("projects/", projects_view, name="projects"),
