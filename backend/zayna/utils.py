@@ -237,17 +237,6 @@ def get_present(user_id, present_id):
     return HttpResponse(status=200)
 
 
-def get_projects(request):
-    projects = list(
-        Project.objects.filter(is_present=False).values("id", "name", "price", "income", "mode", "description", "logo")
-    )
-    for project in projects:
-        if project["logo"]:  # Check if the logo field is not empty
-            project["logo"] = request.build_absolute_uri(settings.MEDIA_URL + project['logo'])
-
-    return JsonResponse({"projects": projects}, status=200)
-
-
 def get_presents(request):
     projects = list(
         Project.objects.filter(is_present=True).values("id", "name", "price", "income", "mode", "description", "logo")

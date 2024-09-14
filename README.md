@@ -28,7 +28,6 @@ curl -X PUT -H "Content-Type: application/json" -d '{"sender_id": 123, "receiver
 To get present be receiver:
 curl -X POST -H "Content-Type: application/json" -d '{"user_id": 123, "present_id": 1}' -v http://127.0.0.1:8000/present/
 curl -X GET -H "Content-Type: application/json" -v http://127.0.0.1:8000/presents/
-curl -X GET -H "Content-Type: application/json" -v http://127.0.0.1:8000/projects/
 curl -X GET -H "Content-Type: application/json" -v http://127.0.0.1:8000/projects/123/
 curl -X POST -H "Content-Type: application/json" -d '{"user_id": 123, "project_id": 1}' -v http://127.0.0.1:8000/participate/
 curl -X POST -H "Content-Type: application/json" -d '{"id": 123, "name": "meme"}' -v http://127.0.0.1:8000/change_name/

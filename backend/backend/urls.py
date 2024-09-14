@@ -37,7 +37,6 @@ urlpatterns = [
     path("presents/", presents_view, name="present"),
     path("projects/<int:id>", user_projects_view, name="user_projects"),
     path("projects/<int:id>/", user_projects_view, name="user_projects"),
-    path("projects/", projects_view, name="projects"),
     path("participate/", participate_view, name="participate"),
     path("change_name/", change_name_view, name="change_name"),
     path("delete_user/<int:id>/", delete_user_view, name="delete_user"),
