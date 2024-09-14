@@ -246,7 +246,7 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
         const platform = window.Telegram.WebApp.platform;
 
         if (!['ios', 'android'].includes(platform)) {
-            alert("Мини-приложение недоступно на десктопе");
+            alert("Mini app is not available on desktop");
             window.Telegram.WebApp.close();
         }
     }, []);

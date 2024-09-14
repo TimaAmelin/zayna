@@ -27,7 +27,7 @@ bot.on('message', async (msg) => {
 
 		// Проверяем, была ли отправлена инлайн-кнопка для этого чата
 		
-		await bot.sendMessage(chatId, 'Check out our app in dev mode', {
+		await bot.sendMessage(chatId, 'Check out our app!', {
 			reply_markup: {
 				inline_keyboard: [
 					[
