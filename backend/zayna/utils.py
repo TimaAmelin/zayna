@@ -1,9 +1,10 @@
+import json
 import random
 from enum import Enum
 
 from django.conf import settings
+from django.db.models import Subquery, OuterRef, When, Case, F
 from django.http import HttpResponse, JsonResponse
-import json
 
 from .config import DAILY_TOKENS, GAME_PRICE
 from .tasks import *
@@ -254,19 +255,32 @@ def get_user_projects(request, user_id):
         logging.info(f"User {user_id} does not exist")
         return HttpResponse(status=400)
     user = user_qs.first()
-    projects = list(user.participates.values(
-        "level",
-        "project__id",
-        "project__name",
-        "project__price",
-        "project__income",
-        "project__mode",
-        "project__description",
-        "project__logo",
-    ))
+    projects = list(
+        Project.objects
+        .annotate(
+            lvl=Subquery(UserProject.objects.filter(user=user, project_id=OuterRef("id")).values("level")[:1]),
+            level=Case(
+                When(
+                    lvl__isnull=False,
+                    then=F("lvl"),
+                ),
+                default=0,
+            )
+        )
+        .values(
+            "level",
+            "id",
+            "name",
+            "price",
+            "income",
+            "mode",
+            "description",
+            "logo",
+        )
+    )
     for project in projects:
-        if project["project__logo"]:  # Check if the logo field is not empty
-            project["project__logo"] = request.build_absolute_uri(settings.MEDIA_URL + project['project__logo'])
+        if project["logo"]:  # Check if the logo field is not empty
+            project["logo"] = request.build_absolute_uri(settings.MEDIA_URL + project["logo"])
 
     return JsonResponse({"projects": projects}, status=200)
 
