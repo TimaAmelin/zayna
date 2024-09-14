@@ -132,7 +132,7 @@ export const Projects = ({ id, username }: {
                             setProject(project);
                             setOpen(true);
                         }}>
-                            <img src={project.logo.replace('web', 'localhost')} alt="" height={38} width={38} />
+                            <img src={project.logo.replace('web', '89.169.165.5')} alt="" height={38} width={38} />
                             <ProjectsMainContainerCardTitle>
                                 {project.name}
                             </ProjectsMainContainerCardTitle>
