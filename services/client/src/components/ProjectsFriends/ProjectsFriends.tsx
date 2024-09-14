@@ -10,6 +10,7 @@ import CoinIcon from '../../assets/icons/coin_big.png';
 import { Add, Check, Close } from '@mui/icons-material';
 import { getFriends } from '@/api/handlers/getFriends';
 import { sendGift } from '@/api/handlers/sendGift';
+import { getPresents } from '@/api/handlers/getPresents';
 
 export const ProjectsFriends = ({ id, username }: {
     id: number,
@@ -46,7 +47,7 @@ export const ProjectsFriends = ({ id, username }: {
 
     useEffect(() => {
         const getUserProjects = async () => {
-            const res = await getProjects();
+            const res = await getPresents();
             return res
         }
 
@@ -56,17 +57,6 @@ export const ProjectsFriends = ({ id, username }: {
     }, []);
 
     const router = useRouter();
-    
-    useEffect(() => {
-        const getUserProjects = async () => {
-            const res = await getProjects();
-            return res
-        }
-
-        getUserProjects().then(data => {
-
-        })
-    }, []);
 
     return (
         <ProjectsFriendsContainer>
