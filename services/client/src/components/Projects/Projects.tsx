@@ -65,6 +65,11 @@ export const Projects = ({ id, username }: {
         })
     }, [id]);
 
+    async function updateProjects() {
+        const data = await getProjects(id);
+        setProjects(data.response.projects);
+    }
+
     return (
         <ProjectsContainer>
             <ProjectsStatisticsContainer>
@@ -127,7 +132,7 @@ export const Projects = ({ id, username }: {
                             setProject(project);
                             setOpen(true);
                         }}>
-                            <Image src={project.logo} alt="" height={38} width={38} />
+                            <img src={project.logo.replace('web', 'localhost')} alt="" height={38} width={38} />
                             <ProjectsMainContainerCardTitle>
                                 {project.name}
                             </ProjectsMainContainerCardTitle>
@@ -154,7 +159,7 @@ export const Projects = ({ id, username }: {
                     ))}
                 </ProjectsMainContainerCardRow>
             </ProjectsMainContainer>
-            <ProjectModal id={id} project={project} open={open} toggleDrawer={setOpen} currentMoney={money} setCurrentMoney={setMoney} />
+            <ProjectModal id={id} project={project} open={open} toggleDrawer={setOpen} currentMoney={money} setCurrentMoney={setMoney} updateProjects={updateProjects} />
         </ProjectsContainer>
     )
 }

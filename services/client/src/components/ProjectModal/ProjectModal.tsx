@@ -18,6 +18,7 @@ export const ProjectModal = (
         open,
         currentMoney,
         setCurrentMoney,
+        updateProjects,
     }: {
         id: number;
         project?: {
@@ -34,6 +35,7 @@ export const ProjectModal = (
         open: boolean;
         currentMoney: number;
         setCurrentMoney: (x: number) => void;
+        updateProjects: () => Promise<void>
     },
 ) => {
     return (
@@ -67,6 +69,7 @@ export const ProjectModal = (
                         return
                     }
                     await buyProject(id, project?.id ?? 0);
+                    await updateProjects();
                     setCurrentMoney(currentMoney - (project?.price ?? 0));
                     toggleDrawer(false);
                 }}>
