@@ -167,7 +167,11 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
         const getUserTokens = async () => {
             await putUser(id, username, from, avatar);
             if (present) {
-                await recieveGift(id, Number(present));
+                try {
+                    await recieveGift(id, Number(present));
+                } catch (error) {
+
+                }
             }
             const res = await getTokens(Number(id));
             return res
@@ -223,7 +227,11 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setTimeToDaily(timeUntilTomorrow);
+            if (!available) {
+                setTimeToDaily(timeUntilTomorrow);
+            } else {
+                setTimeToDaily({hours: 0, minutes: 0});
+            }
             if (nextMini) {
                 setTimeToNextMini(timeUntilDate(new Date(nextMini)));
             }
