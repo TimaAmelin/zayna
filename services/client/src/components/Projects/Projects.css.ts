@@ -2,14 +2,13 @@ import { Box, Button, styled } from '@mui/material';
 
 export const ProjectsContainer = styled(Box)(() => ({
     height: '100%',
+    width: '100%',
     flex: 1,
     backgroundColor: '#000',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-end',
 }));
-
-
 
 export const ProjectsStatisticsContainer = styled(Box)(() => ({
     height: '15%',
@@ -89,6 +88,7 @@ export const ProjectsStatisticsSettingsContainer = styled(Box)(() => ({
 
 export const ProjectsMainContainer = styled(Box)(() => ({
     backgroundColor: '#1F1F2E',
+    width: '100%',
     height: '85%',
     borderRadius: '10px 10px 0 0',
     boxShadow: '0px 0px 48.9px 0px #7ADA4699, 0 0 0 2px #7ADA46',
@@ -132,6 +132,7 @@ export const ProjectsMainContainerCardRow = styled(Box)(() => ({
     margin: '20px 0',
     overflowY: 'auto',
     marginBottom: 100,
+    width: '100%',
 }));
 
 export const ProjectsMainContainerCard = styled(Box)(() => ({
