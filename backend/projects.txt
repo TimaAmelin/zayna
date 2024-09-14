@@ -1,18 +1,18 @@
-1	Transport_Eme1	Transport	Emergency	Save lives in critical moments! Respond to emergencies and help those in need as quickly as possible.	1		3000	360
-1	Forests_Med1	Forests	Medical mission	Head to hotspots and assist victims in disaster zones. Your skills can save lives!	1		21242	381
-1	Energy_Inv1	Energy	"Invisible defender #freeDurov"	Disappear from the enemy’s sight like a self-destructing message! You can't be found, but you can gather all your strength for the next attack	1		16342	409
-1	Forests_For1	Forests	Forester	Plant a million trees to embrace the world and cleanse it of CO2! Now every tree works while you rest	1		1000	210
-1	Energy_Pla1	Energy	Planet of happiness	Spread positive thinking! Improve quality of life and increase happiness among people.	1		2379	357
-1	Forests_Gre1	Forests	Green friend	Grow your own plant and watch it thrive along with your well-being! The more care you give, the more greenery you'll see.	1		241	24
-1	Wastes_Cli1	Wastes	Climate fund	Fund environmental protection projects! Sponsor crucial initiatives and help the planet... so that one day your grandchildren won't be roasting marshmallows on the remnants of Antarctica!	1		54333	435
-1	Energy_A b1	Energy	A baby whale	A small baby whale creates huge waves, but does it so cutely that even enemies pause in admiration for a moment.	1		329	33
-1	Energy_The1	Energy	Therapy of kindness	No one can leave without a smile! Healing is not just about medicine, but also about positivity.	1		2672	187
-1	Wastes_Rec1	Wastes	Recharge the batteries	Get inspired by the Tesla Powerwall and recharge your energy! You can keep fighting without breaks until your batteries run out.	1		13288	465
-1	Forests_Pan1	Forests	Panda Patrol	Save endangered species, starting with the panda! Venture into the wild forests, protect them from deforestation, and win the favor of all the animals.	1		5556	378
-1	Energy_Pea1	Energy	Peaceful mood	Harmony and positive thinking improve everyday life. Share joy and impact those around you!	1		250	25
-1	Energy_Cat1	Energy	Catch some zen	Meditate and develop emotional intelligence skills. Calmness is the key to longevity and happiness.	1		400	60
-1	Wastes_Gree1	Wastes	Green Jedi	Catch carbon emissions with your lightsaber and turn them into energy! Let your power save the planet from the dark side.	1		1899	152
-1	Energy_Spo1	Energy	Sport. Sport. Sport	Run from stress so fast that it can’t catch up with you! The more laps you complete on the track, the wider your smile.	1		1777	266
-1	Transport_Mas1	Transport	Master of Storms	Install wind turbines to generate energy and save the planet! Every turn of the blades brings you closer to the title of "Master of Storms."	1		76222	686
-1	Transport_Mar1	Transport	Martian colonist	You’re already planning Mars colonization, but don’t forget about this battle! Build a mini-base to gain additional resources.	1		339123	3391
-1	Energy_Sol1	Energy	Solar panel	Invest in clean energy! Build solar panels that help reduce carbon emissions... and your electricity bills :)	1		150000	5250
+1	Transport_Eme1	Transport	Emergency	Save lives in critical moments! Respond to emergencies and help those in need as quickly as possible.	1		3000	360	скорая помощь.png
+1	Forests_Med1	Forests	Medical mission	Head to hotspots and assist victims in disaster zones. Your skills can save lives!	1		21242	381	медицинская миссия.png
+1	Energy_Inv1	Energy	"Invisible defender #freeDurov"	Disappear from the enemy’s sight like a self-destructing message! You can't be found, but you can gather all your strength for the next attack	1		16342	409	невидимый защитник.png
+1	Forests_For1	Forests	Forester	Plant a million trees to embrace the world and cleanse it of CO2! Now every tree works while you rest	1		1000	210	лесник.png
+1	Energy_Pla1	Energy	Planet of happiness	Spread positive thinking! Improve quality of life and increase happiness among people.	1		2379	357	планета счастья.png
+1	Forests_Gre1	Forests	Green friend	Grow your own plant and watch it thrive along with your well-being! The more care you give, the more greenery you'll see.	1		241	24	зеленый друг.png
+1	Wastes_Cli1	Wastes	Climate fund	Fund environmental protection projects! Sponsor crucial initiatives and help the planet... so that one day your grandchildren won't be roasting marshmallows on the remnants of Antarctica!	1			54333	435	климатический фонд.png
+1	Energy_A b1	Energy	A baby whale	A small baby whale creates huge waves, but does it so cutely that even enemies pause in admiration for a moment.	1		329	33	Китенок.png
+1	Energy_The1	Energy	Therapy of kindness	No one can leave without a smile! Healing is not just about medicine, but also about positivity.	1		2672	187	Терапия добра.png
+1	Wastes_Rec1	Wastes	Recharge the batteries	Get inspired by the Tesla Powerwall and recharge your energy! You can keep fighting without breaks until your batteries run out.	1		13288	465	Заряди аккумуляторы.png
+1	Forests_Pan1	Forests	Panda Patrol	Save endangered species, starting with the panda! Venture into the wild forests, protect them from deforestation, and win the favor of all the animals.	1		5556	378	Панда Патруль.png
+1	Energy_Pea1	Energy	Peaceful mood	Harmony and positive thinking improve everyday life. Share joy and impact those around you!	1		250	25	Мирное настроение.png
+1	Energy_Cat1	Energy	Catch some zen	Meditate and develop emotional intelligence skills. Calmness is the key to longevity and happiness.	1		400	60	Поймай _дзен_!.png
+1	Wastes_Gree1	Wastes	Green Jedi	Catch carbon emissions with your lightsaber and turn them into energy! Let your power save the planet from the dark side.	1		1899	152	Зеленый джедай.png
+1	Energy_Spo1	Energy	Sport. Sport. Sport	Run from stress so fast that it can’t catch up with you! The more laps you complete on the track, the wider your smile.	1		1777	266	Спорт.Спорт.Спорт.png
+1	Transport_Mas1	Transport	Master of Storms	Install wind turbines to generate energy and save the planet! Every turn of the blades brings you closer to the title of "Master of Storms."	1		76222	686	Повелитель бурь.png
+1	Transport_Mar1	Transport	Martian colonist	You’re already planning Mars colonization, but don’t forget about this battle! Build a mini-base to gain additional resources.	1		339123	3391	Марсианский колонист.png
+1	Energy_Sol1	Energy	Solar panel	Invest in clean energy! Build solar panels that help reduce carbon emissions... and your electricity bills :)	1		150000	5250	солнечная батарея.png
