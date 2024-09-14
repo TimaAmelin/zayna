@@ -1,5 +1,5 @@
 export const getPresents = async () => {
-    const response = await fetch(`/api/handlers/get-projects/`, {
+    const response = await fetch(`/api/handlers/get-presents/`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
