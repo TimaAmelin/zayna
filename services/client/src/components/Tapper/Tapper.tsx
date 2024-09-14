@@ -119,6 +119,14 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
     const [timeToDaily, setTimeToDaily] = useState(timeUntilTomorrow());
     const [coins, setCoins] = useState<{ id: string; x: number; y: number }[]>([]);
 
+    async function refetch() {
+        const data = await getTokens(Number(id));
+
+        setMoney(data.response.sum);
+        setMoneyLast(data.response.sum);
+        setMoneyPerHour(data.response.per_hour ?? 0);
+    }
+
     const handleClick = (e: React.Touch) => {
         setMoney(money + (Math.max(money.toString().length, 1)));
         if (navigator.vibrate) {
@@ -354,7 +362,7 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
                         ))}
                 </TapperMainContainerTapperContainer>
             </TapperMainContainer>
-            <GiftModal toggleDrawer={toggleDrawer} open={giftModalOpen} id={id} gift={gifts[giftN]} />
+            <GiftModal toggleDrawer={toggleDrawer} open={giftModalOpen} id={id} gift={gifts[giftN]} refetch={refetch} />
             <RewardModal
                 toggleDrawer={setDailyModalOpen}
                 open={dailyModalOpen}

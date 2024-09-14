@@ -6,6 +6,7 @@ import { Drawer } from '@mui/material';
 
 import GiftIcon from '../../assets/icons/gift.png';
 import Image from 'next/image';
+import { recieveGift } from '@/api/handlers/recieveGift';
 
 export const GiftModal = (
     { 
@@ -13,6 +14,7 @@ export const GiftModal = (
         gift,
         toggleDrawer,
         open,
+        refetch,
     }: {
         id: number;
         gift?: {
@@ -28,6 +30,7 @@ export const GiftModal = (
         };
         toggleDrawer: any;
         open: boolean;
+        refetch: () => Promise<void>;
     },
 ) => {
     return (
@@ -45,14 +48,21 @@ export const GiftModal = (
                 <Image src={GiftIcon} height={46} alt="" />
                 <GiftModalMainText>
                     You have a gift <br />
-                    <span style={{color: '#7ADA46',}}>from Anna Ivanova</span>
+                    <span style={{color: '#7ADA46'}}>from {gift?.sender__username}</span>
                 </GiftModalMainText>
                 <GiftModalSecondaryTextContainer>
+                    {gift?.project__name}
                     <GiftModalSecondaryText>
-                        Strategic session in Europe lvl2 
+                        {gift?.project__description}
                     </GiftModalSecondaryText>
                 </GiftModalSecondaryTextContainer>
-                <GiftModalButton onClick={() => toggleDrawer(false)}>
+                <GiftModalButton onClick={async () => {
+                    if (gift) {
+                        await recieveGift(id, gift?.project__id);
+                        await refetch();
+                        toggleDrawer(false);
+                    }
+                }}>
                     Recieve
                 </GiftModalButton>
             </GiftModalContainer>

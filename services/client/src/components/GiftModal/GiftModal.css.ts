@@ -22,8 +22,12 @@ export const GiftModalMainText = styled(Box)(() => ({
 export const GiftModalSecondaryTextContainer = styled(Box)(() => ({
     minHeight: 150,
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    fontWeight: 700,
+    fontSize: 18,
+    color: '#fff',
 }));
 
 export const GiftModalSecondaryText = styled(Box)(() => ({
