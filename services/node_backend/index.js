@@ -29,35 +29,13 @@ bot.on('message', async (msg) => {
 								{	
 									text: 'Open',
 									web_app: {
-										url: `${webAppUrl}/tapper?avatar=${encodeURIComponent(fileUrl)}&username=${msg.from.username}&id=${msg.from.id}${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}${text.match(/\/start present[0-9]*/) ? '&present=' + text.replace('/start present', '') : ''}&first_time=1`,
+										url: `${webAppUrl}/tapper?avatar=${encodeURIComponent(fileUrl)}${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}${text.match(/\/start present[0-9]*/) ? '&present=' + text.replace('/start present', '') : ''}&first_time=1`,
 									},
 								},
 							],
 						],
 					},
 				});
-	
-				if (!sentInlineKeyboard[chatId]) {
-					await bot.sendMessage(chatId, 'Or open it via inline button:', {
-						reply_markup: {
-							keyboard: [
-								[
-									{
-										text: 'Play',
-										web_app: {
-											url: `${webAppUrl}/tapper?avatar=${encodeURIComponent(fileUrl)}&username=${msg.from.username}&id=${msg.from.id}${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}${text.match(/\/start present[0-9]*/) ? '&present=' + text.replace('/start present', '') : ''}&first_time=1`,
-											request_full_screen: true,
-										}
-									}
-								]
-							],
-							resize_keyboard: true,
-							one_time_keyboard: false,
-						},
-					});
-				}
-				// Помечаем, что инлайн-кнопка была отправлена
-				sentInlineKeyboard[chatId] = true;
 			}
 			return
 		}
@@ -70,35 +48,13 @@ bot.on('message', async (msg) => {
 							{	
 								text: 'Open',
 								web_app: {
-									url: `${webAppUrl}/tapper?username=${msg.from.username}&id=${msg.from.id}${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}${text.match(/\/start present[0-9]*/) ? '&present=' + text.replace('/start present', '') : ''}&first_time=1`,
+									url: `${webAppUrl}/tapper?${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}${text.match(/\/start present[0-9]*/) ? '&present=' + text.replace('/start present', '') : ''}&first_time=1`,
 								},
 							},
 						],
 					],
 				},
 			});
-	
-			if (!sentInlineKeyboard[chatId]) {
-				await bot.sendMessage(chatId, 'Or open it via inline button:', {
-					reply_markup: {
-						keyboard: [
-							[
-								{
-									text: 'Play',
-									web_app: {
-										url: `${webAppUrl}/tapper?username=${msg.from.username}&id=${msg.from.id}${text.match(/\/start [0-9]*/) ? '&from=' + text.replace('/start ', '') : ''}${text.match(/\/start present[0-9]*/) ? '&present=' + text.replace('/start present', '') : ''}&first_time=1`,
-										request_full_screen: true,
-									}
-								}
-							]
-						],
-						resize_keyboard: true,
-						one_time_keyboard: false,
-					},
-				});
-			}
-			// Помечаем, что инлайн-кнопка была отправлена
-			sentInlineKeyboard[chatId] = true;
 		}
 	} catch (error) {
 		console.log(error)
