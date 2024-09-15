@@ -22,6 +22,7 @@ class User(models.Model):
     last_game_at = models.DateTimeField(default=None, null=True)
     last_game_won = models.BooleanField(default=False)
     photo = models.TextField(default=None, blank=False, null=True)
+    stock = models.CharField(null=True, default=None, blank=True, max_length=255)
 
     def save(self, *args, **kwargs):
         if self.name is None:  # Only set name if it's not already provided

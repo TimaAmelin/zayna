@@ -140,3 +140,16 @@ def delete_user_view(request, id):
         return delete_user(id)
 
     return HttpResponse(status=404)
+
+
+def stock_view(request, id):
+    if request.method == "GET":
+        logging.info(f"[Zayna] getting stock for user {id}")
+        return get_stock(id)
+    elif request.method == "POST":
+        logging.info(f"[Zayna] setting stock for user {id}")
+        body = json.loads(request.body)
+        stock = body.get("stock")
+        return set_stock(id, stock)
+
+    return HttpResponse(status=404)

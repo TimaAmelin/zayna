@@ -392,3 +392,26 @@ def check_tic_tac_toe(id):
             status=408,
         )
     return None
+
+
+def get_stock(id):
+    user_qs = User.objects.filter(id=id)
+    if not user_qs.exists():
+        logging.info(f"User {id} does not exist")
+        return JsonResponse({"status": "ERROR", "message": "User does not exist"}, status=400)
+    user = user_qs.first()
+    return JsonResponse(
+        {"stock": user.stock},
+        status=200,
+    )
+
+
+def set_stock(id, stock):
+    user_qs = User.objects.filter(id=id)
+    if not user_qs.exists():
+        logging.info(f"User {id} does not exist")
+        return JsonResponse({"status": "ERROR", "message": "User does not exist"}, status=400)
+    user = user_qs.first()
+    user.stock = stock
+    user.save(update_fields=["stock"])
+    return HttpResponse(status=201)
