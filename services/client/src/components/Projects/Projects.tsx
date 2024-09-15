@@ -40,31 +40,37 @@ export const Projects = () => {
     const router = useRouter();
     
     useEffect(() => {
-        const getUserProjects = async () => {
-            const res = await getProjects(window.Telegram.WebApp.initDataUnsafe.user.id);
-            return res
-        }
+        if (typeof window !== 'undefined') {
+            const getUserProjects = async () => {
+                const res = await getProjects(window.Telegram.WebApp.initDataUnsafe.user.id);
+                return res
+            }
 
-        getUserProjects().then(data => {
-            setProjects(data.response.projects);
-        })
+            getUserProjects().then(data => {
+                setProjects(data.response.projects);
+            })
+        }
     }, []);
 
     useEffect(() => {
-        const getUserTokens = async () => {
-            const res = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
-            return res
-        }
+        if (typeof window !== 'undefined') {
+            const getUserTokens = async () => {
+                const res = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
+                return res
+            }
 
-        getUserTokens().then(data => {
-            setMoney(data.response.sum);
-            setMoneyPerHour(data.response.per_hour ?? 0);
-        })
-    }, [window.Telegram.WebApp.initDataUnsafe.user.id]);
+            getUserTokens().then(data => {
+                setMoney(data.response.sum);
+                setMoneyPerHour(data.response.per_hour ?? 0);
+            })
+        }
+    }, []);
 
     async function updateProjects() {
-        const data = await getProjects(window.Telegram.WebApp.initDataUnsafe.user.id);
-        setProjects(data.response.projects);
+        if (typeof window !== 'undefined') {
+            const data = await getProjects(window.Telegram.WebApp.initDataUnsafe.user.id);
+            setProjects(data.response.projects);
+        }
     }
 
     return (
@@ -86,9 +92,13 @@ export const Projects = () => {
                     </ProjectsStatisticsLeft>
                     <ProjectsStatisticsRight>
                         <ProjectsStatisticsAvatar />
-                        <ProjectsStatisticsName>
-                            {window.Telegram.WebApp.initDataUnsafe.user.username}
-                        </ProjectsStatisticsName>
+                        {
+                            typeof window !== 'undefined' && (
+                                <ProjectsStatisticsName>
+                                    {window.Telegram.WebApp.initDataUnsafe.user.username}
+                                </ProjectsStatisticsName>
+                            )
+                        }
                         <ProjectsStatisticsSettingsLine />
                         <ProjectsStatisticsSettingsContainer
                             onClick={() => router.push(`/settings`)}>
@@ -156,7 +166,11 @@ export const Projects = () => {
                     ))}
                 </ProjectsMainContainerCardRow>
             </ProjectsMainContainer>
-            <ProjectModal id={window.Telegram.WebApp.initDataUnsafe.user.id} project={project} open={open} toggleDrawer={setOpen} currentMoney={money} setCurrentMoney={setMoney} updateProjects={updateProjects} />
+            {
+                typeof window !== 'undefined' && (
+                    <ProjectModal id={window.Telegram.WebApp.initDataUnsafe.user.id} project={project} open={open} toggleDrawer={setOpen} currentMoney={money} setCurrentMoney={setMoney} updateProjects={updateProjects} />
+                )
+            }
         </ProjectsContainer>
     )
 }

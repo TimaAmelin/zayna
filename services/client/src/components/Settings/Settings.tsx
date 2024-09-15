@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState } from 'react';
 import { SettingsButton, SettingsCard, SettingsContainer, SettingsMainContainer, SettingsPrivacyPolicy, SettingsTitleContainer } from './Settings.css';
@@ -51,7 +51,11 @@ export const Settings = () => {
             <SettingsButton onClick={() => router.push(`/tapper`)}>
                 Close
             </SettingsButton>
-            <DeleteModal id={window.Telegram.WebApp.initDataUnsafe.user.id} open={open} toggleDrawer={setOpen} />
+            {
+                typeof window !== 'undefined' && (
+                    <DeleteModal id={window?.Telegram.WebApp.initDataUnsafe.user.id ?? 0} open={open} toggleDrawer={setOpen} />
+                )
+            }
         </SettingsContainer>
     )
 }
