@@ -178,7 +178,7 @@ export const Tapper = ({from, openReward, present, avatar }: {
         getUserTokens().then(data => {
             setMoney(data.response.sum);
             setMoneyLast(data.response.sum);
-            setMoneyPerHour(40 ?? data.response.per_hour ?? 0);
+            setMoneyPerHour(data.response.per_hour ?? 0);
             setGifts(data.response.presents);
             if (data.response.photo) {
                 setAva(data.response.photo);
