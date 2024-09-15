@@ -63,10 +63,16 @@ class Command(BaseCommand):
                         # Full path to the image
                         full_logo_path = os.path.join(settings.MEDIA_ROOT, 'logos', os.path.basename(logo_path))
 
+                        logo_upload_path = os.path.join('logos', os.path.basename(logo_path))
+
                         # Resize image and get ContentFile
                         logo_content = resize_image(full_logo_path)
+                        print(full_logo_path)
+
+                        if project.logo.storage.exists(logo_upload_path):
+                            project.logo.storage.delete(logo_upload_path)
 
                         # Save the image to the media/logos directory
-                        project.logo.save(os.path.join('logos', os.path.basename(logo_path)), logo_content, save=True)
+                        project.logo.save(logo_upload_path, logo_content, save=True)
                 except Exception as e:
                     print(e)
