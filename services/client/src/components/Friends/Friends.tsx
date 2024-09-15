@@ -34,16 +34,14 @@ function copyTextToClipboard(text: string): void {
     }
 }
 
-export const Friends = ({ id, username, tgLogin }: {
-    id: number,
-    username?: string,
+export const Friends = ({ tgLogin }: {
     tgLogin: string,
 }) => {
     const [friends, setFriends] = useState<{username: string, id: number, photo: string}[]>([]);
 
     useEffect(() => {
         const getUserFriends = async () => {
-            const res = await getFriends(id);
+            const res = await getFriends(window.Telegram.WebApp.initDataUnsafe.user.id);
             return res
         }
 
@@ -82,7 +80,7 @@ export const Friends = ({ id, username, tgLogin }: {
                     <FriendsCardText sx={{fontSize: 12, fontWeight: 400}}><CoinMin style={{marginRight: 5}} />+5,000 for you and your friend</FriendsCardText>
                 </FriendsCardTextContainer>
             </FriendsCard>
-            <FriendsCard onClick={() => router.push(`/projects-friends?id=${id}&username=${username}`)}>
+            <FriendsCard onClick={() => router.push(`/projects-friends`)}>
                 <Box sx={{margin: '10px', width: 59, height: 59, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                     <Image src={Gift} alt="" height={59} />
                 </Box>
@@ -116,7 +114,7 @@ export const Friends = ({ id, username, tgLogin }: {
             <FriendsInviteButtonContainer onClick={(e) => {
                     handleClick(e);
                     setFriendsInviteButtonTextColor('#fff');
-                    copyTextToClipboard(`https://t.me/${tgLogin}?start=${id}`);
+                    copyTextToClipboard(`https://t.me/${tgLogin}?start=${window.Telegram.WebApp.initDataUnsafe.user.id}`);
                     setTimeout(() => {
                         setAnchorEl(null);
                     }, 1000);

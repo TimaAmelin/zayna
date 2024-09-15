@@ -140,7 +140,7 @@ export const RewardModal = (
                     </RewardModalMainText>
                     <RewardModalSecondaryTextContainer>
                         <RewardModalSecondaryText>
-                        Pick up coins for logging into the game daily without<br />skipping. The ‘Pick up’ button must be pressed daily,<br />otherwise the day count will start again
+                            Pick up coins for logging into the game daily without<br />skipping. The ‘Pick up’ button must be pressed daily,<br />otherwise the day count will start again
                         </RewardModalSecondaryText>
                     </RewardModalSecondaryTextContainer>
                     {

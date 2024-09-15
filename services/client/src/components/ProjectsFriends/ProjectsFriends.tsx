@@ -12,10 +12,7 @@ import { getFriends } from '@/api/handlers/getFriends';
 import { sendGift } from '@/api/handlers/sendGift';
 import { getPresents } from '@/api/handlers/getPresents';
 
-export const ProjectsFriends = ({ id, username }: {
-    id: number,
-    username?: string,
-}) => {
+export const ProjectsFriends = () => {
     const [projects, setProjects] = useState<{
         id: number,
         name: string;
@@ -36,7 +33,7 @@ export const ProjectsFriends = ({ id, username }: {
 
     useEffect(() => {
         const getUserFriends = async () => {
-            const res = await getFriends(id);
+            const res = await getFriends(window.Telegram.WebApp.initDataUnsafe.user.id);
             return res
         }
 
@@ -145,18 +142,18 @@ export const ProjectsFriends = ({ id, username }: {
                 </Select>
                 <ProjectsFriendsButton onClick={async () => {
                     if (chosenFriend === 'link') {
-                        const data = await sendGift(id, chosenProjects[0]);
+                        const data = await sendGift(window.Telegram.WebApp.initDataUnsafe.user.id, chosenProjects[0]);
                         window.Telegram.WebApp.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(data.response.link)}&text=Play with me, invest in real projects and earn money.\n💵+5k coins as the first gift`);
                     } else if (chosenFriend !== '') {
-                        await sendGift(id, chosenProjects[0], Number(chosenFriend));
-                        router.push(`/friends?id=${id}&username=${username}`)
+                        await sendGift(window.Telegram.WebApp.initDataUnsafe.user.id, chosenProjects[0], Number(chosenFriend));
+                        router.push(`/friends`)
                     }
                 }}>
                     Send the gift
                 </ProjectsFriendsButton>
             </ProjectsFriendsMainContainer>
             <ProjectsFriendsClose>
-                <IconButton onClick={() => router.push(`/friends?id=${id}&username=${username}`)}>
+                <IconButton onClick={() => router.push(`/friends`)}>
                     <Close sx={{color: '#fff'}} />
                 </IconButton>
             </ProjectsFriendsClose>

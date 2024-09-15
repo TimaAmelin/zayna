@@ -4,7 +4,7 @@ import React from 'react';
 import { NavbarProviderContainer, NavbarProviderChildrenContainer, NavbarContainer, Navbar } from './NavbarProvider.css';
 import { BottomNavigationAction } from '@mui/material';
 
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 import ExchangeIcon from '../../assets/icons/exchange_icon.svg';
 import FriendsIcon from '../../assets/icons/friends_icon.svg';
@@ -50,7 +50,6 @@ export const NavbarProvider = ({
   }>) => {
     const router = useRouter();
     const pathname = usePathname();
-    const searchParams = useSearchParams();
 
     return (
         <NavbarProviderContainer>
@@ -62,7 +61,7 @@ export const NavbarProvider = ({
                     <Navbar
                         showLabels
                         onChange={(_, newValue) => {
-                            router.push(links[newValue].path + `?id=${searchParams.get('id')}&username=${searchParams.get('username')}`);
+                            router.push(links[newValue].path);
                         }}>
                         {links.map((link, index) => (
                             <BottomNavigationAction

@@ -14,10 +14,7 @@ import { Box } from '@mui/material';
 import Link from 'next/link';
 import { DeleteModal } from '../DeleteModal/DeleteModal';
 
-export const Settings = ({ id, username }: {
-    id: number,
-    username?: string,
-}) => {
+export const Settings = () => {
     const router = useRouter();
 
     const [open, setOpen] = useState(false);
@@ -29,13 +26,13 @@ export const Settings = ({ id, username }: {
                     <Image src={SettingsIcon} alt="" height={32} />
                     Settings
                 </SettingsTitleContainer>
-                <SettingsCard onClick={() => router.push(`/stocks?id=${id}&username=${username}`)}>
+                <SettingsCard onClick={() => router.push(`/stocks`)}>
                     <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                         <Exchange style={{margin: 10}} /> Exchange section
                     </Box>
                     <Arrow style={{margin: 15}} />
                 </SettingsCard>
-                <SettingsCard onClick={() => router.push(`/settings/name?id=${id}&username=${username}`)}>
+                <SettingsCard onClick={() => router.push(`/settings/name`)}>
                     <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                         <Name style={{margin: 10}} /> Name selection 
                     </Box>
@@ -51,10 +48,10 @@ export const Settings = ({ id, username }: {
                     <Link style={{ color: '#C3C2C2', textDecoration: 'none' }} href="">Privacy policy</Link>
                 </SettingsPrivacyPolicy>
             </SettingsMainContainer>
-            <SettingsButton onClick={() => router.push(`/tapper?id=${id}&username=${username}`)}>
+            <SettingsButton onClick={() => router.push(`/tapper`)}>
                 Close
             </SettingsButton>
-            <DeleteModal id={id} open={open} toggleDrawer={setOpen} />
+            <DeleteModal id={window.Telegram.WebApp.initDataUnsafe.user.id} open={open} toggleDrawer={setOpen} />
         </SettingsContainer>
     )
 }

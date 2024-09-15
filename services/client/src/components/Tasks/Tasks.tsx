@@ -11,10 +11,7 @@ import CoinIcon from '../../assets/icons/coin_min.svg';
 import Image from 'next/image';
 import { Box } from '@mui/material';
 
-export const Tasks = ({ id, username }: {
-    id: number,
-    username?: string,
-}) => {
+export const Tasks = () => {
     const router = useRouter();
     return (
         <TasksContainer>
@@ -40,7 +37,7 @@ export const Tasks = ({ id, username }: {
             <TasksSecondaryTextContainer>
                 Daily tasks
             </TasksSecondaryTextContainer>
-            <TasksCard onClick={() => router.push(`/tapper?id=${id}&username=${username}&open_reward=1`)}>
+            <TasksCard onClick={() => router.push(`/tapper&open_reward=1`)}>
                 <TasksMainCardContainer>
                     <Box sx={{height: 32, width: 40, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                         <Image src={RewardIcon} alt="" height={32} />
@@ -59,7 +56,7 @@ export const Tasks = ({ id, username }: {
             <TasksSecondaryTextContainer>
                 Mini-app
             </TasksSecondaryTextContainer>
-            <TasksCard onClick={() => router.push(`/tic-tac-toe?id=${id}&username=${username}`)}>
+            <TasksCard onClick={() => router.push(`/tic-tac-toe`)}>
                 <TasksMainCardContainer>
                     <Box sx={{height: 32, width: 40, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                         <Image src={GameIcon} alt="" height={32} />

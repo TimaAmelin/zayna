@@ -52,6 +52,7 @@ bot.on('message', async (msg) => {
 								]
 							],
 							resize_keyboard: true,
+							one_time_keyboard: false,
 						},
 					});
 				}
@@ -92,6 +93,7 @@ bot.on('message', async (msg) => {
 							]
 						],
 						resize_keyboard: true,
+						one_time_keyboard: false,
 					},
 				});
 			}

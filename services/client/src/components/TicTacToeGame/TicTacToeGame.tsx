@@ -10,10 +10,7 @@ import CircleImage from '../../assets/mini-app/circle.png';
 import Image from 'next/image';
 import { ticTacToe } from '@/api/handlers/ticTacToe';
 
-export const TicTacToeGame = ({ id, username }: {
-    id: number,
-    username?: string,
-}) => {
+export const TicTacToeGame = () => {
     const router = useRouter();
     const [turn, setTurn] = useState(true);
     const [gameState, setGameState] = useState(
@@ -28,7 +25,7 @@ export const TicTacToeGame = ({ id, username }: {
     return (
         <TicTacToeContainer>
             <TicTacToeClose>
-                <IconButton onClick={() => router.push(`/tapper?id=${id}&username=${username}`)}>
+                <IconButton onClick={() => router.push(`/tapper`)}>
                     <Close sx={{color: '#fff'}} />
                 </IconButton>
             </TicTacToeClose>
@@ -48,7 +45,7 @@ export const TicTacToeGame = ({ id, username }: {
                                 setTurn(false);
                                 const newGameState = gameState.map((r, iY) => iY === indexY ? row.map((c, iX) => iX === indexX ? 1 : c) : r);
                                 setGameState(newGameState);
-                                const {response} = await ticTacToe(newGameState, id);
+                                const {response} = await ticTacToe(newGameState, window.Telegram.WebApp.initDataUnsafe.user.id);
                                 await new Promise(r => setTimeout(r, 500));
 
                                 const {field, result: newResult} = response;
@@ -69,7 +66,7 @@ export const TicTacToeGame = ({ id, username }: {
                     )))
                 }
             </TicTacToeField>
-            <TicTacToeButton onClick={() => router.push(`/tapper?id=${id}&username=${username}`)} disabled={result === 'in_progress'}>{buttonText}</TicTacToeButton>
+            <TicTacToeButton onClick={() => router.push(`/tapper`)} disabled={result === 'in_progress'}>{buttonText}</TicTacToeButton>
         </TicTacToeContainer>
     )
 }

@@ -17,10 +17,7 @@ import Image from 'next/image';
 import { Box } from '@mui/material';
 import { ProjectModal } from '../ProjectModal/ProjectModal';
 
-export const Projects = ({ id, username }: {
-    id: number,
-    username?: string,
-}) => {
+export const Projects = () => {
     const [projects, setProjects] = useState<{
         id: number,
         name: string;
@@ -44,7 +41,7 @@ export const Projects = ({ id, username }: {
     
     useEffect(() => {
         const getUserProjects = async () => {
-            const res = await getProjects(id);
+            const res = await getProjects(window.Telegram.WebApp.initDataUnsafe.user.id);
             return res
         }
 
@@ -55,7 +52,7 @@ export const Projects = ({ id, username }: {
 
     useEffect(() => {
         const getUserTokens = async () => {
-            const res = await getTokens(Number(id));
+            const res = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
             return res
         }
 
@@ -63,10 +60,10 @@ export const Projects = ({ id, username }: {
             setMoney(data.response.sum);
             setMoneyPerHour(data.response.per_hour ?? 0);
         })
-    }, [id]);
+    }, [window.Telegram.WebApp.initDataUnsafe.user.id]);
 
     async function updateProjects() {
-        const data = await getProjects(id);
+        const data = await getProjects(window.Telegram.WebApp.initDataUnsafe.user.id);
         setProjects(data.response.projects);
     }
 
@@ -90,11 +87,11 @@ export const Projects = ({ id, username }: {
                     <ProjectsStatisticsRight>
                         <ProjectsStatisticsAvatar />
                         <ProjectsStatisticsName>
-                            {username}
+                            {window.Telegram.WebApp.initDataUnsafe.user.username}
                         </ProjectsStatisticsName>
                         <ProjectsStatisticsSettingsLine />
                         <ProjectsStatisticsSettingsContainer
-                            onClick={() => router.push(`/settings?id=${id}&username=${username}`)}>
+                            onClick={() => router.push(`/settings`)}>
                             <SettingsIcon />
                         </ProjectsStatisticsSettingsContainer>
                     </ProjectsStatisticsRight>
@@ -159,7 +156,7 @@ export const Projects = ({ id, username }: {
                     ))}
                 </ProjectsMainContainerCardRow>
             </ProjectsMainContainer>
-            <ProjectModal id={id} project={project} open={open} toggleDrawer={setOpen} currentMoney={money} setCurrentMoney={setMoney} updateProjects={updateProjects} />
+            <ProjectModal id={window.Telegram.WebApp.initDataUnsafe.user.id} project={project} open={open} toggleDrawer={setOpen} currentMoney={money} setCurrentMoney={setMoney} updateProjects={updateProjects} />
         </ProjectsContainer>
     )
 }

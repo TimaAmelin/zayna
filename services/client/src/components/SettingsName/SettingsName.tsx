@@ -5,10 +5,7 @@ import { SettingsButton, SettingsInput, SettingsContainer, SettingsMainContainer
 import { useRouter } from 'next/navigation';
 import { changeName } from '@/api/handlers/changeName';
 
-export const SettingsName = ({ id, username }: {
-    id: number,
-    username?: string,
-}) => {
+export const SettingsName = () => {
     const router = useRouter();
 
     const [name, setName] = useState('');
@@ -27,12 +24,12 @@ export const SettingsName = ({ id, username }: {
             </SettingsMainContainer>
             <SettingsButtonsContainer>
                 <SettingsButton onClick={async () => {
-                    await changeName(id, name);
-                    router.push(`/settings?id=${id}&username=${name}`);
+                    await changeName(window.Telegram.WebApp.initDataUnsafe.user.id, name);
+                    router.push(`/settings?id=${window.Telegram.WebApp.initDataUnsafe.user.id}&username=${name}`);
                 }}>
                     Done
                 </SettingsButton>
-                <SettingsButton sx={{backgroundColor: '#fff'}} onClick={() => router.push(`/settings?id=${id}&username=${username}`)}>
+                <SettingsButton sx={{backgroundColor: '#fff'}} onClick={() => router.push(`/settings`)}>
                     Close
                 </SettingsButton>
             </SettingsButtonsContainer>

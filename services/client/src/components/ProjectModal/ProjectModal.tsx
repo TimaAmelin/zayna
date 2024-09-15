@@ -61,7 +61,7 @@ export const ProjectModal = (
                     <Image src={CoinIcon} alt="" height={12} style={{marginRight: 3}} /> + {project?.income}
                 </ProjectModalProfitText>
                 <ProjectsModalMainContainerMoney>
-                    <CoinMax style={{marginRight: 10}} /> {currentMoney.toLocaleString('ru-RU')}
+                    <CoinMax style={{marginRight: 10}} /> {project?.price.toLocaleString('ru-RU')}
                 </ProjectsModalMainContainerMoney>
                 <ProjectModalButton onClick={async () => {
                     if (currentMoney - (project?.price ?? 0) < 0) {

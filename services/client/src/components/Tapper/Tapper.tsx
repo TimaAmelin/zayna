@@ -82,9 +82,7 @@ function timeUntilDate(date: Date) {
     return dateDiff(now, date)
 }
 
-export const Tapper = ({ id, username, from, openReward, present, avatar }: {
-    id: number;
-    username?: string;
+export const Tapper = ({from, openReward, present, avatar }: {
     from?: number;
     openReward?: boolean;
     present?: string;
@@ -120,7 +118,7 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
     const [coins, setCoins] = useState<{ id: string; x: number; y: number }[]>([]);
 
     async function refetch() {
-        const data = await getTokens(Number(id));
+        const data = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
 
         setMoney(data.response.sum);
         setMoneyLast(data.response.sum);
@@ -128,7 +126,7 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
     }
 
     const handleClick = (e: React.Touch) => {
-        setMoney(money + (Math.max(money.toString().length, 1)));
+        setMoney(money + 2);
         if (navigator.vibrate) {
             navigator.vibrate(200);
         } else {
@@ -165,22 +163,22 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
 
     useEffect(() => {
         const getUserTokens = async () => {
-            await putUser(id, username, from, avatar);
+            await putUser(window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from, avatar);
             if (present) {
                 try {
-                    await recieveGift(id, Number(present));
+                    await recieveGift(window.Telegram.WebApp.initDataUnsafe.user.id, Number(present));
                 } catch (error) {
 
                 }
             }
-            const res = await getTokens(Number(id));
+            const res = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
             return res
         }
 
         getUserTokens().then(data => {
             setMoney(data.response.sum);
             setMoneyLast(data.response.sum);
-            setMoneyPerHour(data.response.per_hour ?? 0);
+            setMoneyPerHour(40 ?? data.response.per_hour ?? 0);
             setGifts(data.response.presents);
             if (data.response.photo) {
                 setAva(data.response.photo);
@@ -190,11 +188,11 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
             }
             setLoading(false);
         })
-    }, [id, username, from]);
+    }, [window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from]);
 
     useEffect(() => {
         const getUserDaily = async () => {
-            const res = await getDaily(Number(id));
+            const res = await getDaily(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
             return res
         }
 
@@ -202,11 +200,11 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
             setAvailable(data.response.reward);
             setCombo(data.response.combo);
         })
-    }, [id, username, from]);
+    }, [window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from]);
 
     useEffect(() => {
         const getUserMini = async () => {
-            const res = await ticTacToe([[0, 0, 0], [0, 0, 0], [0, 0, 0]], id);
+            const res = await ticTacToe([[0, 0, 0], [0, 0, 0], [0, 0, 0]], window.Telegram.WebApp.initDataUnsafe.user.id);
             return res
         }
 
@@ -216,14 +214,13 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
                 setTimeToNextMini(timeUntilDate(new Date(data.response.next)));
             }
         })
-    }, [id, username, from]);
+    }, [window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from]);
 
     useEffect(() => {
         window.Telegram.WebApp.expand();
-        putTokenBatch(Number(id), money - moneyLast)
-        setMoneyLast(money)
+        
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [money, id]);
+    }, [money, window.Telegram.WebApp.initDataUnsafe.user.id]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -234,6 +231,11 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
             }
             if (nextMini) {
                 setTimeToNextMini(timeUntilDate(new Date(nextMini)));
+            }
+            if (!loading) {
+                setMoney(money => money + moneyPerHour / 3600);
+                putTokenBatch(Number(window.Telegram.WebApp.initDataUnsafe.user.id), money - moneyLast + moneyPerHour / 3600);
+                setMoneyLast(money);
             }
         }, 1000);
  
@@ -291,11 +293,11 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
                             }
                         </TapperStatisticsAvatar>
                         <TapperStatisticsName>
-                            {username}
+                            {window.Telegram.WebApp.initDataUnsafe.user.username}
                         </TapperStatisticsName>
                         <TapperStatisticsSettingsLine />
                         <TapperStatisticsSettingsContainer
-                            onClick={() => router.push(`/settings?id=${id}&username=${username}`)}>
+                            onClick={() => router.push(`/settings`)}>
                             <SettingsIcon />
                         </TapperStatisticsSettingsContainer>
                     </TapperStatisticsRight>
@@ -319,7 +321,7 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
                         </TapperMainContainerCardTop>
                         Daily Reward
                     </TapperMainContainerCard>
-                    <TapperMainContainerCard onClick={() => router.push(`/projects?id=${id}&username=${username}`)}>
+                    <TapperMainContainerCard onClick={() => router.push(`/projects`)}>
                         <TapperMainContainerCardTop>
                             <div style={{height: 35}}>
                                 <Image src={ForestIcon} height={35} alt="" />
@@ -331,7 +333,7 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
                         if (timeToNextMini.hours || timeToNextMini.minutes) {
                             return
                         }
-                        router.push(`/tic-tac-toe?id=${id}&username=${username}`);
+                        router.push(`/tic-tac-toe`);
                     }}>
                         <TapperMainContainerCardTop>
                             <div style={{height: 35}}>
@@ -352,7 +354,7 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
                     </TapperMainContainerCard>
                 </TapperMainContainerCardContainer>
                 <TapperMainContainerMoney>
-                    <CoinMax style={{marginRight: 10}} /> {money.toLocaleString('ru-RU')}
+                    <CoinMax style={{marginRight: 10}} /> {Math.floor(money).toLocaleString('ru-RU')}
                 </TapperMainContainerMoney>
                 <TapperMainContainerTapperContainer
                     onTouchStart={e => handleTouchStart(e)}>
@@ -370,11 +372,11 @@ export const Tapper = ({ id, username, from, openReward, present, avatar }: {
                         ))}
                 </TapperMainContainerTapperContainer>
             </TapperMainContainer>
-            <GiftModal toggleDrawer={toggleDrawer} open={giftModalOpen} id={id} gift={gifts[giftN]} refetch={refetch} />
+            <GiftModal toggleDrawer={toggleDrawer} open={giftModalOpen} id={window.Telegram.WebApp.initDataUnsafe.user.id} gift={gifts[giftN]} refetch={refetch} />
             <RewardModal
                 toggleDrawer={setDailyModalOpen}
                 open={dailyModalOpen}
-                id={id} combo={combo}
+                id={window.Telegram.WebApp.initDataUnsafe.user.id} combo={combo}
                 available={available}
                 setMoney={setMoney}
                 setAvailable={setAvailable}

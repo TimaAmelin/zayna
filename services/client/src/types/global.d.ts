@@ -2,8 +2,12 @@ export {};
 
 declare global {
   interface TelegramWebAppInitDataUnsafe {
-    user_id: number;
-    username: string;
+    user: {
+      id: number;
+      first_name: string;
+      last_name: string;
+      username: string;
+    }
   }
 
   interface Window {
@@ -15,6 +19,7 @@ declare global {
         expand: () => void;
         platform: string;
       };
+      WebAppInitData: any;
     };
   }
 }

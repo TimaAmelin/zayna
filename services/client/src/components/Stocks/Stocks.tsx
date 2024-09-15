@@ -15,10 +15,7 @@ import OkxIcon from '../../assets/stocks/okx.png';
 import Image from 'next/image';
 import { Box } from '@mui/material';
 
-export const Stocks = ({ id, username }: {
-    id: number,
-    username?: string,
-}) => {
+export const Stocks = () => {
     const router = useRouter();
     return (
         <StocksContainer>
