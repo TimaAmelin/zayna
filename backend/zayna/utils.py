@@ -75,13 +75,6 @@ def get_tokens_count(user_id):
     user.add_income()
 
     current_tokens = int(user.tokens_count)
-    last_hour_sum = user.batches.filter(
-        created_at__gt=timezone.now() - datetime.timedelta(hours=1),
-    ).aggregate(per_hour=Sum("tokens_count"))
-
-    if last_hour_sum["per_hour"]:
-        current_tokens += last_hour_sum["per_hour"]
-    last_hour_sum["per_hour"] = (last_hour_sum["per_hour"] or 0) + user.income
 
     presents = list(user.presents.filter(shown=False).values(
         "id",
@@ -103,7 +96,7 @@ def get_tokens_count(user_id):
             "name": user.name,
             "income": user.income,
             "photo": user.photo,
-            **last_hour_sum},
+        },
         status=200,
     )
 
