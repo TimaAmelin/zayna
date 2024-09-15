@@ -224,7 +224,7 @@ def get_present(user_id, present_id):
 
     present.received = True
     present.save(update_fields=["received"])
-    logging.info("payment", present.project.payment)
+    logging.info(f"Process payment: {present.project.payment}")
     user.tokens_count = str(int(user.tokens_count) + present.project.payment)
     user.save(update_fields=["tokens_count"])
     participate(user_id, present.project.id)
