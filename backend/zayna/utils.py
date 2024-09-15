@@ -3,7 +3,8 @@ import random
 from enum import Enum
 
 from django.conf import settings
-from django.db.models import Subquery, OuterRef, When, Case, F
+from django.db.models import Subquery, OuterRef, When, Case, F, IntegerField
+from django.db.models.functions import Cast
 from django.http import HttpResponse, JsonResponse
 
 from .config import DAILY_TOKENS, GAME_PRICE
@@ -258,7 +259,9 @@ def get_user_projects(request, user_id):
                     then=F("lvl"),
                 ),
                 default=0,
-            )
+            ),
+            cost=Cast(F("price") * 3.2 ** (F("level") - 1), output_field=IntegerField()),
+            profit=Cast(F("income") * 1.3 ** (F("level") - 1), output_field=IntegerField()),
         )
         .values(
             "level",
@@ -266,6 +269,8 @@ def get_user_projects(request, user_id):
             "name",
             "price",
             "income",
+            "cost",
+            "profit",
             "mode",
             "description",
             "logo",
