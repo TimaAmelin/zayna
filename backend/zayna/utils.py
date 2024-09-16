@@ -433,3 +433,18 @@ def add_network(id, network):
     user.tokens_count = str(int(user.tokens_count) + SOCIAL_NETWORK_PRICE)
     user.save(update_fields=["tokens_count"])
     return HttpResponse(status=201)
+
+
+def get_networks(id):
+    user_qs = User.objects.filter(id=id)
+    if not user_qs.exists():
+        logging.info(f"User {id} does not exist")
+        return JsonResponse({"status": "ERROR", "message": "User does not exist"}, status=400)
+    user = user_qs.first()
+
+    opened_networks = user.networks.values_list("name", flat=True)
+    result_networks = {network: network in opened_networks for network in Network.Values}
+    return JsonResponse(
+        {"networks": result_networks},
+        status=200,
+    )

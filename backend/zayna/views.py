@@ -156,7 +156,10 @@ def stock_view(request, id):
 
 
 def network_view(request, id):
-    if request.method == "POST":
+    if request.method == "GET":
+        logging.info(f"[Zayna] getting networks for user {id}")
+        return get_networks(id)
+    elif request.method == "POST":
         logging.info(f"[Zayna] selecting network for user {id}")
         body = json.loads(request.body)
         network = body.get("network")
