@@ -3,10 +3,8 @@ import { Box, Button, styled } from '@mui/material';
 export const TasksContainer = styled(Box)(() => ({
     backgroundColor: '#1F1F2E',
     height: '100%',
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    width: '100%',
+    overflowY: 'auto',
 }));
 
 export const TasksCard = styled(Box)(() => ({
@@ -24,6 +22,7 @@ export const TasksCard = styled(Box)(() => ({
     marginTop: 10,
     paddingLeft: 10,
     boxSizing: 'border-box',
+    marginLeft: '5%',
 }));
 
 export const TasksMainCardContainer = styled(Box)(() => ({
@@ -59,6 +58,7 @@ export const TasksSecondaryTextContainer = styled(Box)(() => ({
     fontWeight: 400,
     marginBottom: 5,
     marginTop: 30,
+    marginLeft: '5%',
 }));
 
 export const TasksButton = styled(Button)(() => ({

@@ -84,7 +84,7 @@ export const ProjectsFriends = () => {
                     </ProjectsFriendsMainContainerTypeButton>
                 </ProjectsFriendsMainContainerTypeRow>
                 <ProjectsFriendsMainContainerCardRow>
-                    {projects.filter(project => project.mode === type).map((project, index) => (
+                    {projects && projects.filter(project => project.mode === type).map((project, index) => (
                         <ProjectsFriendsMainContainerCard key={index} onClick={() => {
                         }}>
                             <Box sx={{display: 'flex'}}>
@@ -130,6 +130,11 @@ export const ProjectsFriends = () => {
                             </ProjectsFriendsMainContainerCardRight>
                         </ProjectsFriendsMainContainerCard>
                     ))}
+                    {!projects && (
+                        <Box sx={{display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'center', fontSize: 22, marginTop: 2}}>
+                            No gifts available for now
+                        </Box>
+                    )}
                 </ProjectsFriendsMainContainerCardRow>
                 <Select
                     sx={{width: '90%', color: chosenFriend === 'link' ? '#7ADA46' : '#fff'}}
