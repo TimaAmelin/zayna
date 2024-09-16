@@ -8,7 +8,7 @@ from django.db.models.functions import Cast
 from django.http import HttpResponse, JsonResponse
 
 from .config import DAILY_TOKENS, GAME_PRICE, SOCIAL_NETWORK_PRICE
-from .tasks import *
+from .models import *
 
 
 def welcome_gift(user):
@@ -66,7 +66,6 @@ def add_tokens_batch(user_id, tokens_count):
 
 
 def get_tokens_count(user_id):
-    process_old_batches()  # TODO: remove it
     user_qs = User.objects.filter(id=user_id)
     if not user_qs.exists():
         logging.info(f"User {user_id} does not exist")
@@ -74,6 +73,7 @@ def get_tokens_count(user_id):
 
     user = user_qs.first()
     user.add_income()
+    user.process_old_batches()
 
     current_tokens = int(user.tokens_count)
 

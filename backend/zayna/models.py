@@ -39,12 +39,20 @@ class User(models.Model):
         return current_tokens
 
     def add_income(self):
+        logging.info(f"Adding income for user {self.id}")
+        if not self.batches.exists():
+            self.batches.create()
+            return
         income_updated_at = self.batches.order_by("created_at").last().created_at
+        logging.info(f"income_updated_at: {income_updated_at}")
         if income_updated_at >= timezone.now() - datetime.timedelta(minutes=1):
             return
         hours_without_update = (timezone.now() - income_updated_at) / datetime.timedelta(hours=1)
+        logging.info(f"hours_without_update: {hours_without_update}")
         self.tokens_count = str(round(int(self.tokens_count) + self.income * hours_without_update))
+        logging.info(f"Add tokens: {self.income * hours_without_update}")
         self.save(update_fields=["tokens_count"])
+        self.batches.create()
 
     def process_old_batches(self):
         logging.info(f"Aggregating olg batches for user {self.id}...")
