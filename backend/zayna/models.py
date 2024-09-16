@@ -105,6 +105,8 @@ class Network(models.Model):
         INSTA = "Insta", "Insta"
         LINKEDIN = "LinkedIn", "LinkedIn"
         TG = "TG", "TG"
+        TIKTOK = "TikTok", "TikTok"
+        PINTEREST = "Pinterst", "Pinterst"
 
     NETWORK_CHOICES = Values
 
