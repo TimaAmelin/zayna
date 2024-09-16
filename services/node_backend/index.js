@@ -22,7 +22,26 @@ bot.on('message', async (msg) => {
 			const fileUrl = `https://api.telegram.org/file/bot${bot.token}/${file.file_path}`;
 	
 			if (text.includes('/start')) {
-				await bot.sendMessage(chatId, 'Check out our app!', {
+				await bot.sendMessage(chatId, `🌍 Zayna – Investing in a Better Future 🌍
+Welcome to Zayna! We’re not just an investment platform; we’re a community dedicated to earning money while making a positive impact on the world. Here’s what drives us:
+
+💰 Earn and Help the Planet
+Invest in climate projects that truly make a difference. With Zayna, your investments work for you and the planet’s future.
+
+📚 Cryptocurrency Education
+We don’t just offer investment tools—we provide knowledge about cryptocurrencies, helping you navigate the digital economy and boost your earnings. Education is key to successful investing.
+
+🏥 Medical projects are important for the environment  
+At Zayna, we support initiatives that help both nature and people. Our medical projects enable longer, more active, and happier lives, creating a healthy planet for everyone.
+
+🔒 Transparency and Reliability
+Zayna isn’t a short-term scheme. We’re a long-term project with a clear mission and transparent business model. Trust us for our honesty and responsibility.
+
+⏳ Investing in the Future
+Our actions today shape the world for future generations. Zayna is committed to improving the planet for tomorrow through every investment.
+
+Join Zayna to earn and build a more sustainable world for yourself and your children. Together, we can make a difference! ☘️💪
+#Investments #Cryptocurrency #Sustainability #EcoInvestments #Zayna #FutureOfThePlanet #Medicine`, {
 					reply_markup: {
 						inline_keyboard: [
 							[
@@ -41,7 +60,26 @@ bot.on('message', async (msg) => {
 		}
 	
 		if (text.includes('/start')) {
-			await bot.sendMessage(chatId, 'Check out our app!', {
+			await bot.sendMessage(chatId, `🌍 Zayna – Investing in a Better Future 🌍
+Welcome to Zayna! We’re not just an investment platform; we’re a community dedicated to earning money while making a positive impact on the world. Here’s what drives us:
+
+💰 Earn and Help the Planet
+Invest in climate projects that truly make a difference. With Zayna, your investments work for you and the planet’s future.
+
+📚 Cryptocurrency Education
+We don’t just offer investment tools—we provide knowledge about cryptocurrencies, helping you navigate the digital economy and boost your earnings. Education is key to successful investing.
+
+🏥 Medical projects are important for the environment  
+At Zayna, we support initiatives that help both nature and people. Our medical projects enable longer, more active, and happier lives, creating a healthy planet for everyone.
+
+🔒 Transparency and Reliability
+Zayna isn’t a short-term scheme. We’re a long-term project with a clear mission and transparent business model. Trust us for our honesty and responsibility.
+
+⏳ Investing in the Future
+Our actions today shape the world for future generations. Zayna is committed to improving the planet for tomorrow through every investment.
+
+Join Zayna to earn and build a more sustainable world for yourself and your children. Together, we can make a difference! ☘️💪
+#Investments #Cryptocurrency #Sustainability #EcoInvestments #Zayna #FutureOfThePlanet #Medicine`, {
 				reply_markup: {
 					inline_keyboard: [
 						[
