@@ -37,6 +37,7 @@ curl -X GET -H "Content-Type: application/json" -v http://127.0.0.1:8000/daily?i
 curl -X GET -H "Content-Type: application/json" -v http://127.0.0.1:8000/get_daily?id=123
 curl -X GET -H "Content-Type: application/json" -v http://127.0.0.1:8000/stock/123/
 curl -X POST -H "Content-Type: application/json" -d '{"stock": "Binance"}' -v http://127.0.0.1:8000/stock/123/
+curl -X POST -H "Content-Type: application/json" -d '{"network": "YouTube"}' -v http://127.0.0.1:8000/network/123/
 ### Подключение к БД:  
 sqlite3 zaynadb.sqlite3 
 

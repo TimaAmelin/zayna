@@ -41,6 +41,7 @@ urlpatterns = [
     path("change_name/", change_name_view, name="change_name"),
     path("delete_user/<int:id>/", delete_user_view, name="delete_user"),
     path("stock/<int:id>/", stock_view, name="stock"),
+    path("network/<int:id>/", network_view, name="network"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

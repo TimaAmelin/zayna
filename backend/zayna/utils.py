@@ -7,7 +7,7 @@ from django.db.models import Subquery, OuterRef, When, Case, F, IntegerField
 from django.db.models.functions import Cast
 from django.http import HttpResponse, JsonResponse
 
-from .config import DAILY_TOKENS, GAME_PRICE
+from .config import DAILY_TOKENS, GAME_PRICE, SOCIAL_NETWORK_PRICE
 from .tasks import *
 
 
@@ -414,4 +414,22 @@ def set_stock(id, stock):
     user = user_qs.first()
     user.stock = stock
     user.save(update_fields=["stock"])
+    return HttpResponse(status=201)
+
+
+def add_network(id, network):
+    user_qs = User.objects.filter(id=id)
+    if not user_qs.exists():
+        logging.info(f"User {id} does not exist")
+        return JsonResponse({"status": "ERROR", "message": "User does not exist"}, status=400)
+    user = user_qs.first()
+
+    network_qs = user.networks.filter(name=network)
+    if network_qs.exists():
+        logging.info(f"User {id} has already opened network {network}")
+        return JsonResponse({"message": "User has already opened this network"}, status=200)
+
+    user.networks.create(name=network)
+    user.tokens_count = str(int(user.tokens_count) + SOCIAL_NETWORK_PRICE)
+    user.save(update_fields=["tokens_count"])
     return HttpResponse(status=201)

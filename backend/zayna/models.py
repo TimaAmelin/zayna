@@ -95,3 +95,19 @@ class Present(models.Model):
     @property
     def link(self):
         return f"{BOT_LINK}?start=present{self.pk}"
+
+
+class Network(models.Model):
+    class Values(models.TextChoices):
+        YOUTUBE = "YouTube", "YouTube"
+        X = "X", "X"
+        FB = "FB", "FB"
+        INSTA = "Insta", "Insta"
+        LINKEDIN = "LinkedIn", "LinkedIn"
+        TG = "TG", "TG"
+
+    NETWORK_CHOICES = Values
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="networks")
+    name = models.CharField(max_length=10, choices=NETWORK_CHOICES.choices, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)

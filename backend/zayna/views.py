@@ -153,3 +153,13 @@ def stock_view(request, id):
         return set_stock(id, stock)
 
     return HttpResponse(status=404)
+
+
+def network_view(request, id):
+    if request.method == "POST":
+        logging.info(f"[Zayna] selecting network for user {id}")
+        body = json.loads(request.body)
+        network = body.get("network")
+        return add_network(id, network)
+
+    return HttpResponse(status=404)
