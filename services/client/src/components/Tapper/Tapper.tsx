@@ -92,6 +92,7 @@ export const Tapper = ({from, openReward, present, avatar }: {
     const [money, setMoney] = useState(0);
     const [moneyLast, setMoneyLast] = useState(0);
     const [moneyPerHour, setMoneyPerHour] = useState(0);
+    const [moneyPerHourDiff, setMoneyPerHourDiff] = useState(0);
     const [giftModalOpen, setGiftModalOpen] = useState(false);
     const [dailyModalOpen, setDailyModalOpen] = useState(openReward ?? false);
     const [ava, setAva] = useState(avatar);
@@ -214,7 +215,7 @@ export const Tapper = ({from, openReward, present, avatar }: {
                 setTimeToNextMini(timeUntilDate(new Date(data.response.next)));
             }
         })
-    }, [window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from]);
+    }, [window.Telegram.WebApp.initDataUnsafe.user.id]);
 
     useEffect(() => {
         window.Telegram.WebApp.expand();
@@ -233,9 +234,14 @@ export const Tapper = ({from, openReward, present, avatar }: {
                 setTimeToNextMini(timeUntilDate(new Date(nextMini)));
             }
             if (!loading) {
+                let diff = money - moneyLast;
+                if (moneyPerHourDiff + moneyPerHour / 3600 >= 1) {
+                    diff += Math.floor(moneyPerHourDiff + moneyPerHour / 3600);
+                }
+                setMoneyPerHourDiff(moneyPerHourDiff + moneyPerHour / 3600 - Math.floor(moneyPerHourDiff + moneyPerHour / 3600));
+                putTokenBatch(Number(window.Telegram.WebApp.initDataUnsafe.user.id), diff);
                 setMoney(money => money + moneyPerHour / 3600);
-                putTokenBatch(Number(window.Telegram.WebApp.initDataUnsafe.user.id), money - moneyLast + moneyPerHour / 3600);
-                setMoneyLast(money);
+                setMoneyLast(money + moneyPerHour / 3600);
             }
         }, 1000);
  
@@ -277,7 +283,7 @@ export const Tapper = ({from, openReward, present, avatar }: {
                         </TapperStatisticsCoinContainer>
                         <TapperStatisticsProfitContainer>
                             <TapperStatisticsProfitTitleContainer>
-                                Profit per hour
+                                Profit per hour {moneyPerHourDiff}
                             </TapperStatisticsProfitTitleContainer>
                             <TapperStatisticsProfitAmountContainer>
                                 +{moneyPerHour} <IIcon />
@@ -331,6 +337,7 @@ export const Tapper = ({from, openReward, present, avatar }: {
                     </TapperMainContainerCard>
                     <TapperMainContainerCard onClick={() => {
                         if (timeToNextMini.hours || timeToNextMini.minutes) {
+                            alert('Mini game is not available now. Check out later!')
                             return
                         }
                         router.push(`/tic-tac-toe`);

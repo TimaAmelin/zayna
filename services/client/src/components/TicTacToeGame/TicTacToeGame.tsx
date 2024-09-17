@@ -65,6 +65,86 @@ export const TicTacToeGame = () => {
                             sx={{width: 78, height: 78, position: 'absolute', top: 13 + 108 * indexY, left: 13 + 108 * indexX}} />
                     )))
                 }
+                {
+                    gameState[0][0] + gameState[1][0] + gameState[2][0] === 3 && (
+                        <Box sx={{height: '300px', width: '10px', position: 'absolute', backgroundColor: '#81DC50', top: 10, left: 48, borderRadius: 5}} />
+                    )
+                }
+                {
+                    gameState[0][1] + gameState[1][1] + gameState[2][1] === 3 && (
+                        <Box sx={{height: '300px', width: '10px', position: 'absolute', backgroundColor: '#81DC50', top: 10, left: 156, borderRadius: 5}} />
+                    )
+                }
+                {
+                    gameState[0][2] + gameState[1][2] + gameState[2][2] === 3 && (
+                        <Box sx={{height: '300px', width: '10px', position: 'absolute', backgroundColor: '#81DC50', top: 10, left: 264, borderRadius: 5}} />
+                    )
+                }
+                {
+                    gameState[0][0] + gameState[0][1] + gameState[0][2] === 3 && (
+                        <Box sx={{height: '10px', width: '300px', position: 'absolute', backgroundColor: '#81DC50', top: 48, left: 10, borderRadius: 5}} />
+                    )
+                }
+                {
+                    gameState[1][0] + gameState[1][1] + gameState[1][2] === 3 && (
+                        <Box sx={{height: '10px', width: '300px', position: 'absolute', backgroundColor: '#81DC50', top: 156, left: 10, borderRadius: 5}} />
+                    )
+                }
+                {
+                    gameState[2][0] + gameState[2][1] + gameState[2][2] === 3 && (
+                        <Box sx={{height: '10px', width: '300px', position: 'absolute', backgroundColor: '#81DC50', top: 264, left: 10, borderRadius: 5}} />
+                    )
+                }
+                {
+                    gameState[0][0] + gameState[1][1] + gameState[2][2] === 3 && (
+                        <Box sx={{height: '10px', width: '300px', position: 'absolute', backgroundColor: '#81DC50', top: 156, left: 10, borderRadius: 5, transform: 'rotate(-45deg)'}} />
+                    )
+                }
+                {
+                    gameState[2][0] + gameState[1][1] + gameState[0][2] === 3 && (
+                        <Box sx={{height: '10px', width: '300px', position: 'absolute', backgroundColor: '#81DC50', top: 156, left: 10, borderRadius: 5, transform: 'rotate(45deg)'}} />
+                    )
+                }
+                {
+                    gameState[0][0] + gameState[1][0] + gameState[2][0] === -3 && (
+                        <Box sx={{height: '300px', width: '10px', position: 'absolute', backgroundColor: '#FD3F36', top: 10, left: 48, borderRadius: 5}} />
+                    )
+                }
+                {
+                    gameState[0][1] + gameState[1][1] + gameState[2][1] === -3 && (
+                        <Box sx={{height: '300px', width: '10px', position: 'absolute', backgroundColor: '#FD3F36', top: 10, left: 156, borderRadius: 5}} />
+                    )
+                }
+                {
+                    gameState[0][2] + gameState[1][2] + gameState[2][2] === -3 && (
+                        <Box sx={{height: '300px', width: '10px', position: 'absolute', backgroundColor: '#FD3F36', top: 10, left: 264, borderRadius: 5}} />
+                    )
+                }
+                {
+                    gameState[0][0] + gameState[0][1] + gameState[0][2] === -3 && (
+                        <Box sx={{height: '10px', width: '300px', position: 'absolute', backgroundColor: '#FD3F36', top: 48, left: 10, borderRadius: 5}} />
+                    )
+                }
+                {
+                    gameState[1][0] + gameState[1][1] + gameState[1][2] === -3 && (
+                        <Box sx={{height: '10px', width: '300px', position: 'absolute', backgroundColor: '#FD3F36', top: 156, left: 10, borderRadius: 5}} />
+                    )
+                }
+                {
+                    gameState[2][0] + gameState[2][1] + gameState[2][2] === -3 && (
+                        <Box sx={{height: '10px', width: '300px', position: 'absolute', backgroundColor: '#FD3F36', top: 264, left: 10, borderRadius: 5}} />
+                    )
+                }
+                {
+                    gameState[0][0] + gameState[1][1] + gameState[2][2] === -3 && (
+                        <Box sx={{height: '10px', width: '300px', position: 'absolute', backgroundColor: '#FD3F36', top: 156, left: 10, borderRadius: 5, transform: 'rotate(45deg)'}} />
+                    )
+                }
+                {
+                    gameState[2][0] + gameState[1][1] + gameState[0][2] === -3 && (
+                        <Box sx={{height: '10px', width: '300px', position: 'absolute', backgroundColor: '#FD3F36', top: 156, left: 10, borderRadius: 5, transform: 'rotate(-45deg)'}} />
+                    )
+                }
             </TicTacToeField>
             <TicTacToeButton onClick={() => router.push(`/tapper`)} disabled={result === 'in_progress'}>{buttonText}</TicTacToeButton>
         </TicTacToeContainer>

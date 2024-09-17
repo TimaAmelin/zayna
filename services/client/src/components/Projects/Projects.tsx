@@ -168,7 +168,7 @@ export const Projects = () => {
             </ProjectsMainContainer>
             {
                 typeof window !== 'undefined' && (
-                    <ProjectModal id={window.Telegram.WebApp.initDataUnsafe.user.id} project={project} open={open} toggleDrawer={setOpen} currentMoney={money} setCurrentMoney={setMoney} updateProjects={updateProjects} />
+                    <ProjectModal id={window.Telegram.WebApp.initDataUnsafe.user.id} project={project} open={open} toggleDrawer={setOpen} currentMoney={money} setCurrentMoney={setMoney} setMoneyPerHour={setMoneyPerHour} updateProjects={updateProjects} />
                 )
             }
         </ProjectsContainer>

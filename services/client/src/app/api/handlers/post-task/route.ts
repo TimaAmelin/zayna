@@ -1,21 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function PUT(req: NextRequest) {
-    const { id, tokensPerHalfSecond } = await req.json()
-
-    console.log(tokensPerHalfSecond)
+export async function POST(req: NextRequest) {
+    const { id, task } = await req.json()
 
     try {
-        const response = await fetch('http://web:8000/tokens_batch/', {
-            method: 'PUT',
+        const response = await fetch(`http://web:8000/network/${id}/`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                id,
-                tokens_count: tokensPerHalfSecond,
+                network: task,
             })
         });
+
+        console.log(response)
 
         return NextResponse.json({ success: true })
     } catch (error) {
