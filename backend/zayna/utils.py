@@ -319,9 +319,9 @@ def participate(user_id, project_id):
     project = project_qs.first()
 
     user_project_qs = UserProject.objects.filter(user=user, project=project)
-    new_level = 1
+    new_level = 0
     if user_project_qs.exists():
-        new_level = user_project_qs.first().level + 1
+        new_level = user_project_qs.first().level
 
     if user.tokens_sum < project.cost(new_level):
         logging.info(f"Not enough tokens: {user.tokens_sum} < {project.cost(new_level)}")
@@ -331,7 +331,7 @@ def participate(user_id, project_id):
     user.income += project.profit(new_level)
     user.save(update_fields=["tokens_count", "income"])
     up = UserProject.objects.get_or_create(user=user, project=project)[0]
-    up.level = new_level
+    up.level += 1
     up.save(update_fields=["level"])
     return HttpResponse(status=201)
 
