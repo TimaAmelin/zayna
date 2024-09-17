@@ -89,10 +89,10 @@ class Project(models.Model):
     is_present = models.BooleanField(default=False, null=False)
 
     def cost(self, level):
-        return round(self.price * 3.2 ** (level - 1))
+        return round(self.price * 3.2 ** level)
 
     def profit(self, level):
-        return round(self.income * 1.3 ** (level - 1))
+        return round(self.income * 1.3 ** level)
 
 
 class UserProject(models.Model):
