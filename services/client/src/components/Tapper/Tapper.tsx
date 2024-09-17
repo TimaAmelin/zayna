@@ -250,7 +250,9 @@ export const Tapper = ({from, openReward, present, avatar }: {
                 setMoneyPerHourDiff(moneyPerHourDiff + moneyPerHour / 3600 - Math.floor(moneyPerHourDiff + moneyPerHour / 3600));
 
                 if (typeof window !== 'undefined') {
-                    putTokenBatch(Number(window.Telegram.WebApp.initDataUnsafe.user.id), diff);
+                    if (diff !== 0) {
+                        putTokenBatch(Number(window.Telegram.WebApp.initDataUnsafe.user.id), diff);
+                    }
                 }
                 setMoney(money => money + moneyPerHour / 3600);
                 setMoneyLast(money + moneyPerHour / 3600);
