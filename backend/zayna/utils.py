@@ -291,8 +291,6 @@ def get_user_projects(request, user_id):
             "level",
             "id",
             "name",
-            "price",
-            "income",
             "cost",
             "profit",
             "mode",
