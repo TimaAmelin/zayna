@@ -23,6 +23,7 @@ from zayna.views import *
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", login_view, name="login"),
+    path("login", login_view, name="login"),
     path("tokens_batch/", tokens_batch_view, name="tokens_batch"),
     path("tokens_count/", tokens_count_view, name="tokens_count"),
     path("tokens_count", tokens_count_view, name="tokens_count"),
