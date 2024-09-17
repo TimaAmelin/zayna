@@ -52,7 +52,25 @@ def add_user(id, username, referrer_id, photo):
         if referrer_id:
             user.friends.add(referrer_qs.first())
         welcome_gift(user)
-        return HttpResponse(status=201)
+        presents = list(user.presents.filter(shown=False).values(
+            "id",
+            "project__id",
+            "project__name",
+            "project__price",
+            "project__income",
+            "project__mode",
+            "project__description",
+            "project__logo",
+            "project__name",
+            "sender__username",
+        ))
+        user.presents.filter(shown=False).update(shown=True)
+        return JsonResponse(
+            {
+                "presents": presents,
+            },
+            status=201,
+        )
 
 
 def add_tokens_batch(user_id, tokens_count):
