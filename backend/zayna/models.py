@@ -22,6 +22,7 @@ class User(models.Model):
     last_game_won = models.BooleanField(default=False)
     photo = models.TextField(default=None, blank=False, null=True)
     stock = models.CharField(null=True, default=None, blank=True, max_length=255)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         if self.name is None:  # Only set name if it's not already provided
@@ -40,10 +41,7 @@ class User(models.Model):
 
     def add_income(self):
         logging.info(f"Adding income for user {self.id}")
-        if not self.batches.exists():
-            self.batches.create()
-            return
-        income_updated_at = self.batches.order_by("created_at").last().created_at
+        income_updated_at = self.updated_at
         logging.info(f"income_updated_at: {income_updated_at}")
         if income_updated_at >= timezone.now() - datetime.timedelta(minutes=1):
             return
@@ -51,21 +49,18 @@ class User(models.Model):
         logging.info(f"hours_without_update: {hours_without_update}")
         self.tokens_count = str(round(int(self.tokens_count) + self.income * hours_without_update))
         logging.info(f"Add tokens: {self.income * hours_without_update}")
-        self.save(update_fields=["tokens_count"])
-        self.batches.create()
+        self.save(update_fields=["tokens_count", "updated_at"])
 
     def process_old_batches(self):
         logging.info(f"Aggregating olg batches for user {self.id}...")
-        old_batches_sum = self.batches.filter(
-            created_at__lte=timezone.now() - datetime.timedelta(hours=1),
-        ).aggregate(per_hour=Sum("tokens_count"))
-        if old_batches_sum["per_hour"]:
-            self.tokens_count = str(int(self.tokens_count) + old_batches_sum["per_hour"])
-        self.save(update_fields=["tokens_count"])
+        old_batches_sum = self.batches.aggregate(sum=Sum("tokens_count"))
+        if not old_batches_sum["sum"]:
+            logging.info("No batches found")
+            return
+        self.tokens_count = str(int(self.tokens_count) + old_batches_sum["sum"])
+        self.save(update_fields=["tokens_count", "updated_at"])
         logging.info("Deleting olg batches...")
-        deleted, _ = TokensBatch.objects.filter(
-            created_at__lt=timezone.now() - datetime.timedelta(hours=1),
-        ).delete()
+        deleted, _ = self.batches.all().delete()
         logging.info(f"{deleted} batches deleted")
 
 
