@@ -21,7 +21,7 @@ def welcome_gift(user):
         name="Welcome gift",
         defaults={
             'mode': None,
-            'payment': 100000,
+            'payment': 50000,
             'description': "We thank you for caring about our planet and give you 100,000 coins for development"
         }
     )
