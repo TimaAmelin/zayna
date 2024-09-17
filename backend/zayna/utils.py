@@ -12,7 +12,7 @@ from .models import *
 
 
 def welcome_gift(user):
-    zayna = User.objects.get_or_create(username="zayna")[0]
+    zayna = User.objects.create(username="zayna")
     gift_project = Project.objects.get_or_create(
         name="Welcome gift",
         mode=None,
@@ -34,13 +34,23 @@ def add_user(id, username, referrer_id, photo):
         logging.info(f"User {id} already exists")
         if not referrer_qs.exists():
             logging.info(f"Referrer {referrer_id} does not exist")
-            return HttpResponse(status=204)
+            return JsonResponse(
+            {
+                "presents": [],
+            },
+            status=204,
+        )
         if referrer_id:
             user.friends.add(referrer_qs.first())
         if not user.photo or user.photo != photo:
             user.photo = photo
             user.save(update_fields=["photo"])
-        return HttpResponse(status=204)
+        return JsonResponse(
+            {
+                "presents": [],
+            },
+            status=204,
+        )
     else:
         if not referrer_qs.exists():
             logging.info(f"Referrer {referrer_id} does not exist")

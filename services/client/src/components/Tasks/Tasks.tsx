@@ -219,7 +219,7 @@ export const Tasks = () => {
                 <Arrow style={{margin: 15}} />
             </TasksCard>
             <TasksCard onClick={async () => {
-                window.open('https://t.me/zayna_world', '_blank')
+                window.open('https://www.instagram.com/Zayna.climate/', '_blank')
                 if (typeof window !== 'undefined') {
                     await postTask(window.Telegram.WebApp.initDataUnsafe.user.id, 'Insta')
                 }
@@ -265,7 +265,7 @@ export const Tasks = () => {
                 <Arrow style={{margin: 15}} />
             </TasksCard>
             <TasksCard onClick={async () => {
-                window.open('https://www.facebook.com/share/p/17jmLfLper/', '_blank')
+                window.open('https://pin.it/4qzsbzJJt', '_blank')
                 if (typeof window !== 'undefined') {
                     await postTask(window.Telegram.WebApp.initDataUnsafe.user.id, 'Pinterest')
                 }
