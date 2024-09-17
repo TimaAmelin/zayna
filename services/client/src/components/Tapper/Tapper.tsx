@@ -235,7 +235,7 @@ export const Tapper = ({from, openReward, present, avatar }: {
                 setTimeToNextMini(timeUntilDate(new Date(nextMini)));
             }
             if (!loading) {
-                let diff = money - moneyLast;
+                let diff = money - moneyLast < 1000 ? money - moneyLast : 0;
                 if (moneyPerHourDiff + moneyPerHour / 3600 >= 1) {
                     diff += Math.floor(moneyPerHourDiff + moneyPerHour / 3600);
                 }
