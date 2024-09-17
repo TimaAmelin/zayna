@@ -98,7 +98,7 @@ class Project(models.Model):
 class UserProject(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="participates")
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=False)
-    level = models.IntegerField(default=1)
+    level = models.IntegerField(default=0)
 
 
 class Present(models.Model):
