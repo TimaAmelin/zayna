@@ -97,6 +97,7 @@ export const Tapper = ({from, openReward, present, avatar }: {
     const [dailyModalOpen, setDailyModalOpen] = useState(openReward ?? false);
     const [ava, setAva] = useState(avatar);
     const [gifts, setGifts] = useState<{
+        id: number;
         project__id: number;
         project__name: string;
         project__price: number;
@@ -121,8 +122,8 @@ export const Tapper = ({from, openReward, present, avatar }: {
     async function refetch() {
         const data = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
 
-        setMoney(data.response.sum);
         setMoneyLast(data.response.sum);
+        setMoney(data.response.sum);
         setMoneyPerHour(data.response.per_hour ?? 0);
     }
 
@@ -164,7 +165,7 @@ export const Tapper = ({from, openReward, present, avatar }: {
 
     useEffect(() => {
         const getUserTokens = async () => {
-            await putUser(window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from, avatar);
+            const result = await putUser(window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from, avatar);
             if (present) {
                 try {
                     await recieveGift(window.Telegram.WebApp.initDataUnsafe.user.id, Number(present));
@@ -173,18 +174,18 @@ export const Tapper = ({from, openReward, present, avatar }: {
                 }
             }
             const res = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
-            return res
+            return {data: res, result}
         }
 
-        getUserTokens().then(data => {
+        getUserTokens().then(({data, result}) => {
             setMoney(data.response.sum);
             setMoneyLast(data.response.sum);
-            setMoneyPerHour(data.response.per_hour ?? 0);
-            setGifts(data.response.presents);
+            setMoneyPerHour(data.response.income ?? 0);
+            setGifts([...data.response.presents, ...result?.response?.presents]);
             if (data.response.photo) {
                 setAva(data.response.photo);
             }
-            if (data.response.presents.length) {
+            if (data.response.presents.length + result?.response?.presents.length > 0) {
                 setGiftModalOpen(true);
             }
             setLoading(false);
@@ -283,7 +284,7 @@ export const Tapper = ({from, openReward, present, avatar }: {
                         </TapperStatisticsCoinContainer>
                         <TapperStatisticsProfitContainer>
                             <TapperStatisticsProfitTitleContainer>
-                                Profit per hour {moneyPerHourDiff}
+                                Profit per hour
                             </TapperStatisticsProfitTitleContainer>
                             <TapperStatisticsProfitAmountContainer>
                                 +{moneyPerHour} <IIcon />

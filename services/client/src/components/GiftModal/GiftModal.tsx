@@ -18,6 +18,7 @@ export const GiftModal = (
     }: {
         id: number;
         gift?: {
+            id: number;
             project__id: number;
             project__name: string;
             project__price: number;
@@ -58,7 +59,7 @@ export const GiftModal = (
                 </GiftModalSecondaryTextContainer>
                 <GiftModalButton onClick={async () => {
                     if (gift) {
-                        await recieveGift(id, gift?.project__id);
+                        await recieveGift(id, gift?.id);
                         await refetch();
                         toggleDrawer(false);
                     }
