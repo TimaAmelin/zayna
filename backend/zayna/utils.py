@@ -284,8 +284,8 @@ def get_user_projects(request, user_id):
                 ),
                 default=0,
             ),
-            cost=Cast(F("price") * 3.2 ** (F("level") - 1), output_field=IntegerField()),
-            profit=Cast(F("income") * 1.3 ** (F("level") - 1), output_field=IntegerField()),
+            cost=Cast(F("price") * 3.2 ** F("level"), output_field=IntegerField()),
+            profit=Cast(F("income") * 1.3 ** F("level"), output_field=IntegerField()),
         )
         .values(
             "level",
