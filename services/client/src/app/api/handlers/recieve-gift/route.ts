@@ -14,11 +14,9 @@ export async function POST(req: NextRequest) {
             cache: "no-store",
             body: JSON.stringify({
                 user_id: id,
-                present_id: 1,
+                present_id: id,
             })
         });
-
-        // const res = await response.json();
 
         console.log('GIFFFFFT', response);
 
