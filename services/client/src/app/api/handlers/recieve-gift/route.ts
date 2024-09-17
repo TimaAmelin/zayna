@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
             cache: "no-store",
             body: JSON.stringify({
                 user_id: id,
-                present_id: id,
+                present_id: giftId,
             })
         });
 
