@@ -211,17 +211,19 @@ export const Tapper = ({from, openReward, present, avatar }: {
     }, []);
 
     useEffect(() => {
-        const getUserMini = async () => {
-            const res = await ticTacToe([[0, 0, 0], [0, 0, 0], [0, 0, 0]], window.Telegram.WebApp.initDataUnsafe.user.id);
-            return res
-        }
-
-        getUserMini().then(data => {
-            if (data.response.message === 'User has already played the game') {
-                setNextMini(new Date(data.response.next));
-                setTimeToNextMini(timeUntilDate(new Date(data.response.next)));
+        if (typeof window !== 'undefined') { 
+            const getUserMini = async () => {
+                const res = await ticTacToe([[0, 0, 0], [0, 0, 0], [0, 0, 0]], window.Telegram.WebApp.initDataUnsafe.user.id);
+                return res
             }
-        })
+
+            getUserMini().then(data => {
+                if (data.response.message === 'User has already played the game') {
+                    setNextMini(new Date(data.response.next));
+                    setTimeToNextMini(timeUntilDate(new Date(data.response.next)));
+                }
+            })
+        }
     }, []);
 
     useEffect(() => {
