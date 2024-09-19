@@ -21,8 +21,8 @@ export const Projects = () => {
     const [projects, setProjects] = useState<{
         id: number,
         name: string;
-        price: number;
-        income: number;
+        cost: number;
+        profit: number;
         description: string;
         mode: string;
         level: number;
@@ -61,7 +61,7 @@ export const Projects = () => {
 
             getUserTokens().then(data => {
                 setMoney(data.response.sum);
-                setMoneyPerHour(data.response.per_hour ?? 0);
+                setMoneyPerHour(data.response.income ?? 0);
             })
         }
     }, []);
@@ -149,7 +149,7 @@ export const Projects = () => {
                             <ProjectsMainContainerCardProfit>
                                 Profit per hour<br />
                                 <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                    <Image src={CoinIcon} alt="" height={12} style={{marginRight: 3}} /> + {project.income}
+                                    <Image src={CoinIcon} alt="" height={12} style={{marginRight: 3}} /> + {project.profit}
                                 </Box>
                             </ProjectsMainContainerCardProfit>
                             <ProjectsMainContainerCardBottom>
@@ -158,7 +158,7 @@ export const Projects = () => {
                                 </ProjectsMainContainerCardBottomLvl>
                                 <ProjectsMainContainerCardBottomCost>
                                     <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                        <Image src={CoinIcon} alt="" height={15} style={{marginRight: 3}} /> {project.price}
+                                        <Image src={CoinIcon} alt="" height={15} style={{marginRight: 3}} /> {project.cost}
                                     </Box>
                                 </ProjectsMainContainerCardBottomCost>
                             </ProjectsMainContainerCardBottom>

@@ -25,8 +25,8 @@ export const ProjectModal = (
         project?: {
             id: number,
             name: string;
-            price: number;
-            income: number;
+            cost: number;
+            profit: number;
             description: string;
             mode: string;
             level: number;
@@ -60,20 +60,20 @@ export const ProjectModal = (
                 </ProjectModalSecondaryText>
                 <ProjectModalProfitText>
                     Profit per hour<br />
-                    <Image src={CoinIcon} alt="" height={12} style={{marginRight: 3}} /> + {project?.income}
+                    <Image src={CoinIcon} alt="" height={12} style={{marginRight: 3}} /> + {project?.profit}
                 </ProjectModalProfitText>
                 <ProjectsModalMainContainerMoney>
-                    <CoinMax style={{marginRight: 10}} /> {project?.price.toLocaleString('ru-RU')}
+                    <CoinMax style={{marginRight: 10}} /> {project?.cost.toLocaleString('ru-RU')}
                 </ProjectsModalMainContainerMoney>
                 <ProjectModalButton onClick={async () => {
-                    if (currentMoney - (project?.price ?? 0) < 0) {
+                    if (currentMoney - (project?.cost ?? 0) < 0) {
                         alert(`You don't have enough money`);
                         return
                     }
                     await buyProject(id, project?.id ?? 0);
                     await updateProjects();
-                    setCurrentMoney(currentMoney - (project?.price ?? 0));
-                    setMoneyPerHour((moneyPerHour: number) => moneyPerHour + (project?.income ?? 0));
+                    setCurrentMoney(currentMoney - (project?.cost ?? 0));
+                    setMoneyPerHour((moneyPerHour: number) => moneyPerHour + (project?.profit ?? 0));
                     toggleDrawer(false);
                 }}>
                     Buy

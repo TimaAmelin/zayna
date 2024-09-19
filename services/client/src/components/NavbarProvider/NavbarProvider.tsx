@@ -51,6 +51,12 @@ export const NavbarProvider = ({
     const router = useRouter();
     const pathname = usePathname();
 
+    if (typeof document !== 'undefined') {
+        document.addEventListener('gesturestart', function (e) {{
+            e.preventDefault();
+        }});
+        document.body.style.overflowX = 'hidden';
+    }
     return (
         <NavbarProviderContainer>
             <NavbarProviderChildrenContainer>

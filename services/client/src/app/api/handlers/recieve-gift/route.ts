@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(req: NextRequest) {
     const { id, giftId } = await req.json();
 
+    console.log('GIFFFFFT', id, giftId);
+
     try {
         const response = await fetch(`http://web:8000/present/`, {
             method: 'POST',
@@ -16,13 +18,9 @@ export async function POST(req: NextRequest) {
             })
         });
 
-        console.log(await response.text())
+        console.log('GIFFFFFT', response);
 
-        const res = await response.json();
-
-        console.log(res);
-
-        return NextResponse.json({ success: true, response: res })
+        return NextResponse.json({ success: true })
     } catch (error) {
         console.error('Error:', error)
         return NextResponse.json({ success: false, error: 'Something went wrong' }, { status: 500 })

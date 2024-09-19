@@ -15,7 +15,7 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) { 
   return (
     <html lang="en">
       <head>
@@ -26,14 +26,6 @@ export default function RootLayout({
         <Suspense>
           <NavbarProvider>{children}</NavbarProvider>
         </Suspense>
-        <script>
-          {`if (typeof window !== 'undefined') {{
-            document.addEventListener('gesturestart', function (e) {{
-              e.preventDefault();
-            }});
-            document.body.style.overflowX = 'hidden'; /* Ensure no horizontal scroll */
-          }}`}
-        </script>
       </body>
     </html>
   );

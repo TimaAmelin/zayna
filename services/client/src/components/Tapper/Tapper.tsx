@@ -97,6 +97,7 @@ export const Tapper = ({from, openReward, present, avatar }: {
     const [dailyModalOpen, setDailyModalOpen] = useState(openReward ?? false);
     const [ava, setAva] = useState(avatar);
     const [gifts, setGifts] = useState<{
+        id: number;
         project__id: number;
         project__name: string;
         project__price: number;
@@ -119,17 +120,19 @@ export const Tapper = ({from, openReward, present, avatar }: {
     const [coins, setCoins] = useState<{ id: string; x: number; y: number }[]>([]);
 
     async function refetch() {
-        const data = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
+        if (typeof window !== 'undefined') {
+            const data = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
 
-        setMoney(data.response.sum);
-        setMoneyLast(data.response.sum);
-        setMoneyPerHour(data.response.per_hour ?? 0);
+            setMoneyLast(data.response.sum);
+            setMoney(data.response.sum);
+            setMoneyPerHour(data.response.per_hour ?? 0);
+        }
     }
 
     const handleClick = (e: React.Touch) => {
         setMoney(money + 2);
         if (navigator.vibrate) {
-            navigator.vibrate(200);
+            navigator.vibrate(50);
         } else {
             console.log("Вибрация не поддерживается на этом устройстве.");
         }
@@ -163,65 +166,73 @@ export const Tapper = ({from, openReward, present, avatar }: {
     }
 
     useEffect(() => {
-        const getUserTokens = async () => {
-            await putUser(window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from, avatar);
-            if (present) {
-                try {
-                    await recieveGift(window.Telegram.WebApp.initDataUnsafe.user.id, Number(present));
-                } catch (error) {
-
+        if (typeof window !== 'undefined') {
+            const getUserTokens = async () => {
+                const result = await putUser(window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from, avatar);
+                if (present) {
+                    try {
+                        await recieveGift(window.Telegram.WebApp.initDataUnsafe.user.id, Number(present));
+                    } catch (error) {
+    
+                    }
                 }
+                const res = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
+                return {data: res, result}
             }
-            const res = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
-            return res
+    
+            getUserTokens().then(({data, result}) => {
+                setMoney(data.response.sum);
+                setMoneyLast(data.response.sum);
+                setMoneyPerHour(data.response.income ?? 0);
+                setGifts([...data.response.presents, ...result?.response?.presents]);
+                if (data.response.photo) {
+                    setAva(data.response.photo);
+                }
+                if (data.response.presents.length + result?.response?.presents.length > 0) {
+                    setGiftModalOpen(true);
+                }
+                setLoading(false);
+            })
         }
-
-        getUserTokens().then(data => {
-            setMoney(data.response.sum);
-            setMoneyLast(data.response.sum);
-            setMoneyPerHour(data.response.per_hour ?? 0);
-            setGifts(data.response.presents);
-            if (data.response.photo) {
-                setAva(data.response.photo);
-            }
-            if (data.response.presents.length) {
-                setGiftModalOpen(true);
-            }
-            setLoading(false);
-        })
-    }, [window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from]);
+    }, []);
 
     useEffect(() => {
-        const getUserDaily = async () => {
-            const res = await getDaily(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
-            return res
-        }
-
-        getUserDaily().then(data => {
-            setAvailable(data.response.reward);
-            setCombo(data.response.combo);
-        })
-    }, [window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from]);
-
-    useEffect(() => {
-        const getUserMini = async () => {
-            const res = await ticTacToe([[0, 0, 0], [0, 0, 0], [0, 0, 0]], window.Telegram.WebApp.initDataUnsafe.user.id);
-            return res
-        }
-
-        getUserMini().then(data => {
-            if (data.response.message === 'User has already played the game') {
-                setNextMini(new Date(data.response.next));
-                setTimeToNextMini(timeUntilDate(new Date(data.response.next)));
+        if (typeof window !== 'undefined') {
+            const getUserDaily = async () => {
+                const res = await getDaily(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
+                return res
             }
-        })
-    }, [window.Telegram.WebApp.initDataUnsafe.user.id]);
+
+            getUserDaily().then(data => {
+                setAvailable(data.response.reward);
+                setCombo(data.response.combo);
+            })
+        }
+    }, []);
 
     useEffect(() => {
-        window.Telegram.WebApp.expand();
+        if (typeof window !== 'undefined') { 
+            const getUserMini = async () => {
+                const res = await ticTacToe([[0, 0, 0], [0, 0, 0], [0, 0, 0]], window.Telegram.WebApp.initDataUnsafe.user.id);
+                return res
+            }
+
+            getUserMini().then(data => {
+                if (data.response.message === 'User has already played the game') {
+                    setNextMini(new Date(data.response.next));
+                    setTimeToNextMini(timeUntilDate(new Date(data.response.next)));
+                }
+            })
+        }
+    }, []);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            window.Telegram.WebApp.expand();
+        }
         
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [money, window.Telegram.WebApp.initDataUnsafe.user.id]);
+    }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -234,12 +245,17 @@ export const Tapper = ({from, openReward, present, avatar }: {
                 setTimeToNextMini(timeUntilDate(new Date(nextMini)));
             }
             if (!loading) {
-                let diff = money - moneyLast;
+                let diff = money - moneyLast < 1000 ? money - moneyLast : 0;
                 if (moneyPerHourDiff + moneyPerHour / 3600 >= 1) {
                     diff += Math.floor(moneyPerHourDiff + moneyPerHour / 3600);
                 }
                 setMoneyPerHourDiff(moneyPerHourDiff + moneyPerHour / 3600 - Math.floor(moneyPerHourDiff + moneyPerHour / 3600));
-                putTokenBatch(Number(window.Telegram.WebApp.initDataUnsafe.user.id), diff);
+
+                if (typeof window !== 'undefined') {
+                    if (diff !== 0) {
+                        putTokenBatch(Number(window.Telegram.WebApp.initDataUnsafe.user.id), diff);
+                    }
+                }
                 setMoney(money => money + moneyPerHour / 3600);
                 setMoneyLast(money + moneyPerHour / 3600);
             }
@@ -259,11 +275,13 @@ export const Tapper = ({from, openReward, present, avatar }: {
     };
 
     useEffect(() => {
-        const platform = window.Telegram.WebApp.platform;
+        if (typeof window !== 'undefined') {
+            const platform = window.Telegram.WebApp.platform;
 
-        if (!['ios', 'android'].includes(platform)) {
-            alert("Mini app is not available on desktop");
-            window.Telegram.WebApp.close();
+            if (!['ios', 'android'].includes(platform)) {
+                alert("Mini app is not available on desktop");
+                window.Telegram.WebApp.close();
+            }
         }
     }, []);
 
@@ -283,7 +301,7 @@ export const Tapper = ({from, openReward, present, avatar }: {
                         </TapperStatisticsCoinContainer>
                         <TapperStatisticsProfitContainer>
                             <TapperStatisticsProfitTitleContainer>
-                                Profit per hour {moneyPerHourDiff}
+                                Profit per hour
                             </TapperStatisticsProfitTitleContainer>
                             <TapperStatisticsProfitAmountContainer>
                                 +{moneyPerHour} <IIcon />
@@ -298,9 +316,11 @@ export const Tapper = ({from, openReward, present, avatar }: {
                                 )
                             }
                         </TapperStatisticsAvatar>
-                        <TapperStatisticsName>
-                            {window.Telegram.WebApp.initDataUnsafe.user.username}
-                        </TapperStatisticsName>
+                        {typeof window !== 'undefined' && (
+                            <TapperStatisticsName>
+                                {window.Telegram.WebApp.initDataUnsafe.user.username}
+                            </TapperStatisticsName>
+                        )}
                         <TapperStatisticsSettingsLine />
                         <TapperStatisticsSettingsContainer
                             onClick={() => router.push(`/settings`)}>
@@ -379,15 +399,19 @@ export const Tapper = ({from, openReward, present, avatar }: {
                         ))}
                 </TapperMainContainerTapperContainer>
             </TapperMainContainer>
-            <GiftModal toggleDrawer={toggleDrawer} open={giftModalOpen} id={window.Telegram.WebApp.initDataUnsafe.user.id} gift={gifts[giftN]} refetch={refetch} />
-            <RewardModal
-                toggleDrawer={setDailyModalOpen}
-                open={dailyModalOpen}
-                id={window.Telegram.WebApp.initDataUnsafe.user.id} combo={combo}
-                available={available}
-                setMoney={setMoney}
-                setAvailable={setAvailable}
-                money={money} />
+            {typeof window !== 'undefined' && (
+                <GiftModal toggleDrawer={toggleDrawer} open={giftModalOpen} id={window.Telegram.WebApp.initDataUnsafe.user.id} gift={gifts[giftN]} refetch={refetch} />
+            )}
+            {typeof window !== 'undefined' && (
+                <RewardModal
+                    toggleDrawer={setDailyModalOpen}
+                    open={dailyModalOpen}
+                    id={window.Telegram.WebApp.initDataUnsafe.user.id} combo={combo}
+                    available={available}
+                    setMoney={setMoney}
+                    setAvailable={setAvailable}
+                    money={money} />
+            )}
         </TapperContainer>
     )
 }

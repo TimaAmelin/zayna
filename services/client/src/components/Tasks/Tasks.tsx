@@ -63,10 +63,10 @@ export const Tasks = () => {
                 Zayna Social (New)
             </TasksSecondaryTextContainer>
             <TasksCard onClick={async () => {
-                if (typeof window !== 'undefined') {
-                    await postTask(window.Telegram.WebApp.initDataUnsafe.user.id, 'Youtube')
-                }
                 window.open('https://www.youtube.com/@Zaynaclimate', '_blank')
+                if (typeof window !== 'undefined') {
+                    await postTask(window.Telegram.WebApp.initDataUnsafe.user.id, 'YouTube')
+                }
             }}>
                 <TasksMainCardContainer>
                     <Box sx={{height: 32, width: 40, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
