@@ -16,7 +16,7 @@ class User(models.Model):
     income = models.IntegerField(default=0)
     name = models.CharField(max_length=MAX_NANE_LENGTH, null=True, blank=True)
     friends = models.ManyToManyField("self", blank=True)
-    daily_reward_at = models.DateTimeField(default=timezone.now)
+    daily_reward_at = models.DateTimeField(null=True, default=None)
     daily_combo = models.IntegerField(default=0)
     last_game_at = models.DateTimeField(default=None, null=True)
     last_game_won = models.BooleanField(default=False)

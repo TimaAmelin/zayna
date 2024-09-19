@@ -1,5 +1,4 @@
 import json
-import logging
 import random
 from enum import Enum
 
@@ -375,17 +374,20 @@ def check_daily_reward(id):
         logging.info(f"User {id} does not exist")
         return HttpResponse(status=400)
     user = user_qs.first()
-    if timezone.now() - user.daily_reward_at < datetime.timedelta(days=1):
+    if user.daily_reward_at and timezone.now() - user.daily_reward_at < datetime.timedelta(days=1):
         return JsonResponse({"reward": False, "combo": user.daily_combo, "last": user.daily_reward_at}, status=200)
-    if datetime.timedelta(days=1) < timezone.now() - user.daily_reward_at < datetime.timedelta(hours=30):
+
+    if not user.daily_reward_at or datetime.timedelta(
+            days=1) < timezone.now() - user.daily_reward_at < datetime.timedelta(hours=30):
         user.daily_combo += 1
         user.daily_reward_at = timezone.now()
         user.save(update_fields=["daily_combo", "daily_reward_at"])
-        return JsonResponse({"reward": True, "combo": user.daily_combo + 1, "last": user.daily_reward_at}, status=201)
-    user.daily_combo = 0
+        return JsonResponse({"reward": True, "combo": user.daily_combo, "last": user.daily_reward_at}, status=201)
+
+    user.daily_combo = 1
     user.daily_reward_at = timezone.now()
     user.save(update_fields=["daily_combo", "daily_reward_at"])
-    return JsonResponse({"reward": False, "combo": 0, "last": user.daily_reward_at}, status=200)
+    return JsonResponse({"reward": False, "combo": user.daily_combo, "last": user.daily_reward_at}, status=200)
 
 
 def get_daily_reward(id):
