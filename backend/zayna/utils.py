@@ -369,6 +369,7 @@ def get_friends(id):
 
 
 def check_daily_reward(id):
+    id = int(id)
     user_qs = User.objects.filter(id=id)
     if not user_qs.exists():
         logging.info(f"User {id} does not exist")
@@ -391,6 +392,7 @@ def check_daily_reward(id):
 
 
 def get_daily_reward(id):
+    id = int(id)
     user_qs = User.objects.filter(id=id)
     if not user_qs.exists():
         logging.info(f"User {id} does not exist")
@@ -403,6 +405,7 @@ def get_daily_reward(id):
 
 
 def check_tic_tac_toe(id):
+    id = int(id)
     user_qs = User.objects.filter(id=id)
     if not user_qs.exists():
         logging.info(f"User {id} does not exist")
