@@ -335,11 +335,12 @@ def get_friends(id):
 def check_daily_reward(id):
     id = int(id)
     user = get_object_or_404(User, id=id)
+
     if user.daily_reward_at and timezone.now().date() - user.daily_reward_at.date() < datetime.timedelta(days=1):
         logging.info(f"User {user.id} have to wait: {user.daily_reward_at}")
         return JsonResponse({"reward": False, "combo": user.daily_combo, "last": user.daily_reward_at}, status=200)
 
-    if not user.daily_reward_at or timezone.now().date() == user.daily_reward_at.date():
+    if not user.daily_reward_at or timezone.now().date() - user.daily_reward_at.date() == datetime.timedelta(days=1):
         logging.info(f"User {user.id} has daily reward: {user.daily_reward_at}")
         return JsonResponse({"reward": True, "combo": user.daily_combo, "last": user.daily_reward_at}, status=200)
 
