@@ -12,6 +12,8 @@ import Image from 'next/image';
 import { RewardExactModal } from '../RewardExactModal/RewardExactModal';
 import { Close } from '@mui/icons-material';
 import { recieveDaily } from '@/api/handlers/recieveDaily';
+import { putTokenBatch } from '@/api/handlers/putTokenBatch';
+import { buyProject } from '@/api/handlers/buyProject';
 
 export const RewardModal = (
     { 
@@ -23,6 +25,7 @@ export const RewardModal = (
         money,
         setMoney,
         setAvailable,
+        projects,
     }: {
         id: number;
         toggleDrawer: any;
@@ -32,88 +35,98 @@ export const RewardModal = (
         money: number;
         setMoney: (x: number) => void;
         setAvailable: (x: boolean) => void;
+        projects: {
+            id: number,
+            name: string;
+            cost: number;
+            profit: number;
+            description: string;
+            mode: string;
+            level: number;
+            logo: string;
+        }[];
     },
 ) => {
     const [rewards, setRewards] = useState([
         {
             type: 'coins',
-            amount: 1000,
+            amount: 10000,
         },
         {
             type: 'gift',
-            text: 'Текст подсказка совет',
+            text: 'Random Card (+1 lvl)',
         },
         {
             type: 'coins',
-            amount: 1000,
+            amount: 50000,
         },
         {
             type: 'gift',
-            text: 'Текст подсказка совет',
+            amount: 100000,
         },
         {
             type: 'coins',
-            amount: 1000,
+            amount: 150000,
         },
         {
             type: 'coins',
-            amount: 1000,
+            amount: 200000,
         },
         {
             type: 'gift',
-            text: 'Текст подсказка совет',
+            amount: 250000,
         },
         {
             type: 'coins',
-            amount: 1000,
+            amount: 250000,
         },
         {
             type: 'gift',
-            text: 'Текст подсказка совет',
+            text: 'Random Card (+1 lvl)',
         },
         {
             type: 'coins',
-            amount: 1000,
+            amount: 250000,
         },
         {
             type: 'coins',
-            amount: 1000,
+            amount: 300000,
+        },
+        {
+            type: 'coins',
+            amount: 300000,
+        },
+        {
+            type: 'coins',
+            amount: 300000,
+        },
+        {
+            type: 'coins',
+            amount: 350000,
+        },
+        {
+            type: 'coins',
+            amount: 350000,
         },
         {
             type: 'gift',
-            text: 'Текст подсказка совет',
+            text: 'Random Card (+1 lvl)',
         },
         {
             type: 'coins',
-            amount: 1000,
-        },
-        {
-            type: 'gift',
-            text: 'Текст подсказка совет',
+            amount: 350000,
         },
         {
             type: 'coins',
-            amount: 1000,
+            amount: 400000,
         },
         {
             type: 'coins',
-            amount: 1000,
-        },
-        {
-            type: 'gift',
-            text: 'Текст подсказка совет',
+            amount: 400000,
         },
         {
             type: 'coins',
-            amount: 1000,
-        },
-        {
-            type: 'gift',
-            text: 'Текст подсказка совет',
-        },
-        {
-            type: 'coins',
-            amount: 1000,
+            amount: 400000,
         },
     ]);
 
@@ -151,8 +164,19 @@ export const RewardModal = (
                                         if (!available) {
                                             return
                                         }
-                                        const result = await recieveDaily(id);
-                                        setMoney(money + result.response.tokens ?? 0);
+                                        await recieveDaily(id);
+                                        setMoney(money + (rewards[rowN * 5 + rewardN].amount ?? 0));
+                                        if (rewards[rowN * 5 + rewardN].amount) {
+                                            await putTokenBatch(id, rewards[rowN * 5 + rewardN].amount ?? 0);
+                                        }
+                                        if (rewards[rowN * 5 + rewardN].text) {
+                                            if (projects.length) {
+                                                const project = projects[Math.floor(Math.random() * projects.length)];
+                                                await putTokenBatch(id, project.cost);
+                                                await buyProject(id, project?.id ?? 0);
+                                            }
+                                            
+                                        }
                                         setReward(rewards[rowN * 5 + rewardN])
                                         setOpenExact(true)
                                     }}>
@@ -160,7 +184,7 @@ export const RewardModal = (
                                             <Image src={rewards[rowN * 5 + rewardN].type === 'coins' ? Coin : Gift} alt="" height={26} />
                                         </Box>
                                         Day {rowN * 5 + rewardN + 1}<br />
-                                        {rewards[rowN * 5 + rewardN].type === 'coins' && '1K'}
+                                        {rewards[rowN * 5 + rewardN].type === 'coins' && ((rewards[rowN * 5 + rewardN].amount ?? 0) / 1000 + 'K')}
                                         {rowN * 5 + rewardN < combo && <RewardModalCardShadow />}
                                         {rowN * 5 + rewardN === combo && !available && <RewardModalCardShadow />}
                                     </RewardModalCard>

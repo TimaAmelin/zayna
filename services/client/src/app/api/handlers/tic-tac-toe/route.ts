@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
         const res = await response.json();
 
-        console.log({ success: true, response: res });
+        console.log('tictactoe', { success: true, response: res });
 
         return NextResponse.json({ success: true, response: res })
     } catch (error) {

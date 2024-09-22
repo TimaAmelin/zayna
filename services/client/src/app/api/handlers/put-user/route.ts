@@ -4,8 +4,6 @@ export async function PUT(req: NextRequest) {
     const { id, username, from, avatar } = await req.json()
 
     try {
-        console.log(id, username, from, avatar)
-
         const response = await fetch('http://web:8000/login/', {
             method: 'PUT',
             headers: {
@@ -18,6 +16,8 @@ export async function PUT(req: NextRequest) {
 
         try {
             const res = await response.json();
+
+            console.log('user', res)
             return NextResponse.json({ success: true, response: res })
         } catch (error) {
             return NextResponse.json({ success: true, response: { presents: [] } })

@@ -12,9 +12,11 @@ export async function GET(req: NextRequest) {
             cache: "no-store",
         });
 
+        console.log('daily', response)
+
         const res = await response.json();
 
-        console.log(res);
+        console.log('daily', res);
 
         return NextResponse.json({ success: true, response: res })
     } catch (error) {

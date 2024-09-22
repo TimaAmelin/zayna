@@ -27,6 +27,7 @@ import { keyframes, styled } from '@mui/material';
 
 import { v4 as uuidv4 } from 'uuid';
 import { DummyContainer } from '../Dummy/Dummy.css';
+import { getProjects } from '@/api/handlers/getProjects';
 
 const coinAnimation = keyframes`
   0% {
@@ -90,6 +91,16 @@ export const Tapper = ({from, openReward, present, avatar }: {
 }) => {
     const [loading, setLoading] = useState(true);
     const [money, setMoney] = useState(0);
+    const [projects, setProjects] = useState<{
+        id: number,
+        name: string;
+        cost: number;
+        profit: number;
+        description: string;
+        mode: string;
+        level: number;
+        logo: string;
+    }[]>([]);
     const [moneyLast, setMoneyLast] = useState(0);
     const [moneyPerHour, setMoneyPerHour] = useState(0);
     const [moneyPerHourDiff, setMoneyPerHourDiff] = useState(0);
@@ -131,10 +142,13 @@ export const Tapper = ({from, openReward, present, avatar }: {
 
     const handleClick = (e: React.Touch) => {
         setMoney(money + 2);
-        if (navigator.vibrate) {
-            navigator.vibrate(50);
-        } else {
-            console.log("Вибрация не поддерживается на этом устройстве.");
+        // if (navigator.vibrate) {
+        //     navigator.vibrate(50);
+        // } else {
+        //     console.log("Вибрация не поддерживается на этом устройстве.");
+        // }
+        if (typeof window !== 'undefined') {
+            window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
         }
     
         const x = e.clientX + Math.random() * 200 - 100;
@@ -167,8 +181,8 @@ export const Tapper = ({from, openReward, present, avatar }: {
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const getUserTokens = async () => {
-                const result = await putUser(window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from, avatar);
+            const getUser = async () => {
+                const user = await putUser(window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from, avatar);
                 if (present) {
                     try {
                         await recieveGift(window.Telegram.WebApp.initDataUnsafe.user.id, Number(present));
@@ -176,52 +190,32 @@ export const Tapper = ({from, openReward, present, avatar }: {
     
                     }
                 }
-                const res = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
-                return {data: res, result}
+                const tokens = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
+                const daily = await getDaily(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
+                const tictactoe = await ticTacToe([[0, 0, 0], [0, 0, 0], [0, 0, 0]], window.Telegram.WebApp.initDataUnsafe.user.id);
+                const projects = await getProjects(window.Telegram.WebApp.initDataUnsafe.user.id);
+                return {tokens, user, daily, tictactoe, projects}
             }
     
-            getUserTokens().then(({data, result}) => {
-                setMoney(data.response.sum);
-                setMoneyLast(data.response.sum);
-                setMoneyPerHour(data.response.income ?? 0);
-                setGifts([...data.response.presents, ...result?.response?.presents]);
-                if (data.response.photo) {
-                    setAva(data.response.photo);
+            getUser().then(({tokens, user, daily, tictactoe, projects}) => {
+                setMoney(tokens.response.sum);
+                setMoneyLast(tokens.response.sum);
+                setMoneyPerHour(tokens.response.income ?? 0);
+                setGifts([...tokens.response.presents, ...user?.response?.presents]);
+                setAvailable(daily.response.reward);
+                setCombo(daily.response.combo);
+                if (tokens.response.photo) {
+                    setAva(tokens.response.photo);
                 }
-                if (data.response.presents.length + result?.response?.presents.length > 0) {
+                if (tokens.response.presents.length + user?.response?.presents.length > 0) {
                     setGiftModalOpen(true);
                 }
                 setLoading(false);
-            })
-        }
-    }, []);
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const getUserDaily = async () => {
-                const res = await getDaily(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
-                return res
-            }
-
-            getUserDaily().then(data => {
-                setAvailable(data.response.reward);
-                setCombo(data.response.combo);
-            })
-        }
-    }, []);
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') { 
-            const getUserMini = async () => {
-                const res = await ticTacToe([[0, 0, 0], [0, 0, 0], [0, 0, 0]], window.Telegram.WebApp.initDataUnsafe.user.id);
-                return res
-            }
-
-            getUserMini().then(data => {
-                if (data.response.message === 'User has already played the game') {
-                    setNextMini(new Date(data.response.next));
-                    setTimeToNextMini(timeUntilDate(new Date(data.response.next)));
+                if (tictactoe.response.message === 'User has already played the game') {
+                    setNextMini(new Date(tictactoe.response.next));
+                    setTimeToNextMini(timeUntilDate(new Date(tictactoe.response.next)));
                 }
+                setProjects(projects.response.projects);
             })
         }
     }, []);
@@ -336,7 +330,7 @@ export const Tapper = ({from, openReward, present, avatar }: {
                             <div style={{height: 35}}>
                                 <Image src={CalendarNewIcon} height={27} alt="" />
                             </div>
-                            {timeToDaily ? (
+                            {timeToDaily.hours && timeToDaily.minutes ? (
                                 <TapperMainContainerCardTopTime>
                                     {timeToDaily.hours}h{timeToDaily.minutes}m
                                 </TapperMainContainerCardTopTime>
@@ -410,7 +404,8 @@ export const Tapper = ({from, openReward, present, avatar }: {
                     available={available}
                     setMoney={setMoney}
                     setAvailable={setAvailable}
-                    money={money} />
+                    money={money}
+                    projects={projects} />
             )}
         </TapperContainer>
     )

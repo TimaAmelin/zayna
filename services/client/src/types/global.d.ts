@@ -18,6 +18,8 @@ declare global {
         openTelegramLink: (x: string) => void;
         expand: () => void;
         platform: string;
+        postEvent: any;
+        HapticFeedback: any;
       };
       WebAppInitData: any;
     };

@@ -12,8 +12,6 @@ export async function GET(req: NextRequest) {
 
         const res = await response.json();
 
-        console.log(res);
-
         return NextResponse.json({ success: true, response: res })
     } catch (error) {
         console.error('Error:', error)
