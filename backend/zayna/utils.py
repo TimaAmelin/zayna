@@ -7,6 +7,7 @@ from django.db.models import Subquery, OuterRef, When, Case, F, IntegerField
 from django.db.models.functions import Cast
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
+from sqlalchemy.testing.plugin.plugin_base import logging
 
 from .config import DAILY_TOKENS, GAME_PRICE, SOCIAL_NETWORK_PRICE
 from .models import *
@@ -334,29 +335,33 @@ def get_friends(id):
 def check_daily_reward(id):
     id = int(id)
     user = get_object_or_404(User, id=id)
-    if user.daily_reward_at and timezone.now() - user.daily_reward_at < datetime.timedelta(days=1):
+    if user.daily_reward_at and timezone.now().date() - user.daily_reward_at.date() < datetime.timedelta(days=1):
+        logging.info(f"User {user.id} have to wait: {user.daily_reward_at}")
         return JsonResponse({"reward": False, "combo": user.daily_combo, "last": user.daily_reward_at}, status=200)
 
-    if not user.daily_reward_at or datetime.timedelta(
-            days=1) < timezone.now() - user.daily_reward_at < datetime.timedelta(hours=30):
-        user.daily_combo += 1
-        user.daily_reward_at = timezone.now()
-        user.save(update_fields=["daily_combo", "daily_reward_at"])
-        return JsonResponse({"reward": True, "combo": user.daily_combo, "last": user.daily_reward_at}, status=201)
+    if not user.daily_reward_at or timezone.now().date() == user.daily_reward_at.date():
+        logging.info(f"User {user.id} has daily reward: {user.daily_reward_at}")
+        return JsonResponse({"reward": True, "combo": user.daily_combo, "last": user.daily_reward_at}, status=200)
 
-    user.daily_combo = 1
-    user.daily_reward_at = timezone.now()
-    user.save(update_fields=["daily_combo", "daily_reward_at"])
-    return JsonResponse({"reward": False, "combo": user.daily_combo, "last": user.daily_reward_at}, status=200)
+    user.daily_combo = 0
+    user.save(update_fields=["daily_combo"])
+    logging.info(f"User {user.id} has failed his combo: {user.daily_reward_at}")
+    return JsonResponse({"reward": True, "combo": user.daily_combo, "last": user.daily_reward_at}, status=200)
 
 
 def get_daily_reward(id):
     id = int(id)
     user = get_object_or_404(User, id=id)
-    new_tokens = DAILY_TOKENS * user.daily_combo
-    user.tokens_count = str(int(user.tokens_count) + new_tokens)
-    user.save(update_fields=["tokens_count"])
-    return JsonResponse({"tokens": new_tokens, "combo": user.daily_combo}, status=201)
+    if user.daily_reward_at and timezone.now().date() - user.daily_reward_at.date() < datetime.timedelta(days=1):
+        logging.info(f"No daily reward for user {user.id}")
+        return HttpResponse("No daily reward", status=400)
+
+    user.daily_combo += 1
+    user.daily_reward_at = timezone.now()
+    user.save(update_fields=["daily_combo", "daily_reward_at"])
+    logging.info(f"User {user.id} got daily reward. Combo: {user.daily_combo}")
+
+    return JsonResponse({"combo": user.daily_combo}, status=201)
 
 
 def check_tic_tac_toe(id):
