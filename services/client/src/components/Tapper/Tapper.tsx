@@ -148,7 +148,7 @@ export const Tapper = ({from, openReward, present, avatar }: {
         //     console.log("Вибрация не поддерживается на этом устройстве.");
         // }
         if (typeof window !== 'undefined') {
-            window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            window.Telegram.WebApp.HapticFeedback.impactOccurred('soft');
         }
     
         const x = e.clientX + Math.random() * 200 - 100;
