@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db.models import Subquery, OuterRef, When, Case, F, IntegerField
 from django.db.models.functions import Cast
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
 
 from .config import DAILY_TOKENS, GAME_PRICE, SOCIAL_NETWORK_PRICE
 from .models import *
@@ -34,6 +35,7 @@ def welcome_gift(user):
 
 
 def add_user(id, username, referrer_id, photo):
+    id = int(id)
     if id == referrer_id:
         logging.warning(f"User {id} tries to refer himself")
         return JsonResponse({"status": "ERROR", "message": "User can not refer himself"}, status=400)
@@ -336,45 +338,34 @@ def participate(user_id, project_id):
 
 
 def change_name(id, name):
-    user_qs = User.objects.filter(id=id)
-    if not user_qs.exists():
-        logging.info(f"User {id} does not exist")
-        return HttpResponse(status=400)
+    id = int(id)
+    user = get_object_or_404(User, id=id)
     if len(name) > MAX_NANE_LENGTH:
         logging.info(f"Name {name} is too long")
         return HttpResponse(status=400)
-    user = user_qs.first()
     user.name = name
     user.save(update_fields=["name"])
     return HttpResponse(status=201)
 
 
 def delete_user(id):
-    user_qs = User.objects.filter(id=id)
-    if not user_qs.exists():
-        logging.info(f"User {id} does not exist")
-        return HttpResponse(status=400)
-    user_qs.delete()
+    id = int(id)
+    user = get_object_or_404(User, id=id)
+    user.delete()
     logging.info(f"User {id} deleted!")
     return HttpResponse(status=201)
 
 
 def get_friends(id):
-    user_qs = User.objects.filter(id=id)
-    if not user_qs.exists():
-        logging.info(f"User {id} does not exist")
-        return HttpResponse(status=400)
-    friends = list(user_qs.first().friends.values("id", "username", "photo"))
+    id = int(id)
+    user = get_object_or_404(User, id=id)
+    friends = list(user.friends.values("id", "username", "photo"))
     return JsonResponse({"friends": friends}, status=200)
 
 
 def check_daily_reward(id):
     id = int(id)
-    user_qs = User.objects.filter(id=id)
-    if not user_qs.exists():
-        logging.info(f"User {id} does not exist")
-        return HttpResponse(status=400)
-    user = user_qs.first()
+    user = get_object_or_404(User, id=id)
     if user.daily_reward_at and timezone.now() - user.daily_reward_at < datetime.timedelta(days=1):
         return JsonResponse({"reward": False, "combo": user.daily_combo, "last": user.daily_reward_at}, status=200)
 
@@ -393,11 +384,7 @@ def check_daily_reward(id):
 
 def get_daily_reward(id):
     id = int(id)
-    user_qs = User.objects.filter(id=id)
-    if not user_qs.exists():
-        logging.info(f"User {id} does not exist")
-        return HttpResponse(status=400)
-    user = user_qs.first()
+    user = get_object_or_404(User, id=id)
     new_tokens = DAILY_TOKENS * user.daily_combo
     user.tokens_count = str(int(user.tokens_count) + new_tokens)
     user.save(update_fields=["tokens_count"])
@@ -406,11 +393,7 @@ def get_daily_reward(id):
 
 def check_tic_tac_toe(id):
     id = int(id)
-    user_qs = User.objects.filter(id=id)
-    if not user_qs.exists():
-        logging.info(f"User {id} does not exist")
-        return JsonResponse({"status": "ERROR", "message": "User does not exist"}, status=400)
-    user = user_qs.first()
+    user = get_object_or_404(User, id=id)
     delta = datetime.timedelta(days=1) if user.last_game_won else datetime.timedelta(hours=1)
     if user.last_game_at and user.last_game_at > timezone.now() - delta:
         logging.info(f"User {id} has already played the game")
@@ -422,11 +405,8 @@ def check_tic_tac_toe(id):
 
 
 def get_stock(id):
-    user_qs = User.objects.filter(id=id)
-    if not user_qs.exists():
-        logging.info(f"User {id} does not exist")
-        return JsonResponse({"status": "ERROR", "message": "User does not exist"}, status=400)
-    user = user_qs.first()
+    id = int(id)
+    user = get_object_or_404(User, id=id)
     return JsonResponse(
         {"stock": user.stock},
         status=200,
@@ -434,22 +414,16 @@ def get_stock(id):
 
 
 def set_stock(id, stock):
-    user_qs = User.objects.filter(id=id)
-    if not user_qs.exists():
-        logging.info(f"User {id} does not exist")
-        return JsonResponse({"status": "ERROR", "message": "User does not exist"}, status=400)
-    user = user_qs.first()
+    id = int(id)
+    user = get_object_or_404(User, id=id)
     user.stock = stock
     user.save(update_fields=["stock"])
     return HttpResponse(status=201)
 
 
 def add_network(id, network):
-    user_qs = User.objects.filter(id=id)
-    if not user_qs.exists():
-        logging.info(f"User {id} does not exist")
-        return JsonResponse({"status": "ERROR", "message": "User does not exist"}, status=400)
-    user = user_qs.first()
+    id = int(id)
+    user = get_object_or_404(User, id=id)
 
     network_qs = user.networks.filter(name=network)
     if network_qs.exists():
@@ -463,11 +437,8 @@ def add_network(id, network):
 
 
 def get_networks(id):
-    user_qs = User.objects.filter(id=id)
-    if not user_qs.exists():
-        logging.info(f"User {id} does not exist")
-        return JsonResponse({"status": "ERROR", "message": "User does not exist"}, status=400)
-    user = user_qs.first()
+    id = int(id)
+    user = get_object_or_404(User, id=id)
 
     opened_networks = user.networks.values_list("name", flat=True)
     result_networks = {network: network in opened_networks for network in Network.Values}
