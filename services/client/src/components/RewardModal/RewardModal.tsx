@@ -179,6 +179,7 @@ export const RewardModal = (
                                         }
                                         setReward(rewards[rowN * 5 + rewardN])
                                         setOpenExact(true)
+                                        setAvailable(false);
                                     }}>
                                         <Box sx={{height: 32, display: 'flex', alignItems: 'center'}}>
                                             <Image src={rewards[rowN * 5 + rewardN].type === 'coins' ? Coin : Gift} alt="" height={26} />
