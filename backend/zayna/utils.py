@@ -7,9 +7,8 @@ from django.db.models import Subquery, OuterRef, When, Case, F, IntegerField
 from django.db.models.functions import Cast
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
-from sqlalchemy.testing.plugin.plugin_base import logging
 
-from .config import DAILY_TOKENS, GAME_PRICE, SOCIAL_NETWORK_PRICE
+from .config import GAME_PRICE, SOCIAL_NETWORK_PRICE
 from .models import *
 
 
@@ -196,7 +195,7 @@ def add_present(sender_id, project_id, receiver_id=None):
     sender = get_object_or_404(User, id=sender_id)
 
     project_id = int(project_id)
-    project = get_object_or_404(User, id=project_id)
+    project = get_object_or_404(Project, id=project_id)
 
     receiver = None
     if receiver_id:
@@ -218,9 +217,8 @@ def get_present(user_id, present_id):
     user_id = int(user_id)
     user = get_object_or_404(User, id=user_id)
 
-
     present_id = int(present_id)
-    present = get_object_or_404(User, id=present_id)
+    present = get_object_or_404(Present, id=present_id)
 
     if present.received:
         logging.info(f"Present {present_id} has been already received")
