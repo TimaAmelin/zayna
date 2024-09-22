@@ -81,22 +81,16 @@ def add_user(id, username, referrer_id, photo):
 
 
 def add_tokens_batch(user_id, tokens_count):
-    user_qs = User.objects.filter(id=user_id)
-    if not user_qs.exists():
-        logging.info(f"User {user_id} does not exist")
-        return HttpResponse(status=400)
-    TokensBatch.objects.create(user_id=user_qs.values_list("id", flat=True)[0], tokens_count=tokens_count)
+    id = int(user_id)
+    user = get_object_or_404(User, id=id)
+    TokensBatch.objects.create(user_id=user.id, tokens_count=tokens_count)
     logging.info(f"TokensBatch object created (user_id={user_id}, tokens_count={tokens_count})")
     return HttpResponse(status=201)
 
 
 def get_tokens_count(user_id):
-    user_qs = User.objects.filter(id=user_id)
-    if not user_qs.exists():
-        logging.info(f"User {user_id} does not exist")
-        return HttpResponse(status=400)
-
-    user = user_qs.first()
+    id = int(user_id)
+    user = get_object_or_404(User, id=id)
     user.add_income()
     user.process_old_batches()
 
@@ -167,11 +161,8 @@ def check_win(field, value):
 
 
 def next_step(user_id, field):
-    user_qs = User.objects.filter(id=user_id)
-    if not user_qs.exists():
-        logging.info(f"User {user_id} does not exist")
-        return HttpResponse(status=400)
-    user = user_qs.first()
+    user_id = int(user_id)
+    user = get_object_or_404(User, id=user_id)
 
     status = check_win(field, PlayerValue.PLAYER)
     if isinstance(status, JsonResponse):
@@ -200,25 +191,16 @@ def next_step(user_id, field):
 
 
 def add_present(sender_id, project_id, receiver_id=None):
-    sender_qs = User.objects.filter(id=sender_id)
-    if not sender_qs.exists():
-        logging.info(f"User {sender_id} does not exist")
-        return HttpResponse(status=400)
-    sender = sender_qs.first()
+    sender_id = int(sender_id)
+    sender = get_object_or_404(User, id=sender_id)
 
-    project_qs = Project.objects.filter(id=project_id)
-    if not project_qs.exists():
-        logging.info(f"Project {project_id} does not exist")
-        return HttpResponse(status=400)
-    project = project_qs.first()
+    project_id = int(project_id)
+    project = get_object_or_404(User, id=project_id)
 
     receiver = None
     if receiver_id:
-        receiver_qs = User.objects.filter(id=receiver_id)
-        if not receiver_qs.exists():
-            logging.info(f"Receiver {receiver_id} does not exist")
-            return HttpResponse(status=400)
-        receiver = receiver_qs.first()
+        receiver_id = int(receiver_id)
+        receiver = get_object_or_404(User, id=receiver_id)
 
     if sender.tokens_sum < project.price:
         logging.warning(f"Required {project.price}, current tokens: {sender.tokens_sum}")
@@ -232,17 +214,12 @@ def add_present(sender_id, project_id, receiver_id=None):
 
 
 def get_present(user_id, present_id):
-    user_qs = User.objects.filter(id=user_id)
-    if not user_qs.exists():
-        logging.info(f"User {user_id} does not exist")
-        return HttpResponse(status=400)
-    user = user_qs.first()
+    user_id = int(user_id)
+    user = get_object_or_404(User, id=user_id)
 
-    present_qs = Present.objects.filter(id=present_id)
-    if not present_qs.exists():
-        logging.info(f"Present {present_id} does not exist")
-        return HttpResponse(status=400)
-    present = present_qs.first()
+
+    present_id = int(present_id)
+    present = get_object_or_404(User, id=present_id)
 
     if present.received:
         logging.info(f"Present {present_id} has been already received")
@@ -269,11 +246,9 @@ def get_presents(request):
 
 
 def get_user_projects(request, user_id):
-    user_qs = User.objects.filter(id=user_id)
-    if not user_qs.exists():
-        logging.info(f"User {user_id} does not exist")
-        return HttpResponse(status=400)
-    user = user_qs.first()
+    user_id = int(user_id)
+    user = get_object_or_404(User, id=user_id)
+
     projects = list(
         Project.objects
         .annotate(
@@ -307,17 +282,10 @@ def get_user_projects(request, user_id):
 
 
 def participate(user_id, project_id):
-    user_qs = User.objects.filter(id=user_id)
-    if not user_qs.exists():
-        logging.info(f"User {user_id} does not exist")
-        return HttpResponse(status=400)
-    user = user_qs.first()
+    user_id = int(user_id)
+    user = get_object_or_404(User, id=user_id)
 
-    project_qs = Project.objects.filter(id=project_id)
-    if not project_qs.exists():
-        logging.info(f"Project {project_id} does not exist")
-        return HttpResponse(status=400)
-    project = project_qs.first()
+    project = get_object_or_404(Project, id=int(project_id))
 
     user_project_qs = UserProject.objects.filter(user=user, project=project)
     new_level = 0
