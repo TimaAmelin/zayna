@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { NavbarProvider } from "@/components/NavbarProvider/NavbarProvider";
 import { Suspense } from "react";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,7 +19,7 @@ export default function RootLayout({
         <script src="https://telegram.org/js/telegram-web-app.js" async></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </head>
-      <body className={inter.className}>
+      <body>
         <Suspense>
           <NavbarProvider>{children}</NavbarProvider>
         </Suspense>

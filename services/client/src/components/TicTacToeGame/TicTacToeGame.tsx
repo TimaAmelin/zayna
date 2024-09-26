@@ -9,6 +9,7 @@ import CrossImage from '../../assets/mini-app/cross.png';
 import CircleImage from '../../assets/mini-app/circle.png';
 import Image from 'next/image';
 import { ticTacToe } from '@/api/handlers/ticTacToe';
+import { MiniModal } from '../MiniModal/MiniModal';
 
 export const TicTacToeGame = () => {
     const router = useRouter();
@@ -22,6 +23,7 @@ export const TicTacToeGame = () => {
     );
     const [result, setResult] = useState('in_progress');
     const [buttonText, setButtonText] = useState('Playing...');
+    const [open, setOpen] = useState(false);
     return (
         <TicTacToeContainer>
             <TicTacToeClose>
@@ -146,7 +148,8 @@ export const TicTacToeGame = () => {
                     )
                 }
             </TicTacToeField>
-            <TicTacToeButton onClick={() => router.push(`/tapper`)} disabled={result === 'in_progress'}>{buttonText}</TicTacToeButton>
+            <TicTacToeButton onClick={() => setOpen(true)} disabled={result === 'in_progress'}>{buttonText}</TicTacToeButton>
+            <MiniModal open={open} toggleDrawer={setOpen} />
         </TicTacToeContainer>
     )
 }
