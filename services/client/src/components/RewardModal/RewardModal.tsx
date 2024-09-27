@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { RewardModalContainer, RewardModalMainText, RewardModalCard, RewardModalSecondaryText, RewardModalSecondaryTextContainer, RewardModalCardRow, RewardModalCardShadow, RewardModalButton } from './RewardModal.css';
+import { RewardModalContainer, RewardModalMainText, RewardModalCard, RewardModalSecondaryText, RewardModalSecondaryTextContainer, RewardModalCardRow, RewardModalCardShadow, RewardModalButton, RewardGetModalButton } from './RewardModal.css';
 import { Box, Drawer, IconButton } from '@mui/material';
 
 import Reward from '../../assets/icons/reward.png';
@@ -197,6 +197,26 @@ export const RewardModal = (
                             </RewardModalCardRow>
                         ))
                     }
+                    <RewardGetModalButton disabled={!available} onClick={async () => {
+                        await recieveDaily(id);
+                        setMoney(money + (rewards[combo].amount ?? 0));
+                        if (rewards[combo].amount) {
+                            await putTokenBatch(id, rewards[combo].amount ?? 0);
+                        }
+                        if (rewards[combo].text) {
+                            if (projects.length) {
+                                const project = projects[Math.floor(Math.random() * projects.length)];
+                                await putTokenBatch(id, project.cost);
+                                await buyProject(id, project?.id ?? 0);
+                            }
+                            
+                        }
+                        setReward(rewards[combo])
+                        setOpenExact(true)
+                        setAvailable(false);
+                    }}>
+                        Recieve
+                    </RewardGetModalButton>
                 </RewardModalContainer>
             </Box>
             <RewardModalButton>

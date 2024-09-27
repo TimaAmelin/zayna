@@ -22,9 +22,9 @@ export const RewardModalMainText = styled(Box)(() => ({
 }));
 
 export const RewardModalSecondaryTextContainer = styled(Box)(() => ({
-    minHeight: 100,
     display: 'flex',
     justifyContent: 'center',
+    marginBottom: 10,
 }));
 
 export const RewardModalSecondaryText = styled(Box)(() => ({
@@ -70,5 +70,25 @@ export const RewardModalButton = styled(Button)(() => ({
     position: 'absolute',
     top: '14%',
     right: 0,
+    zIndex: 3,
+}));
+
+export const RewardGetModalButton = styled(Button)(() => ({
+    borderRadius: 12,
+    height: 60,
+    width: '90%',
+    backgroundColor: '#7ADA46',
+    color: '#000',
+    fontSize: 16,
+    fontWeight: 600,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 11,
+    '&:hover': {
+        backgroundColor: '#fff',
+    },
+    textTransform: 'none',
+    margin: 10,
     zIndex: 3,
 }));
