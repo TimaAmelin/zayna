@@ -183,13 +183,13 @@ export const Tapper = ({from, openReward, present, avatar }: {
         if (typeof window !== 'undefined') {
             const getUser = async () => {
                 const user = await putUser(window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from, avatar);
-                if (present) {
-                    try {
-                        await recieveGift(window.Telegram.WebApp.initDataUnsafe.user.id, Number(present));
-                    } catch (error) {
+                // if (present) {
+                //     try {
+                //         await recieveGift(window.Telegram.WebApp.initDataUnsafe.user.id, Number(present));
+                //     } catch (error) {
     
-                    }
-                }
+                //     }
+                // }
                 const tokens = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
                 const daily = await getDaily(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
                 const tictactoe = await ticTacToe([[0, 0, 0], [0, 0, 0], [0, 0, 0]], window.Telegram.WebApp.initDataUnsafe.user.id);
