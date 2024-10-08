@@ -131,34 +131,42 @@ export const Tapper = ({from, openReward, present, avatar }: {
     const [coins, setCoins] = useState<{ id: string; x: number; y: number }[]>([]);
 
     async function refetch() {
-        if (typeof window !== 'undefined') {
-            const data = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
-
-            setMoneyLast(data.response.sum);
-            setMoney(data.response.sum);
-            setMoneyPerHour(data.response.per_hour ?? 0);
+        try {
+            if (typeof window !== 'undefined') {
+                const data = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
+    
+                setMoneyLast(data.response.sum);
+                setMoney(data.response.sum);
+                setMoneyPerHour(data.response.per_hour ?? 0);
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 
     const handleClick = (e: React.Touch) => {
-        setMoney(money + 2);
-        // if (navigator.vibrate) {
-        //     navigator.vibrate(50);
-        // } else {
-        //     console.log("Вибрация не поддерживается на этом устройстве.");
-        // }
-        if (typeof window !== 'undefined') {
-            window.Telegram.WebApp.HapticFeedback.impactOccurred('soft');
+        try {
+            setMoney(money + 2);
+            // if (navigator.vibrate) {
+            //     navigator.vibrate(50);
+            // } else {
+            //     console.log("Вибрация не поддерживается на этом устройстве.");
+            // }
+            if (typeof window !== 'undefined') {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('soft');
+            }
+        
+            const x = e.clientX + Math.random() * 200 - 100;
+            const y = e.clientY + Math.random() * 200 - 100;
+        
+            setCoins((prevCoins) => [...prevCoins, { id: uuidv4(), x, y }]);
+        
+            setTimeout(() => {
+              setCoins((prevCoins) => prevCoins.filter((coin) => coin.id !== prevCoins[0].id));
+            }, 1000);
+        } catch (error) {
+            console.log(error);
         }
-    
-        const x = e.clientX + Math.random() * 200 - 100;
-        const y = e.clientY + Math.random() * 200 - 100;
-    
-        setCoins((prevCoins) => [...prevCoins, { id: uuidv4(), x, y }]);
-    
-        setTimeout(() => {
-          setCoins((prevCoins) => prevCoins.filter((coin) => coin.id !== prevCoins[0].id));
-        }, 1000);
       };
 
     const router = useRouter();
@@ -180,43 +188,47 @@ export const Tapper = ({from, openReward, present, avatar }: {
     }
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const getUser = async () => {
-                const user = await putUser(window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from, avatar);
-                // if (present) {
-                //     try {
-                //         await recieveGift(window.Telegram.WebApp.initDataUnsafe.user.id, Number(present));
-                //     } catch (error) {
-    
-                //     }
-                // }
-                const tokens = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
-                const daily = await getDaily(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
-                const tictactoe = await ticTacToe([[0, 0, 0], [0, 0, 0], [0, 0, 0]], window.Telegram.WebApp.initDataUnsafe.user.id);
-                const projects = await getProjects(window.Telegram.WebApp.initDataUnsafe.user.id);
-                return {tokens, user, daily, tictactoe, projects}
+        try {
+            if (typeof window !== 'undefined') {
+                const getUser = async () => {
+                    const user = await putUser(window.Telegram.WebApp.initDataUnsafe.user.id, window.Telegram.WebApp.initDataUnsafe.user.username, from, avatar);
+                    // if (present) {
+                    //     try {
+                    //         await recieveGift(window.Telegram.WebApp.initDataUnsafe.user.id, Number(present));
+                    //     } catch (error) {
+        
+                    //     }
+                    // }
+                    const tokens = await getTokens(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
+                    const daily = await getDaily(Number(window.Telegram.WebApp.initDataUnsafe.user.id));
+                    const tictactoe = await ticTacToe([[0, 0, 0], [0, 0, 0], [0, 0, 0]], window.Telegram.WebApp.initDataUnsafe.user.id);
+                    const projects = await getProjects(window.Telegram.WebApp.initDataUnsafe.user.id);
+                    return {tokens, user, daily, tictactoe, projects}
+                }
+        
+                getUser().then(({tokens, user, daily, tictactoe, projects}) => {
+                    setMoney(tokens.response.sum);
+                    setMoneyLast(tokens.response.sum);
+                    setMoneyPerHour(tokens.response.income ?? 0);
+                    setGifts([...tokens.response.presents, ...(user.response?.presents?.[0]?.sender__username ? user?.response?.presents : [])]);
+                    setAvailable(daily.response.reward);
+                    setCombo(daily.response.combo);
+                    if (tokens.response.photo) {
+                        setAva(tokens.response.photo);
+                    }
+                    if (tokens.response.presents.length + user?.response?.presents.length > 0 && user.response?.presents?.[0]?.sender__username) {
+                        setGiftModalOpen(true);
+                    }
+                    setLoading(false);
+                    if (tictactoe.response.message === 'User has already played the game') {
+                        setNextMini(new Date(tictactoe.response.next));
+                        setTimeToNextMini(timeUntilDate(new Date(tictactoe.response.next)));
+                    }
+                    setProjects(projects.response.projects);
+                })
             }
-    
-            getUser().then(({tokens, user, daily, tictactoe, projects}) => {
-                setMoney(tokens.response.sum);
-                setMoneyLast(tokens.response.sum);
-                setMoneyPerHour(tokens.response.income ?? 0);
-                setGifts([...tokens.response.presents, ...user?.response?.presents]);
-                setAvailable(daily.response.reward);
-                setCombo(daily.response.combo);
-                if (tokens.response.photo) {
-                    setAva(tokens.response.photo);
-                }
-                if (tokens.response.presents.length + user?.response?.presents.length > 0) {
-                    setGiftModalOpen(true);
-                }
-                setLoading(false);
-                if (tictactoe.response.message === 'User has already played the game') {
-                    setNextMini(new Date(tictactoe.response.next));
-                    setTimeToNextMini(timeUntilDate(new Date(tictactoe.response.next)));
-                }
-                setProjects(projects.response.projects);
-            })
+        } catch (error) {
+            console.log(error);
         }
     }, []);
 
@@ -229,33 +241,37 @@ export const Tapper = ({from, openReward, present, avatar }: {
     }, []);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            if (!available) {
-                setTimeToDaily(timeUntilTomorrow);
-            } else {
-                setTimeToDaily({hours: 0, minutes: 0});
-            }
-            if (nextMini) {
-                setTimeToNextMini(timeUntilDate(new Date(nextMini)));
-            }
-            if (!loading) {
-                let diff = money - moneyLast < 1000 ? money - moneyLast : 0;
-                if (moneyPerHourDiff + moneyPerHour / 3600 >= 1) {
-                    diff += Math.floor(moneyPerHourDiff + moneyPerHour / 3600);
+        try {
+            const interval = setInterval(() => {
+                if (!available) {
+                    setTimeToDaily(timeUntilTomorrow);
+                } else {
+                    setTimeToDaily({hours: 0, minutes: 0});
                 }
-                setMoneyPerHourDiff(moneyPerHourDiff + moneyPerHour / 3600 - Math.floor(moneyPerHourDiff + moneyPerHour / 3600));
-
-                if (typeof window !== 'undefined') {
-                    if (diff !== 0) {
-                        putTokenBatch(Number(window.Telegram.WebApp.initDataUnsafe.user.id), diff);
+                if (nextMini) {
+                    setTimeToNextMini(timeUntilDate(new Date(nextMini)));
+                }
+                if (!loading) {
+                    let diff = money - moneyLast < 1000 ? money - moneyLast : 0;
+                    if (moneyPerHourDiff + moneyPerHour / 3600 >= 1) {
+                        diff += Math.floor(moneyPerHourDiff + moneyPerHour / 3600);
                     }
+                    setMoneyPerHourDiff(moneyPerHourDiff + moneyPerHour / 3600 - Math.floor(moneyPerHourDiff + moneyPerHour / 3600));
+    
+                    if (typeof window !== 'undefined') {
+                        if (diff !== 0) {
+                            putTokenBatch(Number(window.Telegram.WebApp.initDataUnsafe.user.id), diff);
+                        }
+                    }
+                    setMoney(money => money + moneyPerHour / 3600);
+                    setMoneyLast(money + moneyPerHour / 3600);
                 }
-                setMoney(money => money + moneyPerHour / 3600);
-                setMoneyLast(money + moneyPerHour / 3600);
-            }
-        }, 1000);
- 
-        return () => clearInterval(interval);
+            }, 1000);
+     
+            return () => clearInterval(interval);
+        } catch (error) {
+            console.log(error);
+        }
     }, [timeToDaily]);
 
     const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
@@ -269,13 +285,17 @@ export const Tapper = ({from, openReward, present, avatar }: {
     };
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const platform = window.Telegram.WebApp.platform;
-
-            if (!['ios', 'android'].includes(platform)) {
-                alert("Mini app is not available on desktop");
-                window.Telegram.WebApp.close();
+        try {
+            if (typeof window !== 'undefined') {
+                const platform = window.Telegram.WebApp.platform;
+    
+                if (!['ios', 'android'].includes(platform)) {
+                    alert("Mini app is not available on desktop");
+                    window.Telegram.WebApp.close();
+                }
             }
+        } catch (error) {
+            console.log(error);
         }
     }, []);
 
