@@ -207,16 +207,16 @@ export const Tapper = ({from, openReward, present, avatar }: {
                 }
         
                 getUser().then(({tokens, user, daily, tictactoe, projects}) => {
-                    setMoney(tokens.response.sum);
-                    setMoneyLast(tokens.response.sum);
-                    setMoneyPerHour(tokens.response.income ?? 0);
-                    setGifts([...tokens.response.presents, ...(user.response?.presents?.[0]?.sender__username ? user?.response?.presents : [])]);
+                    setMoney(tokens?.response?.sum ?? 0);
+                    setMoneyLast(tokens?.response?.sum ?? 0);
+                    setMoneyPerHour(tokens?.response?.income ?? 0);
+                    setGifts([...tokens?.response?.presents, ...(user.response?.presents?.[0]?.sender__username ? user?.response?.presents : [])]);
                     setAvailable(daily.response.reward);
                     setCombo(daily.response.combo);
-                    if (tokens.response.photo) {
+                    if (tokens?.response?.photo) {
                         setAva(tokens.response.photo);
                     }
-                    if (tokens.response.presents.length + user?.response?.presents.length > 0 && user.response?.presents?.[0]?.sender__username) {
+                    if ((tokens?.response?.presents.length ?? 0) + user?.response?.presents.length > 0 && user.response?.presents?.[0]?.sender__username) {
                         setGiftModalOpen(true);
                     }
                     setLoading(false);

@@ -10,7 +10,11 @@ export const postStock = async (
         body: JSON.stringify({ id, stock }),
     });
 
-    const data = await response.json();
+    try {
+        const data = await response.json();
 
-    return data
+        return data
+    } catch (error) {
+        return {}
+    }
 }

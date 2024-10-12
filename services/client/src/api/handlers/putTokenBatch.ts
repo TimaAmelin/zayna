@@ -10,7 +10,11 @@ export const putTokenBatch = async (
         body: JSON.stringify({ id, tokensPerHalfSecond }),
     });
 
-    const data = await response.json();
+    try {
+        const data = await response.json();
 
-    return data
+        return data
+    } catch (error) {
+        return {}
+    }
 }

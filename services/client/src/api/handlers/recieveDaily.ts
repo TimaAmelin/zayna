@@ -6,7 +6,11 @@ export const recieveDaily = async (id: number) => {
         },
     });
 
-    const data = await response.json();
+    try {
+        const data = await response.json();
 
-    return data
+        return data
+    } catch (error) {
+        return {}
+    }
 }

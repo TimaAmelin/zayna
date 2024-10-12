@@ -10,7 +10,11 @@ export const postTask = async (
         body: JSON.stringify({ id, task }),
     });
 
-    const data = await response.json();
+    try {
+        const data = await response.json();
 
-    return data
+        return data
+    } catch (error) {
+        return {}
+    }
 }
