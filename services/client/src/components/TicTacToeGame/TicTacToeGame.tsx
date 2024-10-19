@@ -90,9 +90,9 @@ export const TicTacToeGame = () => {
                   setTurn(true);
 
                   if (newResult === 'player_win') {
-                    setButtonText('Take your prize');
+                    setButtonText('Заберите свой приз');
                   } else if (newResult === 'bot_win' || newResult === 'draw') {
-                    setButtonText('Return later');
+                    setButtonText('Возвращайтесь позже');
                   }
                 }}
                 sx={{

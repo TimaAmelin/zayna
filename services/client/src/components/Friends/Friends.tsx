@@ -105,7 +105,7 @@ export const Friends = ({ tgLogin }: { tgLogin: string }) => {
             window.Telegram.WebApp.openTelegramLink(
               `https://t.me/share/url?url=${encodeURIComponent(
                 'https://t.me/zayna_eco_bot'
-              )}&text=Play with me, invest in real projects and earn money.\n💵+5k coins as the first gift`
+              )}&text=Играйте со мной, инвестируйте в реальные проекты и зарабатывайте деньги.\n💵+5k монет в качестве приветственного подарка`
             )
           }
         >
