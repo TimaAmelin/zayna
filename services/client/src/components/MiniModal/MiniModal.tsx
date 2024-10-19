@@ -37,7 +37,7 @@ export const MiniModal = ({
     >
       <MiniModalContainer>
         <Image src={GiftIcon} height={46} alt="" />
-        <MiniModalMainText>Вы выйграли 50K</MiniModalMainText>
+        <MiniModalMainText>Вы выиграли 50K</MiniModalMainText>
         <MiniModalButton
           onClick={async () => {
             router.push('/tapper');

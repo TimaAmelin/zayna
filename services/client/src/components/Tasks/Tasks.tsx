@@ -77,7 +77,7 @@ export const Tasks = () => {
   return (
     <TasksContainer>
       <TasksSecondaryTextContainer>
-        Zayna Social (New)
+        Zayna Медиа (Новое)
       </TasksSecondaryTextContainer>
       <TasksCard
         onClick={async () => {
