@@ -47,6 +47,8 @@ class User(models.Model):
             return
         hours_without_update = (timezone.now() - income_updated_at) / datetime.timedelta(hours=1)
         logging.info(f"hours_without_update: {hours_without_update}")
+        hours_without_update = min(3, hours_without_update)
+        logging.info(f"new hours_without_update: {hours_without_update}")
         self.tokens_count = str(round(int(self.tokens_count) + self.income * hours_without_update))
         logging.info(f"Add tokens: {self.income * hours_without_update}")
         self.save(update_fields=["tokens_count", "updated_at"])
