@@ -84,8 +84,9 @@ def add_tokens_batch(user_id, tokens_count):
     id = int(user_id)
     user = get_object_or_404(User, id=id)
     TokensBatch.objects.create(user_id=user.id, tokens_count=tokens_count)
-    logging.info(f"TokensBatch object created (user_id={user_id}, tokens_count={tokens_count})")
-    return HttpResponse(status=201)
+    message = f"TokensBatch object created (user_id={user_id}, tokens_count={tokens_count})"
+    logging.info(message)
+    return JsonResponse({"message": message}, status=201)
 
 
 def get_tokens_count(user_id):
@@ -204,7 +205,7 @@ def add_present(sender_id, project_id, receiver_id=None):
 
     if sender.tokens_sum < project.price:
         logging.warning(f"Required {project.price}, current tokens: {sender.tokens_sum}")
-        return HttpResponse("Not enough tokens", status=400)
+        return JsonResponse({"message": "Not enough tokens"}, status=400)
 
     present = Present.objects.create(sender=sender, project=project, receiver=receiver)
 
@@ -221,8 +222,9 @@ def get_present(user_id, present_id):
     present = get_object_or_404(Present, id=present_id)
 
     if present.received:
-        logging.info(f"Present {present_id} has been already received")
-        return HttpResponse(status=400)
+        message = f"Present {present_id} has been already received"
+        logging.info(message)
+        return JsonResponse({"message": message}, status=400)
 
     present.received = True
     present.save(update_fields=["received"])
@@ -230,7 +232,7 @@ def get_present(user_id, present_id):
     user.tokens_count = str(int(user.tokens_count) + present.project.payment)
     user.save(update_fields=["tokens_count"])
     participate(user_id, present.project.id)
-    return HttpResponse(status=200)
+    return JsonResponse({"message": "present has been taken"}, status=201)
 
 
 def get_presents(request):
@@ -301,18 +303,19 @@ def participate(user_id, project_id):
     up = UserProject.objects.get_or_create(user=user, project=project)[0]
     up.level += 1
     up.save(update_fields=["level"])
-    return HttpResponse(status=201)
+    return JsonResponse({"message": "User participated"}, status=201)
 
 
 def change_name(id, name):
     id = int(id)
     user = get_object_or_404(User, id=id)
     if len(name) > MAX_NANE_LENGTH:
-        logging.info(f"Name {name} is too long")
-        return HttpResponse(status=400)
+        message = f"Name {name} is too long"
+        logging.info(message)
+        return JsonResponse({"message": message}, status=400)
     user.name = name
     user.save(update_fields=["name"])
-    return HttpResponse(status=201)
+    return JsonResponse({"message": "name changed"}, status=201)
 
 
 def delete_user(id):
@@ -320,7 +323,7 @@ def delete_user(id):
     user = get_object_or_404(User, id=id)
     user.delete()
     logging.info(f"User {id} deleted!")
-    return HttpResponse(status=201)
+    return JsonResponse({"message": "user deleted"}, status=201)
 
 
 def get_friends(id):
@@ -353,7 +356,7 @@ def get_daily_reward(id):
     user = get_object_or_404(User, id=id)
     if user.daily_reward_at and timezone.now().date() - user.daily_reward_at.date() < datetime.timedelta(days=1):
         logging.info(f"No daily reward for user {user.id}")
-        return HttpResponse("No daily reward", status=400)
+        return JsonResponse({"message": "No daily reward"}, status=400)
 
     user.daily_combo += 1
     user.daily_reward_at = timezone.now()
@@ -390,7 +393,7 @@ def set_stock(id, stock):
     user = get_object_or_404(User, id=id)
     user.stock = stock
     user.save(update_fields=["stock"])
-    return HttpResponse(status=201)
+    return JsonResponse({"message": "stock set"}, status=201)
 
 
 def add_network(id, network):
@@ -405,7 +408,7 @@ def add_network(id, network):
     user.networks.create(name=network)
     user.tokens_count = str(int(user.tokens_count) + SOCIAL_NETWORK_PRICE)
     user.save(update_fields=["tokens_count"])
-    return HttpResponse(status=201)
+    return JsonResponse({"message": "network added"}, status=201)
 
 
 def get_networks(id):
