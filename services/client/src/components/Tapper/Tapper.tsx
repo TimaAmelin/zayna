@@ -438,7 +438,7 @@ export const Tapper = ({
                 <Image src={ForestIcon} height={35} alt="" />
               </div>
             </TapperMainContainerCardTop>
-            Леса
+            Рынок
           </TapperMainContainerCard>
           <TapperMainContainerCard
             onClick={() => {
