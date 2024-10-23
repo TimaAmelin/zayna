@@ -83,7 +83,9 @@ class Project(models.Model):
 
     name = models.CharField(default="", null=False, blank=True, max_length=255)
     price = models.IntegerField(default=0)
+    price_by_level = models.JSONField(default=list)
     income = models.IntegerField(default=0)
+    income_by_level = models.JSONField(default=list)
     payment = models.IntegerField(default=0)
     mode = models.CharField(max_length=10, choices=MODE_CHOICES.choices, default=Modes.FOREST, null=True)
     description = models.TextField(null=True, blank=True)
@@ -91,9 +93,13 @@ class Project(models.Model):
     is_present = models.BooleanField(default=False, null=False)
 
     def cost(self, level):
+        if len(self.price_by_level) > level:
+            return self.price_by_level[level]
         return round(self.price * 3.2 ** level)
 
     def profit(self, level):
+        if len(self.income_by_level) > level:
+            return self.income_by_level[level]
         return round(self.income * 1.3 ** level)
 
 

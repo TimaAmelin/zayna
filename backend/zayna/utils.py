@@ -7,6 +7,7 @@ from django.db.models import Subquery, OuterRef, When, Case, F, IntegerField
 from django.db.models.functions import Cast
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
+from sqlalchemy.testing.plugin.plugin_base import logging
 
 from .config import GAME_PRICE, SOCIAL_NETWORK_PRICE
 from .models import *
@@ -261,23 +262,36 @@ def get_user_projects(request, user_id):
                 ),
                 default=0,
             ),
-            cost=Cast(F("price") * 3.2 ** F("level"), output_field=IntegerField()),
-            profit=Cast(F("income") * 1.3 ** F("level"), output_field=IntegerField()),
         )
         .values(
             "level",
             "id",
             "name",
-            "cost",
-            "profit",
             "mode",
             "description",
             "logo",
+            "price",
+            "income",
+            "price_by_level",
+            "income_by_level",
         )
     )
     for project in projects:
         if project["logo"]:  # Check if the logo field is not empty
             project["logo"] = request.build_absolute_uri(settings.MEDIA_URL + project["logo"])
+
+        level = project["level"]
+        project["cost"] = (
+            project["price_by_level"][level] if len(project["price_by_level"]) > level else round(
+                project["price"] * 3.2 ** level
+            )
+        )
+        project["profit"] = (
+            project["income_by_level"][level] if len(project["income_by_level"]) > level else round(
+                project["income"] * 3.2 ** level
+            )
+        )
+
 
     return JsonResponse({"projects": projects}, status=200)
 
