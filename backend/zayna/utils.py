@@ -3,11 +3,9 @@ import random
 from enum import Enum
 
 from django.conf import settings
-from django.db.models import Subquery, OuterRef, When, Case, F, IntegerField
-from django.db.models.functions import Cast
-from django.http import HttpResponse, JsonResponse
+from django.db.models import Subquery, OuterRef, When, Case, F
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from sqlalchemy.testing.plugin.plugin_base import logging
 
 from .config import GAME_PRICE, SOCIAL_NETWORK_PRICE
 from .models import *
@@ -291,7 +289,6 @@ def get_user_projects(request, user_id):
                 project["income"] * 3.2 ** level
             )
         )
-
 
     return JsonResponse({"projects": projects}, status=200)
 
