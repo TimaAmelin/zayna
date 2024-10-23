@@ -59,7 +59,10 @@ def add_user(id, username, referrer_id, photo):
         logging.info(
             f"Create user {id} with username {username}" + (f" by referrer {referrer_id}" if referrer_id else "")
         )
-        user = User.objects.create(username=username, id=id, referrer=referrer_qs.first(), photo=photo)
+        if referrer_id:
+            user = User.objects.create(username=username, id=id, referrer=referrer_qs.first(), photo=photo)
+        else:
+            user = User.objects.create(username=username, id=id, photo=photo)
         if referrer_id:
             user.friends.add(referrer_qs.first())
         present = welcome_gift(user)
