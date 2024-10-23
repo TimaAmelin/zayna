@@ -74,10 +74,10 @@ class TokensBatch(models.Model):
 
 class Project(models.Model):
     class Modes(models.TextChoices):
-        FOREST = "Forests", "Forests"
-        TRANSPORT = "Transport", "Transport"
-        ENERGY = "Energy", "Energy"
-        WASTES = "Wastes", "Wastes"
+        FOREST = "Леса", "Леса"
+        TRANSPORT = "Транспорт", "Транспорт"
+        ENERGY = "Энергия", "Энергия"
+        WASTES = "Затраты", "Затраты"
 
     MODE_CHOICES = Modes
 
