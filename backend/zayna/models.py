@@ -74,8 +74,8 @@ class TokensBatch(models.Model):
 
 class Project(models.Model):
     class Modes(models.TextChoices):
-        FOREST = "Леса", "Леса"
-        TRANSPORT = "Транспорт", "Транспорт"
+        MARKET = "Рынок", "Рынок"
+        REALTY = "Недвижимость", "Недвижимость"
         ENERGY = "Энергия", "Энергия"
         WASTES = "Затраты", "Затраты"
 
@@ -87,7 +87,7 @@ class Project(models.Model):
     income = models.IntegerField(default=0)
     income_by_level = models.JSONField(default=list)
     payment = models.IntegerField(default=0)
-    mode = models.CharField(max_length=10, choices=MODE_CHOICES.choices, default=Modes.FOREST, null=True)
+    mode = models.CharField(max_length=12, choices=MODE_CHOICES.choices, default=Modes.MARKET, null=True)
     description = models.TextField(null=True, blank=True)
     logo = models.ImageField(blank=True, null=True)
     is_present = models.BooleanField(default=False, null=False)
