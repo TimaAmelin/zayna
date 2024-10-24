@@ -184,11 +184,12 @@ export const Projects = () => {
                 }}
               >
                 <img
-                  src={project.logo.replace('web', '45.159.188.244')}
+                  src={project.logo.replace('web', '45.159.188.244').replace(/\_[a-zA-Z0-9]+\./g, '.')}
                   alt=""
                   height={38}
                   width={38}
                 />
+                {project.logo.replace('web', '45.159.188.244').replace(/\_[a-zA-Z0-9]+\./g, '.')}
                 <ProjectsMainContainerCardTitle>
                   {project.name}
                 </ProjectsMainContainerCardTitle>
