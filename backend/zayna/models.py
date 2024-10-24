@@ -89,7 +89,7 @@ class Project(models.Model):
     payment = models.IntegerField(default=0)
     mode = models.CharField(max_length=12, choices=MODE_CHOICES.choices, default=Modes.MARKET, null=True)
     description = models.TextField(null=True, blank=True)
-    logo = models.ImageField(blank=True, null=True)
+    logo = models.CharField(default="", null=False, blank=True, max_length=255)
     is_present = models.BooleanField(default=False, null=False)
 
     def cost(self, level):

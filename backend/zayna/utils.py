@@ -278,9 +278,6 @@ def get_user_projects(request, user_id):
         )
     )
     for project in projects:
-        if project["logo"]:  # Check if the logo field is not empty
-            project["logo"] = request.build_absolute_uri(settings.MEDIA_URL + project["logo"])
-
         level = project["level"]
         project["cost"] = (
             project["price_by_level"][level] if len(project["price_by_level"]) > level else round(
