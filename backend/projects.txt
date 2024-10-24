@@ -1,18 +1,18 @@
-1	TransportEme1	Недвижимость	Emergency	Save lives in critical moments! Respond to emergencies and help those in need as quickly as possible.	1		3000	360	skorayapomoshch
-1	ForestsMed1	Рынок	Medical mission	Head to hotspots and assist victims in disaster zones. Your skills can save lives!	1		21242	381	meditsinskayamissiya
-1	EnergyInv1	Энергия	"Invisible defender #freeDurov"	Disappear from the enemy’s sight like a self-destructing message! You can't be found, but you can gather all your strength for the next attack	1		16342	409	nevidimyyzashchitnik
-1	ForestsFor1	Рынок	Forester	Plant a million trees to embrace the world and cleanse it of CO2! Now every tree works while you rest	1		1000	210	lesnik
-1	EnergyPla1	Энергия	Planet of happiness	Spread positive thinking! Improve quality of life and increase happiness among people.	1		2379	357	planetaschastya
-1	ForestsGre1	Рынок	Green friend	Grow your own plant and watch it thrive along with your well-being! The more care you give, the more greenery you'll see.	1		241	24	zelenyydrug
-1	WastesCli1	Затраты	Climate fund	Fund environmental protection projects! Sponsor crucial initiatives and help the planet... so that one day your grandchildren won't be roasting marshmallows on the remnants of Antarctica!	1			54333	435	klimaticheskiyfond
-1	EnergyA b1	Энергия	A baby whale	A small baby whale creates huge waves, but does it so cutely that even enemies pause in admiration for a moment.	1		329	33	kitenok
-1	EnergyThe1	Энергия	Therapy of kindness	No one can leave without a smile! Healing is not just about medicine, but also about positivity.	1		2672	187	Терапиядобра
-1	WastesRec1	Затраты	Recharge the batteries	Get inspired by the Tesla Powerwall and recharge your energy! You can keep fighting without breaks until your batteries run out.	1		13288	465	zaryadiakkumulyatory
-1	ForestsPan1	Рынок	Panda Patrol	Save endangered species, starting with the panda! Venture into the wild forests, protect them from deforestation, and win the favor of all the animals.	1		5556	378	pandapatrul
-1	EnergyPea1	Энергия	Peaceful mood	Harmony and positive thinking improve everyday life. Share joy and impact those around you!	1		250	25	mirnoenastroenie
-1	EnergyCat1	Энергия	Catch some zen	Meditate and develop emotional intelligence skills. Calmness is the key to longevity and happiness.	1		400	60	poymaydzen
-1	WastesGree1	Затраты	Green Jedi	Catch carbon emissions with your lightsaber and turn them into energy! Let your power save the planet from the dark side.	1		1899	152	zelenyydzheday
-1	EnergySpo1	Энергия	Sport. Sport. Sport	Run from stress so fast that it can’t catch up with you! The more laps you complete on the track, the wider your smile.	1		1777	266	sportsportsport
-1	TransportMas1	Недвижимость	Master of Storms	Install wind turbines to generate energy and save the planet! Every turn of the blades brings you closer to the title of "Master of Storms."	1		76222	686	povelitelbur
-1	TransportMar1	Недвижимость	Martian colonist	You’re already planning Mars colonization, but don’t forget about this battle! Build a mini-base to gain additional resources.	1		339123	3391	marsianskiykolonist
-1	EnergySol1	Энергия	Solar panel	Invest in clean energy! Build solar panels that help reduce carbon emissions... and your electricity bills :)	1		150000	5250	solnechnayabatareya
+1	TransportEme1	Недвижимость	Emergency	Save lives in critical moments! Respond to emergencies and help those in need as quickly as possible.	1		3000	360	skorayapomoshch.svg
+1	ForestsMed1	Рынок	Medical mission	Head to hotspots and assist victims in disaster zones. Your skills can save lives!	1		21242	381	meditsinskayamissiya.svg
+1	EnergyInv1	Энергия	"Invisible defender #freeDurov"	Disappear from the enemy’s sight like a self-destructing message! You can't be found, but you can gather all your strength for the next attack	1		16342	409	nevidimyyzashchitnik.svg
+1	ForestsFor1	Рынок	Forester	Plant a million trees to embrace the world and cleanse it of CO2! Now every tree works while you rest	1		1000	210	lesnik.svg
+1	EnergyPla1	Энергия	Planet of happiness	Spread positive thinking! Improve quality of life and increase happiness among people.	1		2379	357	planetaschastya.svg
+1	ForestsGre1	Рынок	Green friend	Grow your own plant and watch it thrive along with your well-being! The more care you give, the more greenery you'll see.	1		241	24	zelenyydrug.svg
+1	WastesCli1	Затраты	Climate fund	Fund environmental protection projects! Sponsor crucial initiatives and help the planet... so that one day your grandchildren won't be roasting marshmallows on the remnants of Antarctica!	1			54333	435	klimaticheskiyfond.svg
+1	EnergyA b1	Энергия	A baby whale	A small baby whale creates huge waves, but does it so cutely that even enemies pause in admiration for a moment.	1		329	33	kitenok.svg
+1	EnergyThe1	Энергия	Therapy of kindness	No one can leave without a smile! Healing is not just about medicine, but also about positivity.	1		2672	187	Терапиядобра.svg
+1	WastesRec1	Затраты	Recharge the batteries	Get inspired by the Tesla Powerwall and recharge your energy! You can keep fighting without breaks until your batteries run out.	1		13288	465	zaryadiakkumulyatory.svg
+1	ForestsPan1	Рынок	Panda Patrol	Save endangered species, starting with the panda! Venture into the wild forests, protect them from deforestation, and win the favor of all the animals.	1		5556	378	pandapatrul.svg
+1	EnergyPea1	Энергия	Peaceful mood	Harmony and positive thinking improve everyday life. Share joy and impact those around you!	1		250	25	mirnoenastroenie.svg
+1	EnergyCat1	Энергия	Catch some zen	Meditate and develop emotional intelligence skills. Calmness is the key to longevity and happiness.	1		400	60	poymaydzen.svg
+1	WastesGree1	Затраты	Green Jedi	Catch carbon emissions with your lightsaber and turn them into energy! Let your power save the planet from the dark side.	1		1899	152	zelenyydzheday.svg
+1	EnergySpo1	Энергия	Sport. Sport. Sport	Run from stress so fast that it can’t catch up with you! The more laps you complete on the track, the wider your smile.	1		1777	266	sportsportsport.svg
+1	TransportMas1	Недвижимость	Master of Storms	Install wind turbines to generate energy and save the planet! Every turn of the blades brings you closer to the title of "Master of Storms."	1		76222	686	povelitelbur.svg
+1	TransportMar1	Недвижимость	Martian colonist	You’re already planning Mars colonization, but don’t forget about this battle! Build a mini-base to gain additional resources.	1		339123	3391	marsianskiykolonist.svg
+1	EnergySol1	Энергия	Solar panel	Invest in clean energy! Build solar panels that help reduce carbon emissions... and your electricity bills :)	1		150000	5250	solnechnayabatareya.svg

@@ -13,13 +13,13 @@ services:
     networks:
       - my-network
 
-  node_backend:
-    build:
-      context: .
-      dockerfile: services/node_backend/Dockerfile
-      target: development
-    env_file:
-      - .env.local
+#  node_backend:
+#    build:
+#      context: .
+#      dockerfile: services/node_backend/Dockerfile
+#      target: development
+#    env_file:
+#      - .env.local
 
   web:
     build:
