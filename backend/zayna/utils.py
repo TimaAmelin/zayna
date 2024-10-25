@@ -70,8 +70,6 @@ def add_user(id, username, referrer_id, photo):
             "id",
             "project__id",
             "project__name",
-            "project__price",
-            "project__income",
             "project__mode",
             "project__description",
             "project__logo",
@@ -103,8 +101,6 @@ def get_tokens_count(user_id):
         "id",
         "project__id",
         "project__name",
-        "project__price",
-        "project__income",
         "project__mode",
         "project__description",
         "project__logo",
@@ -205,13 +201,13 @@ def add_present(sender_id, project_id, receiver_id=None):
         receiver_id = int(receiver_id)
         receiver = get_object_or_404(User, id=receiver_id)
 
-    if sender.tokens_sum < project.price:
-        logging.warning(f"Required {project.price}, current tokens: {sender.tokens_sum}")
+    if sender.tokens_sum < project.cost(1):
+        logging.warning(f"Required {project.cost(1)}, current tokens: {sender.tokens_sum}")
         return JsonResponse({"message": "Not enough tokens"}, status=400)
 
     present = Present.objects.create(sender=sender, project=project, receiver=receiver)
 
-    sender.tokens_count = str(int(sender.tokens_count) - project.price)
+    sender.tokens_count = str(int(sender.tokens_count) - project.cost(1))
     sender.save(update_fields=["tokens_count"])
     return JsonResponse({"present": present.pk, "link": present.link}, status=201)
 
@@ -239,7 +235,7 @@ def get_present(user_id, present_id):
 
 def get_presents(request):
     projects = list(
-        Project.objects.filter(is_present=True).values("id", "name", "price", "income", "mode", "description", "logo")
+        Project.objects.filter(is_present=True).values("id", "name", "mode", "description", "logo")
     )
     for project in projects:
         if project["logo"]:  # Check if the logo field is not empty
@@ -271,8 +267,6 @@ def get_user_projects(request, user_id):
             "mode",
             "description",
             "logo",
-            "price",
-            "income",
             "price_by_level",
             "income_by_level",
         )
