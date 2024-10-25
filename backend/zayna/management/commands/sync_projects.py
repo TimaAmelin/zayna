@@ -24,19 +24,8 @@ class Command(BaseCommand):
                         mode=mode,
                         description=description,
                         price=price,
-                        income=income
+                        income=income,
+                        logo=logo_path,
                     )
-
-                    if logo_path:
-                        # Full path to the image
-                        full_logo_path = os.path.join(settings.MEDIA_ROOT, 'logos', os.path.basename(logo_path))
-
-                        logo_upload_path = os.path.join('logos', os.path.basename(logo_path))
-
-                        print(full_logo_path)
-
-                        with open(full_logo_path, 'rb') as f:
-                            project.logo.save(os.path.basename(full_logo_path), File(f))
-                        project.save()  # Save the project instance
                 except Exception as e:
                     print(e)

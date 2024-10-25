@@ -47,6 +47,8 @@ class User(models.Model):
             return
         hours_without_update = (timezone.now() - income_updated_at) / datetime.timedelta(hours=1)
         logging.info(f"hours_without_update: {hours_without_update}")
+        hours_without_update = min(3, hours_without_update)
+        logging.info(f"new hours_without_update: {hours_without_update}")
         self.tokens_count = str(round(int(self.tokens_count) + self.income * hours_without_update))
         logging.info(f"Add tokens: {self.income * hours_without_update}")
         self.save(update_fields=["tokens_count", "updated_at"])
@@ -72,26 +74,32 @@ class TokensBatch(models.Model):
 
 class Project(models.Model):
     class Modes(models.TextChoices):
-        FOREST = "Forests", "Forests"
-        TRANSPORT = "Transport", "Transport"
-        ENERGY = "Energy", "Energy"
-        WASTES = "Wastes", "Wastes"
+        MARKET = "Рынок", "Рынок"
+        REALTY = "Недвижимость", "Недвижимость"
+        ENERGY = "Энергия", "Энергия"
+        WASTES = "Затраты", "Затраты"
 
     MODE_CHOICES = Modes
 
     name = models.CharField(default="", null=False, blank=True, max_length=255)
-    price = models.IntegerField(default=0)
-    income = models.IntegerField(default=0)
+    price = models.FloatField(default=0)
+    price_by_level = models.JSONField(default=list)
+    income = models.FloatField(default=0)
+    income_by_level = models.JSONField(default=list)
     payment = models.IntegerField(default=0)
-    mode = models.CharField(max_length=10, choices=MODE_CHOICES.choices, default=Modes.FOREST, null=True)
+    mode = models.CharField(max_length=12, choices=MODE_CHOICES.choices, default=Modes.MARKET, null=True)
     description = models.TextField(null=True, blank=True)
-    logo = models.ImageField(blank=True, null=True)
+    logo = models.CharField(default="", null=False, blank=True, max_length=255)
     is_present = models.BooleanField(default=False, null=False)
 
     def cost(self, level):
+        if len(self.price_by_level) > level:
+            return self.price_by_level[level]
         return round(self.price * 3.2 ** level)
 
     def profit(self, level):
+        if len(self.income_by_level) > level:
+            return self.income_by_level[level]
         return round(self.income * 1.3 ** level)
 
 

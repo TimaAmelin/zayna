@@ -86,26 +86,26 @@ export const ProjectsFriends = () => {
         </ProjectsFriendsTitleContainer>
         <ProjectsFriendsMainContainerTypeRow>
           <ProjectsFriendsMainContainerTypeButton
-            sx={{ backgroundColor: type === 'Forests' ? '#306A11' : 'none' }}
-            onClick={() => setType('Forests')}
+            sx={{ backgroundColor: type === 'Рынок' ? '#306A11' : 'none' }}
+            onClick={() => setType('Рынок')}
           >
-            Леса
+            Рынок
           </ProjectsFriendsMainContainerTypeButton>
           <ProjectsFriendsMainContainerTypeButton
-            sx={{ backgroundColor: type === 'Transport' ? '#306A11' : 'none' }}
-            onClick={() => setType('Transport')}
+            sx={{ backgroundColor: type === 'Недвижимость' ? '#306A11' : 'none' }}
+            onClick={() => setType('Недвижимость')}
           >
-            Транспорт
+            Недвижимость
           </ProjectsFriendsMainContainerTypeButton>
           <ProjectsFriendsMainContainerTypeButton
-            sx={{ backgroundColor: type === 'Energy' ? '#306A11' : 'none' }}
-            onClick={() => setType('Energy')}
+            sx={{ backgroundColor: type === 'Энергия' ? '#306A11' : 'none' }}
+            onClick={() => setType('Энергия')}
           >
             Энергия
           </ProjectsFriendsMainContainerTypeButton>
           <ProjectsFriendsMainContainerTypeButton
-            sx={{ backgroundColor: type === 'Wastes' ? '#306A11' : 'none' }}
-            onClick={() => setType('Wastes')}
+            sx={{ backgroundColor: type === 'Затраты' ? '#306A11' : 'none' }}
+            onClick={() => setType('Затраты')}
           >
             Затраты
           </ProjectsFriendsMainContainerTypeButton>
