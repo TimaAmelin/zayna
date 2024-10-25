@@ -93,12 +93,12 @@ class Project(models.Model):
     def cost(self, level):
         if len(self.price_by_level) > level:
             return self.price_by_level[level]
-        return float("inf")
+        return 1e10
 
     def profit(self, level):
         if len(self.income_by_level) > level:
             return self.income_by_level[level]
-        return float("inf")
+        return 1e10
 
 
 class UserProject(models.Model):
