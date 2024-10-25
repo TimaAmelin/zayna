@@ -280,14 +280,10 @@ def get_user_projects(request, user_id):
     for project in projects:
         level = project["level"]
         project["cost"] = (
-            project["price_by_level"][level] if len(project["price_by_level"]) > level else round(
-                project["price"] * 3.2 ** level
-            )
+            project["price_by_level"][level] if len(project["price_by_level"]) > level else float("inf")
         )
         project["profit"] = (
-            project["income_by_level"][level] if len(project["income_by_level"]) > level else round(
-                project["income"] * 3.2 ** level
-            )
+            project["income_by_level"][level] if len(project["income_by_level"]) > level else float("inf")
         )
 
     return JsonResponse({"projects": projects}, status=200)

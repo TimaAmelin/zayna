@@ -82,9 +82,7 @@ class Project(models.Model):
     MODE_CHOICES = Modes
 
     name = models.CharField(default="", null=False, blank=True, max_length=255)
-    price = models.FloatField(default=0)
     price_by_level = models.JSONField(default=list)
-    income = models.FloatField(default=0)
     income_by_level = models.JSONField(default=list)
     payment = models.IntegerField(default=0)
     mode = models.CharField(max_length=12, choices=MODE_CHOICES.choices, default=Modes.MARKET, null=True)
@@ -95,12 +93,12 @@ class Project(models.Model):
     def cost(self, level):
         if len(self.price_by_level) > level:
             return self.price_by_level[level]
-        return round(self.price * 3.2 ** level)
+        return float("inf")
 
     def profit(self, level):
         if len(self.income_by_level) > level:
             return self.income_by_level[level]
-        return round(self.income * 1.3 ** level)
+        return float("inf")
 
 
 class UserProject(models.Model):

@@ -1,9 +1,6 @@
 from django.core.management.base import BaseCommand
 
 from ...models import *
-import os
-from django.conf import settings
-from django.core.files import File
 
 
 class Command(BaseCommand):
@@ -23,9 +20,11 @@ class Command(BaseCommand):
                         name=name,
                         mode=mode,
                         description=description,
-                        price=price,
-                        income=income,
                         logo=logo_path,
                     )
+                    print("created", created)
+                    project.price_by_level.append(round(float(price)))
+                    project.income_by_level.append(round(float(price)))
+                    project.save(update_fields=["price_by_level", "income_by_level"])
                 except Exception as e:
                     print(e)
