@@ -25,6 +25,10 @@ def welcome_gift(user):
         }
     )
 
+    if user.participates.filter(project=gift_project).exists():
+        logging.info(f"User {user.id} has already got welcome gift!")
+        return None
+
     # Create the present
     present = Present.objects.create(sender=zayna, receiver=user, project=gift_project)
 
@@ -51,7 +55,19 @@ def add_user(id, username, referrer_id, photo):
         if not user.photo or user.photo != photo:
             user.photo = photo
             user.save(update_fields=["photo"])
-        return JsonResponse({"presents": []}, status=204)
+        welcome_gift(user)
+        presents = list(user.presents.filter(shown=False).values(
+            "id",
+            "project__id",
+            "project__name",
+            "project__mode",
+            "project__description",
+            "project__logo",
+            "project__name",
+            "sender__username",
+        ))
+        user.presents.filter(shown=False).update(shown=True)
+        return JsonResponse({"presents": presents}, status=204)
     else:
         if not referrer_qs.exists():
             logging.info(f"Referrer {referrer_id} does not exist")
@@ -65,7 +81,7 @@ def add_user(id, username, referrer_id, photo):
             user = User.objects.create(username=username, id=id, photo=photo)
         if referrer_id:
             user.friends.add(referrer_qs.first())
-        present = welcome_gift(user)
+        welcome_gift(user)
         presents = list(user.presents.filter(shown=False).values(
             "id",
             "project__id",
