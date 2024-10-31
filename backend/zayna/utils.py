@@ -3,7 +3,7 @@ import random
 from enum import Enum
 
 from django.conf import settings
-from django.db.models import Subquery, OuterRef, When, Case, F
+from django.db.models import Subquery, OuterRef, When, Case, F, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
@@ -58,7 +58,7 @@ def add_user(id, username, referrer_id, photo):
             user.photo = photo
             user.save(update_fields=["photo"])
         present = welcome_gift(user)
-        presents = list(user.presents.filter(shown=False).values(
+        presents = list(user.presents.filter(Q(shown=False) | Q(id=present.id)).values(
             "id",
             "project__id",
             "project__name",
@@ -69,7 +69,7 @@ def add_user(id, username, referrer_id, photo):
             "sender__username",
         ))
         user.presents.filter(shown=False).update(shown=True)
-        return JsonResponse({"presents": presents + [present] if present else []}, status=204)
+        return JsonResponse({"presents": presents}, status=204)
     else:
         if not referrer_qs.exists():
             logging.info(f"Referrer {referrer_id} does not exist")
