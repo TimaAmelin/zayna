@@ -53,7 +53,6 @@ def add_user(id, username, referrer_id, photo):
         logging.info(f"User {id} already exists")
         if not referrer_qs.exists():
             logging.info(f"Referrer {referrer_id} does not exist")
-            return JsonResponse({"presents": []}, status=204)
         if referrer_id:
             user.friends.add(referrer_qs.first())
         if not user.photo or user.photo != photo:
