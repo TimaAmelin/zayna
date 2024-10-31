@@ -12,9 +12,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
-from django.conf import settings
-from django import http
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_URL = '/media/'
@@ -47,14 +44,7 @@ INSTALLED_APPS = [
 ]
 
 
-# BLOCKED_IPS = ["147.185.132.57"]
-#
-#
-# class BlockedIpMiddleware(object):
-#     def process_request(self, request):
-#         if request.META['REMOTE_ADDR'] in settings.BLOCKED_IPS:
-#             return http.HttpResponseForbidden('<h1>Forbidden</h1>')
-#         return None
+BLOCKED_IPS = ["147.185.132.57"]
 
 
 MIDDLEWARE = [
@@ -66,6 +56,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "zayna.middleware.BlockedIpMiddleware",
 ]
 
 ROOT_URLCONF = "backend.urls"
