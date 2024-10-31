@@ -70,7 +70,7 @@ def add_user(id, username, referrer_id, photo):
             "project__name",
             "sender__username",
         ))
-        logging.info("presents:", presents)
+        logging.info("presents: %s", str(presents))
         user.presents.filter(shown=False).update(shown=True)
         return JsonResponse({"presents": presents}, status=204)
     else:
