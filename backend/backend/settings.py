@@ -47,14 +47,14 @@ INSTALLED_APPS = [
 ]
 
 
-BLOCKED_IPS = ["147.185.132.57"]
-
-
-class BlockedIpMiddleware(object):
-    def process_request(self, request):
-        if request.META['REMOTE_ADDR'] in settings.BLOCKED_IPS:
-            return http.HttpResponseForbidden('<h1>Forbidden</h1>')
-        return None
+# BLOCKED_IPS = ["147.185.132.57"]
+#
+#
+# class BlockedIpMiddleware(object):
+#     def process_request(self, request):
+#         if request.META['REMOTE_ADDR'] in settings.BLOCKED_IPS:
+#             return http.HttpResponseForbidden('<h1>Forbidden</h1>')
+#         return None
 
 
 MIDDLEWARE = [
@@ -66,7 +66,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "BlockedIpMiddleware",
 ]
 
 ROOT_URLCONF = "backend.urls"
