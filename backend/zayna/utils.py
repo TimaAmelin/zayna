@@ -12,6 +12,8 @@ from .models import *
 
 
 def welcome_gift(user):
+    logging.info(f"Checking welcome gift for user {user.id}...")
+
     # Get or create user Zayna
     zayna, created = User.objects.get_or_create(username="zayna")
 
@@ -55,7 +57,7 @@ def add_user(id, username, referrer_id, photo):
         if not user.photo or user.photo != photo:
             user.photo = photo
             user.save(update_fields=["photo"])
-        welcome_gift(user)
+        present = welcome_gift(user)
         presents = list(user.presents.filter(shown=False).values(
             "id",
             "project__id",
@@ -67,7 +69,7 @@ def add_user(id, username, referrer_id, photo):
             "sender__username",
         ))
         user.presents.filter(shown=False).update(shown=True)
-        return JsonResponse({"presents": presents}, status=204)
+        return JsonResponse({"presents": presents + [present] if present else []}, status=204)
     else:
         if not referrer_qs.exists():
             logging.info(f"Referrer {referrer_id} does not exist")
