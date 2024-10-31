@@ -229,7 +229,7 @@ def get_present(user_id, present_id):
     logging.info(f"Process payment: {present.project.payment}")
     user.tokens_count = str(int(user.tokens_count) + present.project.payment)
     user.save(update_fields=["tokens_count"])
-    participate(user_id, present.project.id)
+    participate(user_id, present.project.id, free=True)
     return JsonResponse({"message": "present has been taken"}, status=201)
 
 
@@ -283,7 +283,7 @@ def get_user_projects(request, user_id):
     return JsonResponse({"projects": projects}, status=200)
 
 
-def participate(user_id, project_id):
+def participate(user_id, project_id, free=False):
     user_id = int(user_id)
     user = get_object_or_404(User, id=user_id)
 
@@ -293,12 +293,13 @@ def participate(user_id, project_id):
     new_level = 0
     if user_project_qs.exists():
         new_level = user_project_qs.first().level
+    if not free:
+        if user.tokens_sum < project.cost(new_level):
+            logging.info(f"Not enough tokens: {user.tokens_sum} < {project.cost(new_level)}")
+            return JsonResponse({"result": "ERROR", "message": "Not enough tokens"}, status=400)
 
-    if user.tokens_sum < project.cost(new_level):
-        logging.info(f"Not enough tokens: {user.tokens_sum} < {project.cost(new_level)}")
-        return JsonResponse({"result": "ERROR", "message": "Not enough tokens"}, status=400)
+        user.tokens_count = str(int(user.tokens_count) - project.cost(new_level))
 
-    user.tokens_count = str(int(user.tokens_count) - project.cost(new_level))
     user.income += project.profit(new_level)
     user.save(update_fields=["tokens_count", "income"])
     up = UserProject.objects.get_or_create(user=user, project=project)[0]
