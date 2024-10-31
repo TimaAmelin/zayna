@@ -32,7 +32,9 @@ def welcome_gift(user):
         return None
 
     # Create the present
-    present = Present.objects.create(sender=zayna, receiver=user, project=gift_project)
+    present, created = Present.objects.get_or_create(sender=zayna, receiver=user, project=gift_project)
+    present.shown = False
+    present.save(update_fields=["shown"])
 
     # Log the creation of the welcome gift
     logging.info(f"Welcome gift for user {user.id} created!")
@@ -57,8 +59,8 @@ def add_user(id, username, referrer_id, photo):
         if not user.photo or user.photo != photo:
             user.photo = photo
             user.save(update_fields=["photo"])
-        present = welcome_gift(user)
-        presents = list(user.presents.filter(Q(shown=False) | Q(id=present.id)).values(
+        welcome_gift(user)
+        presents = list(user.presents.filter(shown=False).values(
             "id",
             "project__id",
             "project__name",
