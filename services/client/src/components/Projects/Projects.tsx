@@ -38,51 +38,93 @@ import SettingsIcon from '../../assets/icons/settings.svg';
 import CoinMax from '../../assets/icons/coin_max.svg';
 
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import { Box } from '@mui/material';
 import { ProjectModal } from '../ProjectModal/ProjectModal';
 
-import Ekstrennyenovosti1 from '../../assets/logos/ekstrennyenovosti1.svg';
-import Kitenok from '../../assets/logos/kitenok.svg';
-import Klimaticheskiyfond from '../../assets/logos/klimaticheskiyfond.svg';
-import Lesnik from '../../assets/logos/lesnik.svg';
-import Marsianskiykolonist from '../../assets/logos/marsianskiykolonist.svg';
-import Meditsinskayamissiya from '../../assets/logos/meditsinskayamissiya.svg';
-import Mirnoenastroenie from '../../assets/logos/mirnoenastroenie.svg';
-import Mevidimyyzashchitnik from '../../assets/logos/nevidimyyzashchitnik.svg';
-import Pandapatrul from '../../assets/logos/pandapatrul.svg';
-import Planetaschastya from '../../assets/logos/planetaschastya.svg';
-import Povelitelbur from '../../assets/logos/povelitelbur.svg';
-import Poymaydzen from '../../assets/logos/poymaydzen.svg';
-import Skorayapomoshch from '../../assets/logos/skorayapomoshch.svg';
-import Solnechnayabatareya from '../../assets/logos/solnechnayabatareya.svg';
-import Sportsportsport from '../../assets/logos/sportsportsport.svg';
-import Terapiyadobra from '../../assets/logos/terapiyadobra.svg';
-import Zaryadiakkumulyatory from '../../assets/logos/zaryadiakkumulyatory.svg';
-import Zelenyydrug from '../../assets/logos/zelenyydrug.svg';
-import Zelenyydzheday from '../../assets/logos/zelenyydzheday.svg';
+import gymMembership from '../../assets/logos/gymMembership.png';
+import peakPromotions from '../../assets/logos/peakPromotions.png';
+import tenantDifference from '../../assets/logos/tenantDifference.png';
+import businessLunchOrFastFood from '../../assets/logos/businessLunchOrFastFood.png';
+import bioenergy from '../../assets/logos/bioenergy.png';
+import hospitalChains from '../../assets/logos/hospitalChains.png';
+import worldOwner from '../../assets/logos/worldOwner.png';
+import renewableEnergyGuru from '../../assets/logos/renewableEnergyGuru.png';
+import houseAbroad from '../../assets/logos/houseAbroad.png';
+import expensiveHobbies from '../../assets/logos/expensiveHobbies.png';
+import creativityLaunch from '../../assets/logos/creativityLaunch.png';
+import charismaBoost from '../../assets/logos/charismaBoost.png';
+import starRealEstate from '../../assets/logos/starRealEstate.png';
+import greenBonds from '../../assets/logos/greenBonds.png';
+import greenDeveloper from '../../assets/logos/greenDeveloper.png';
+import insiderDeal from '../../assets/logos/insiderDeal.png';
+import profitableAI from '../../assets/logos/profitableAI.png';
+import marketCorrection from '../../assets/logos/marketCorrection.png';
+import pyramidCollapse from '../../assets/logos/pyramidCollapse.png';
+import cryptoEnergy from '../../assets/logos/cryptoEnergy.png';
+import loftAttic from '../../assets/logos/loftAttic.png';
+import morningMagic from '../../assets/logos/morningMagic.png';
+import repairMasters from '../../assets/logos/repairMasters.png';
+import medicalBreakthrough from '../../assets/logos/medicalBreakthrough.png';
+import powerfulComputer from '../../assets/logos/powerfulComputer.png';
+import officeInBusinessCenter from '../../assets/logos/officeInBusinessCenter.png';
+import plasticRecycling from '../../assets/logos/plasticRecycling.png';
+import holidayGifts from '../../assets/logos/holidayGifts.png';
+import findZen from '../../assets/logos/findZen.png';
+import dreamTrip from '../../assets/logos/dreamTrip.png';
+import turnkeyRepair from '../../assets/logos/turnkeyRepair.png';
+import toughChoice from '../../assets/logos/toughChoice.png';
+import surprisesOfOldHouse from '../../assets/logos/surprisesOfOldHouse.png';
+import morningRitual from '../../assets/logos/morningRitual.png';
+import financialTurbulence from '../../assets/logos/financialTurbulence.png';
+import repairCost from '../../assets/logos/repairCost.png';
+import eliteDeveloper from '../../assets/logos/eliteDeveloper.png';
+import energyCollapse from '../../assets/logos/energyCollapse.png';
+import joyEnergy from '../../assets/logos/joyEnergy.png';
 
-// const logosObj = {
-//   ekstrennyenovosti1,
-//   kitenok,
-//   klimaticheskiyfond,
-//   lesnik,
-//   marsianskiykolonist,
-//   meditsinskayamissiya,
-//   mirnoenastroenie,
-//   nevidimyyzashchitnik,
-//   pandapatrul,
-//   planetaschastya,
-//   povelitelbur,
-//   poymaydzen,
-//   skorayapomoshch,
-//   solnechnayabatareya,
-//   sportsportsport,
-//   terapiyadobra,
-//   zaryadiakkumulyatory,
-//   zelenyydrug,
-//   zelenyydzheday,
-// }
+
+const logos: {[x: string]: StaticImageData} = {
+  'Абонемент в спортзал': gymMembership,
+  'Акции на пике': peakPromotions,
+  'Арендатор арендатору рознь': tenantDifference,
+  'Бизнес-ланч или фаст-фуд': businessLunchOrFastFood,
+  'Биоэнергетика': bioenergy,
+  'Больничные сети': hospitalChains,
+  'Владелец мира': worldOwner,
+  'Гуру возобновляемой энергии': renewableEnergyGuru,
+  'Дом за границей': houseAbroad,
+  'Дорогие увлечения': expensiveHobbies,
+  'Запуск творчества': creativityLaunch,
+  'Заряд харизмы': charismaBoost,
+  'Звездная недвижимость': starRealEstate,
+  'Зелёные облигации': greenBonds,
+  'Зеленый девелопер': greenDeveloper,
+  'Инсайдерская cделка': insiderDeal,
+  'Искусственный_интеллект_это_выгодно': profitableAI,
+  'Коррекция рынка': marketCorrection,
+  'Крах пирамиды': pyramidCollapse,
+  'Криптоэнергетика': cryptoEnergy,
+  'Лофт на чердаке': loftAttic,
+  'Магия утра': morningMagic,
+  'Мастер ремонта': repairMasters,
+  'Медицинский прорыв': medicalBreakthrough,
+  'Мощный компьютер': powerfulComputer,
+  'Офис в бизнес-центре': officeInBusinessCenter,
+  'Переработка пластика': plasticRecycling,
+  'Подарки на праздники': holidayGifts,
+  'Поймай дзен': findZen,
+  'Путешествие мечты': dreamTrip,
+  'Ремонт под ключ': turnkeyRepair,
+  'Сложный выбор': toughChoice,
+  'Сюрпризы старинного дома': surprisesOfOldHouse,
+  'Утренний ритуал': morningRitual,
+  'Финансовая турбулентность': financialTurbulence,
+  'Цена ремонта': repairCost,
+  'Элитный застройщик': eliteDeveloper,
+  'Энергетический коллапс': energyCollapse,
+  'Энергия радости': joyEnergy,
+};
+
 
 export const Projects = () => {
   const [projects, setProjects] = useState<
@@ -223,7 +265,7 @@ export const Projects = () => {
                   setOpen(true);
                 }}
               >
-                <Kitenok style={{height: 38}} />
+                <Image alt="" src={logos[project.logo[0].toUpperCase() + project.logo.slice(1).toLowerCase()]} style={{height: 38, maxWidth: 38}} />
                 <ProjectsMainContainerCardTitle>
                   {project.name}
                 </ProjectsMainContainerCardTitle>
