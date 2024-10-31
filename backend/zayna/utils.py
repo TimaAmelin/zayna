@@ -71,7 +71,7 @@ def add_user(id, username, referrer_id, photo):
         ))
         logging.info("presents: %s", str(presents))
         user.presents.filter(shown=False).update(shown=True)
-        return JsonResponse({"presents": presents}, status=204)
+        return JsonResponse({"presents": presents}, status=200)
     else:
         if not referrer_qs.exists():
             logging.info(f"Referrer {referrer_id} does not exist")
