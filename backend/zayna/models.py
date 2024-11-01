@@ -98,7 +98,7 @@ class Project(models.Model):
     def profit(self, level):
         if len(self.income_by_level) > level:
             return self.income_by_level[level]
-        return 1e10
+        return 0
 
 
 class UserProject(models.Model):
