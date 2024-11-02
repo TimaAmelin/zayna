@@ -14,6 +14,8 @@ export async function PUT(req: NextRequest) {
             })
         });
 
+        console.log('put user', response)
+
         try {
             const res = await response.json();
 

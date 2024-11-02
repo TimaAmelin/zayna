@@ -3,7 +3,7 @@ import random
 from enum import Enum
 
 from django.conf import settings
-from django.db.models import Subquery, OuterRef, When, Case, F
+from django.db.models import Subquery, OuterRef, When, Case, F, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
@@ -12,6 +12,8 @@ from .models import *
 
 
 def welcome_gift(user):
+    logging.info(f"Checking welcome gift for user {user.id}...")
+
     # Get or create user Zayna
     zayna, created = User.objects.get_or_create(username="zayna")
 
@@ -25,8 +27,14 @@ def welcome_gift(user):
         }
     )
 
+    if user.participates.filter(project=gift_project).exists():
+        logging.info(f"User {user.id} has already got welcome gift!")
+        return None
+
     # Create the present
-    present = Present.objects.create(sender=zayna, receiver=user, project=gift_project)
+    present, created = Present.objects.get_or_create(sender=zayna, receiver=user, project=gift_project)
+    present.shown = False
+    present.save(update_fields=["shown"])
 
     # Log the creation of the welcome gift
     logging.info(f"Welcome gift for user {user.id} created!")
@@ -45,13 +53,25 @@ def add_user(id, username, referrer_id, photo):
         logging.info(f"User {id} already exists")
         if not referrer_qs.exists():
             logging.info(f"Referrer {referrer_id} does not exist")
-            return JsonResponse({"presents": []}, status=204)
         if referrer_id:
             user.friends.add(referrer_qs.first())
         if not user.photo or user.photo != photo:
             user.photo = photo
             user.save(update_fields=["photo"])
-        return JsonResponse({"presents": []}, status=204)
+        welcome_gift(user)
+        presents = list(user.presents.filter(shown=False).values(
+            "id",
+            "project__id",
+            "project__name",
+            "project__mode",
+            "project__description",
+            "project__logo",
+            "project__name",
+            "sender__username",
+        ))
+        logging.info("presents: %s", str(presents))
+        user.presents.filter(shown=False).update(shown=True)
+        return JsonResponse({"presents": presents}, status=200)
     else:
         if not referrer_qs.exists():
             logging.info(f"Referrer {referrer_id} does not exist")
@@ -65,13 +85,11 @@ def add_user(id, username, referrer_id, photo):
             user = User.objects.create(username=username, id=id, photo=photo)
         if referrer_id:
             user.friends.add(referrer_qs.first())
-        present = welcome_gift(user)
+        welcome_gift(user)
         presents = list(user.presents.filter(shown=False).values(
             "id",
             "project__id",
             "project__name",
-            "project__price",
-            "project__income",
             "project__mode",
             "project__description",
             "project__logo",
@@ -103,8 +121,6 @@ def get_tokens_count(user_id):
         "id",
         "project__id",
         "project__name",
-        "project__price",
-        "project__income",
         "project__mode",
         "project__description",
         "project__logo",
@@ -205,13 +221,13 @@ def add_present(sender_id, project_id, receiver_id=None):
         receiver_id = int(receiver_id)
         receiver = get_object_or_404(User, id=receiver_id)
 
-    if sender.tokens_sum < project.price:
-        logging.warning(f"Required {project.price}, current tokens: {sender.tokens_sum}")
+    if sender.tokens_sum < project.cost(1):
+        logging.warning(f"Required {project.cost(1)}, current tokens: {sender.tokens_sum}")
         return JsonResponse({"message": "Not enough tokens"}, status=400)
 
     present = Present.objects.create(sender=sender, project=project, receiver=receiver)
 
-    sender.tokens_count = str(int(sender.tokens_count) - project.price)
+    sender.tokens_count = str(int(sender.tokens_count) - project.cost(1))
     sender.save(update_fields=["tokens_count"])
     return JsonResponse({"present": present.pk, "link": present.link}, status=201)
 
@@ -233,13 +249,13 @@ def get_present(user_id, present_id):
     logging.info(f"Process payment: {present.project.payment}")
     user.tokens_count = str(int(user.tokens_count) + present.project.payment)
     user.save(update_fields=["tokens_count"])
-    participate(user_id, present.project.id)
+    participate(user_id, present.project.id, free=True)
     return JsonResponse({"message": "present has been taken"}, status=201)
 
 
 def get_presents(request):
     projects = list(
-        Project.objects.filter(is_present=True).values("id", "name", "price", "income", "mode", "description", "logo")
+        Project.objects.filter(is_present=True).values("id", "name", "mode", "description", "logo")
     )
     for project in projects:
         if project["logo"]:  # Check if the logo field is not empty
@@ -271,8 +287,6 @@ def get_user_projects(request, user_id):
             "mode",
             "description",
             "logo",
-            "price",
-            "income",
             "price_by_level",
             "income_by_level",
         )
@@ -280,20 +294,16 @@ def get_user_projects(request, user_id):
     for project in projects:
         level = project["level"]
         project["cost"] = (
-            project["price_by_level"][level] if len(project["price_by_level"]) > level else round(
-                project["price"] * 3.2 ** level
-            )
+            project["price_by_level"][level] if len(project["price_by_level"]) > level else 1e10
         )
         project["profit"] = (
-            project["income_by_level"][level] if len(project["income_by_level"]) > level else round(
-                project["income"] * 3.2 ** level
-            )
+            project["income_by_level"][level] if len(project["income_by_level"]) > level else 1e10
         )
 
     return JsonResponse({"projects": projects}, status=200)
 
 
-def participate(user_id, project_id):
+def participate(user_id, project_id, free=False):
     user_id = int(user_id)
     user = get_object_or_404(User, id=user_id)
 
@@ -303,12 +313,13 @@ def participate(user_id, project_id):
     new_level = 0
     if user_project_qs.exists():
         new_level = user_project_qs.first().level
+    if not free:
+        if user.tokens_sum < project.cost(new_level):
+            logging.info(f"Not enough tokens: {user.tokens_sum} < {project.cost(new_level)}")
+            return JsonResponse({"result": "ERROR", "message": "Not enough tokens"}, status=400)
 
-    if user.tokens_sum < project.cost(new_level):
-        logging.info(f"Not enough tokens: {user.tokens_sum} < {project.cost(new_level)}")
-        return JsonResponse({"result": "ERROR", "message": "Not enough tokens"}, status=400)
+        user.tokens_count = str(int(user.tokens_count) - project.cost(new_level))
 
-    user.tokens_count = str(int(user.tokens_count) - project.cost(new_level))
     user.income += project.profit(new_level)
     user.save(update_fields=["tokens_count", "income"])
     up = UserProject.objects.get_or_create(user=user, project=project)[0]

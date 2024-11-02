@@ -51,6 +51,10 @@ INSTALLED_APPS = [
     "zayna",
 ]
 
+
+BLOCKED_IPS = ["147.185.132.57", "205.210.31.245"]
+
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
@@ -60,6 +64,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "zayna.middleware.BlockedIpMiddleware",
 ]
 
 ROOT_URLCONF = "backend.urls"
