@@ -29,8 +29,12 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     "127.0.0.1:3000",
+    "127.0.0.1",
+    "localhost"
     "45.159.188.244:3000",
+    "45.159.188.244",
     "unique-tiger-seemingly.ngrok-free.app:3000",
+    "unique-tiger-seemingly.ngrok-free.app",
 ]
 
 
