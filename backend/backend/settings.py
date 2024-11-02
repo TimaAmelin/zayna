@@ -33,6 +33,7 @@ ALLOWED_HOSTS = [
     '45.159.188.244',
     'unique-tiger-seemingly.ngrok-free.app',
     'zayna-web-1',
+    "web",
 ]
 
 CORS_ORIGIN_WHITELIST = [
