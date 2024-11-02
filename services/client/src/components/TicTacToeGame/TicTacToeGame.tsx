@@ -320,7 +320,13 @@ export const TicTacToeGame = () => {
         )}
       </TicTacToeField>
       <TicTacToeButton
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          if (result === 'player_win'){
+            setOpen(true)
+          } else {
+            router.push('/tapper');
+          }
+        }}
         disabled={result === 'in_progress'}
       >
         {buttonText}
