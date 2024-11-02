@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '45.159.188.244',
     'unique-tiger-seemingly.ngrok-free.app',
+    'zayna-web-1',
 ]
 
 CORS_ORIGIN_WHITELIST = [
@@ -43,9 +44,11 @@ CORS_ORIGIN_WHITELIST = [
     "https://45.159.188.244:3000",
     "http://unique-tiger-seemingly.ngrok-free.app:3000",
     "https://unique-tiger-seemingly.ngrok-free.app:3000",
+    'http://zayna-client-1:3000',
+    'https://zayna-client-1:3000',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = False
 
 
 # Application definition
