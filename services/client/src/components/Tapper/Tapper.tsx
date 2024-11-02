@@ -168,9 +168,9 @@ export const Tapper = ({
 
   async function refetch() {
     try {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && window.Telegram) {
         const data = await getTokens(
-          Number(window.Telegram.WebApp.initDataUnsafe.user.id)
+          Number(window.Telegram?.WebApp?.initDataUnsafe?.user?.id)
         );
 
         setMoneyLast(data.response.sum);
@@ -190,7 +190,7 @@ export const Tapper = ({
       // } else {
       //     console.log("Вибрация не поддерживается на этом устройстве.");
       // }
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && window.Telegram) {
         window.Telegram.WebApp.HapticFeedback.impactOccurred('soft');
       }
 
@@ -229,26 +229,26 @@ export const Tapper = ({
 
   useEffect(() => {
     try {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && window.Telegram) {
         const getUser = async () => {
           const user = await putUser(
-            window.Telegram.WebApp.initDataUnsafe.user.id,
-            window.Telegram.WebApp.initDataUnsafe.user.username,
+            window.Telegram?.WebApp?.initDataUnsafe?.user?.id,
+            window.Telegram?.WebApp?.initDataUnsafe?.user?.username,
             from,
             avatar
           );
           // if (present) {
           //     try {
-          //         await recieveGift(window.Telegram.WebApp.initDataUnsafe.user.id, Number(present));
+          //         await recieveGift(window.Telegram?.WebApp?.initDataUnsafe?.user?.id, Number(present));
           //     } catch (error) {
 
           //     }
           // }
           const tokens = await getTokens(
-            Number(window.Telegram.WebApp.initDataUnsafe.user.id)
+            Number(window.Telegram?.WebApp?.initDataUnsafe?.user?.id)
           );
           const daily = await getDaily(
-            Number(window.Telegram.WebApp.initDataUnsafe.user.id)
+            Number(window.Telegram?.WebApp?.initDataUnsafe?.user?.id)
           );
           const tictactoe = await ticTacToe(
             [
@@ -256,10 +256,10 @@ export const Tapper = ({
               [0, 0, 0],
               [0, 0, 0],
             ],
-            window.Telegram.WebApp.initDataUnsafe.user.id
+            window.Telegram?.WebApp?.initDataUnsafe?.user?.id
           );
           const projects = await getProjects(
-            window.Telegram.WebApp.initDataUnsafe.user.id
+            window.Telegram?.WebApp?.initDataUnsafe?.user?.id
           );
           return { tokens, user, daily, tictactoe, projects };
         };
@@ -303,7 +303,7 @@ export const Tapper = ({
   }, []);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && window.Telegram) {
       window.Telegram.WebApp.expand();
     }
 
@@ -332,10 +332,10 @@ export const Tapper = ({
               Math.floor(moneyPerHourDiff + moneyPerHour / 3600)
           );
 
-          if (typeof window !== 'undefined') {
+          if (typeof window !== 'undefined' && window.Telegram) {
             if (diff !== 0) {
               putTokenBatch(
-                Number(window.Telegram.WebApp.initDataUnsafe.user.id),
+                Number(window.Telegram?.WebApp?.initDataUnsafe?.user?.id),
                 diff
               );
             }
@@ -363,7 +363,7 @@ export const Tapper = ({
 
   useEffect(() => {
     try {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && window.Telegram) {
         const platform = window.Telegram.WebApp.platform;
 
         if (!['ios', 'android'].includes(platform)) {
@@ -401,9 +401,9 @@ export const Tapper = ({
             <TapperStatisticsAvatar>
               {ava && <Image src={ava} alt="" height={20} width={20} />}
             </TapperStatisticsAvatar>
-            {typeof window !== 'undefined' && (
+            {typeof window !== 'undefined' && window.Telegram && (
               <TapperStatisticsName>
-                {window.Telegram.WebApp.initDataUnsafe.user.username}
+                {window.Telegram?.WebApp?.initDataUnsafe?.user?.username}
               </TapperStatisticsName>
             )}
             <TapperStatisticsSettingsLine />
@@ -488,20 +488,20 @@ export const Tapper = ({
           ))}
         </TapperMainContainerTapperContainer>
       </TapperMainContainer>
-      {typeof window !== 'undefined' && (
+      {typeof window !== 'undefined' && window.Telegram && (
         <GiftModal
           toggleDrawer={toggleDrawer}
           open={giftModalOpen}
-          id={window.Telegram.WebApp.initDataUnsafe.user.id}
+          id={window.Telegram?.WebApp?.initDataUnsafe?.user?.id}
           gift={gifts[giftN]}
           refetch={refetch}
         />
       )}
-      {typeof window !== 'undefined' && (
+      {typeof window !== 'undefined' && window.Telegram && (
         <RewardModal
           toggleDrawer={setDailyModalOpen}
           open={dailyModalOpen}
-          id={window.Telegram.WebApp.initDataUnsafe.user.id}
+          id={window.Telegram?.WebApp?.initDataUnsafe?.user?.id}
           combo={combo}
           available={available}
           setMoney={setMoney}
