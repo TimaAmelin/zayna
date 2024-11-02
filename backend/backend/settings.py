@@ -28,28 +28,22 @@ SECRET_KEY = "django-insecure-a88yhep0)0yfb-62s%t$r#b4#5dudnd3c500x^$eknykj&0ck)
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "127.0.0.1:3000",
-    "http://127.0.0.1:3000",
-    "https://127.0.0.1:3000",
-    "localhost",
-    'localhost:3000',
-    'http://localhost:3000',
-    'https://localhost:3000',
-    "45.159.188.244",
-    "45.159.188.244:3000",
-    "http://45.159.188.244:3000",
-    "https://45.159.188.244:3000",
-    "unique-tiger-seemingly.ngrok-free.app",
-    "unique-tiger-seemingly.ngrok-free.app:3000",
-    "http://unique-tiger-seemingly.ngrok-free.app:3000",
-    "https://unique-tiger-seemingly.ngrok-free.app:3000",
-    "zayna-web",
-    "zayna-client",
-    "mynetwork",
+    'localhost',
+    '127.0.0.1',
+    '45.159.188.244',
+    'unique-tiger-seemingly.ngrok-free.app',
 ]
 
-CORS_ORIGIN_WHITELIST = ALLOWED_HOSTS
+CORS_ORIGIN_WHITELIST = [
+    "http://127.0.0.1:3000",
+    "https://127.0.0.1:3000",
+    'http://localhost:3000',
+    'https://localhost:3000',
+    "http://45.159.188.244:3000",
+    "https://45.159.188.244:3000",
+    "http://unique-tiger-seemingly.ngrok-free.app:3000",
+    "https://unique-tiger-seemingly.ngrok-free.app:3000",
+]
 
 CORS_ORIGIN_ALLOW_ALL = True
 
